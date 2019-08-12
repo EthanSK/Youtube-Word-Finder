@@ -1,14 +1,8 @@
 import { spawn } from "child_process"
 import { path as ffmpegPath } from "@ffmpeg-installer/ffmpeg"
 
-// const ffmpeg = spawn(ffmpegPath, [
-//   "-i ../playground/testVideo.mp4 -ss 0 -t 1 ../playground/testFfmpegOut.mp4"
-// ])=
-
-const ffmpeg = spawn("ffmpeg", [
-  "-i",
-  "./playground/testVideo.mp4",
-  "./playground/testFfmpegOut.mp4"
+const ffmpeg = spawn(ffmpegPath, [
+  "-i ../playground/testVideo.mp4 -ss 0 -t 1 ../playground/testFfmpegOut.mp4"
 ])
 
 ffmpeg.stdout.setEncoding("utf8")
