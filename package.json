@@ -1,0 +1,18 @@
+{
+  "name": "youtuberwordfinderbot",
+  "version": "1.0.0",
+  "description": "Finds clips of youtubers saying certain words",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EthanSK/YoutuberWordFinderBot.git"
+  },
+  "author": "Ethan Sarif-Kattan",
+  "bugs": {
+    "url": "https://github.com/EthanSK/YoutuberWordFinderBot/issues"
+  },
+  "homepage": "https://github.com/EthanSK/YoutuberWordFinderBot#readme"
+}
