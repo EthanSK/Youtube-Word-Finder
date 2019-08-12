@@ -2,8 +2,9 @@
   "name": "youtuberwordfinderbot",
   "version": "1.0.0",
   "description": "Finds clips of youtubers saying certain words",
-  "main": "main.js",
+  "main": "dist/index.js",
   "scripts": {
+    "start": "node .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -14,5 +15,13 @@
   "bugs": {
     "url": "https://github.com/EthanSK/YoutuberWordFinderBot/issues"
   },
-  "homepage": "https://github.com/EthanSK/YoutuberWordFinderBot#readme"
+  "homepage": "https://github.com/EthanSK/YoutuberWordFinderBot#readme",
+  "devDependencies": {
+    "@types/youtube-dl": "^1.12.2",
+    "electron": "^6.0.1"
+  },
+  "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.0.19",
+    "youtube-dl": "^2.0.1"
+  }
 }

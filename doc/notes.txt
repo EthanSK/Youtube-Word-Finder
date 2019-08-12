@@ -1,0 +1,5 @@
+Apparently, to create a dts-gen for a scoped package, (one with @ already in front of it), you need to create a directory in root called @whatever, and it wont crash.
+
+eg dts-gen -m @ffmpeg-installer/ffmpeg needs an @ffmpeg-installer dir in root. it's weird but it works
+
+for some fucked reason, I need to keep @ffmpeg-installer folder top level idk and idc
