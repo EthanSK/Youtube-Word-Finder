@@ -3,7 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const child_process_1 = require("child_process");
 const ffmpeg_1 = require("@ffmpeg-installer/ffmpeg");
 const ffmpeg = child_process_1.spawn(ffmpeg_1.path, [
-    "-i ../playground/testVideo.mp4 -ss 0 -t 1 ../playground/testFfmpegOut.mp4"
+    "-i",
+    "./playground/testVideo.mp4",
+    "./playground/testFfmpegOut.mp4"
 ]);
 ffmpeg.stdout.setEncoding("utf8");
 ffmpeg.stdout.on("data", function (data) {
