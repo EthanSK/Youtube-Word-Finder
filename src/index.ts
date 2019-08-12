@@ -1,6 +1,7 @@
 import { spawn } from "child_process"
 import { path as ffmpegPath } from "@ffmpeg-installer/ffmpeg"
 import youtubedl from "youtube-dl"
+import path from "path"
 
 // const ffmpeg = spawn(ffmpegPath, [
 //   "-i",
@@ -22,16 +23,16 @@ import youtubedl from "youtube-dl"
 // ffmpeg.on("close", (code, signal) => {
 //   console.log(code, signal)
 // })
-const path = process.cwd() + "/" + "subs"
+const pathsubs = path.join(process.cwd(), "subs")
 
-console.log("path:", path)
+console.log("path:", pathsubs)
 youtubedl.getSubs(
   "https://www.youtube.com/watch?v=Pc6rnTFjJZI",
   {
-    auto: false,
+    auto: true,
     all: false,
     lang: "en",
-    cwd: path
+    cwd: pathsubs
   },
   (err, files) => {
     if (err) console.error("error subs:", err)

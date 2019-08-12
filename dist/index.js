@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const youtube_dl_1 = __importDefault(require("youtube-dl"));
+const path_1 = __importDefault(require("path"));
 // const ffmpeg = spawn(ffmpegPath, [
 //   "-i",
 //   "./playground/testVideo.mp4",
@@ -20,13 +21,13 @@ const youtube_dl_1 = __importDefault(require("youtube-dl"));
 // ffmpeg.on("close", (code, signal) => {
 //   console.log(code, signal)
 // })
-const path = process.cwd() + "/" + "subs";
-console.log("path:", path);
+const pathsubs = path_1.default.join(process.cwd(), "subs");
+console.log("path:", pathsubs);
 youtube_dl_1.default.getSubs("https://www.youtube.com/watch?v=Pc6rnTFjJZI", {
-    auto: false,
+    auto: true,
     all: false,
     lang: "en",
-    cwd: path
+    cwd: pathsubs
 }, (err, files) => {
     if (err)
         console.error("error subs:", err);
