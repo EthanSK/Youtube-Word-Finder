@@ -6,8 +6,6 @@ import dotenv from "dotenv"
 dotenv.config()
 let mainWindow: BrowserWindow | null
 
-require("electron-reload")(__dirname)
-
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
@@ -29,11 +27,11 @@ function createWindow() {
   if (process.env.NODE_ENV === "development") {
     mainWindow.setPosition(300, 300)
     // and load the index.html of the app.
-    // mainWindow.loadURL("http://localhost:3000")
-    mainWindow.loadFile(path.join(__dirname, "../view/build/index.html"))
+    mainWindow.loadURL("http://localhost:3000")
   } else {
     // and load  index.html of the app.
-    mainWindow.loadFile(path.join(__dirname, "../public/index.html"))
+    // mainWindow.loadFile(path.join(__dirname, "../public/index.html"))
+    mainWindow.loadFile(path.join(__dirname, "../view/build/index.html"))
   }
 
   mainWindow.webContents.once("did-finish-load", () => {})

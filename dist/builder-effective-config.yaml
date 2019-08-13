@@ -1,0 +1,7 @@
+directories:
+  output: dist
+  buildResources: build
+appId: com.ethansk.youtuberwordfinderbot
+mac:
+  category: your.app.category.type
+electronVersion: 6.0.1
