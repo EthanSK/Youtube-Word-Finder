@@ -30,11 +30,12 @@ function createWindow() {
     if (process.env.NODE_ENV === "development") {
         mainWindow.setPosition(300, 300);
         // and load the index.html of the app.
-        mainWindow.loadFile(path_1.default.join(__dirname, "../public/index.html"));
+        // mainWindow.loadURL("http://localhost:3000")
+        mainWindow.loadFile(path_1.default.join(__dirname, "../view/build/index.html"));
     }
     else {
         // and load  index.html of the app.
-        mainWindow.loadFile(path_1.default.join(__dirname, "http://localhost:3000"));
+        mainWindow.loadFile(path_1.default.join(__dirname, "../public/index.html"));
     }
     mainWindow.webContents.once("did-finish-load", () => { });
     // Emitted when the window is closed.
