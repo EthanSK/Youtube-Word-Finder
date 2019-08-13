@@ -12,6 +12,8 @@ function createWindow() {
     mainWindow = new electron_1.BrowserWindow({
         width: 800,
         height: 600,
+        minWidth: 300,
+        minHeight: 400,
         webPreferences: {
             nodeIntegration: true
         },

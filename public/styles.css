@@ -1,4 +1,21 @@
 @font-face {
   font-family: youtube-font;
-  src: url(assets/youtubeFont.ttf);
+  src: url("assets/Trade Gothic LT Bold Condensed No. 20.ttf");
+}
+
+body {
+  background-color: rgb(40, 40, 40);
+}
+
+h1 {
+  color: white;
+  font-family: youtube-font;
+  font-size: 40px;
+}
+
+.titleContainer {
+  display: flex;
+  justify-content: center;
+  background-color: transparent;
+  margin-top: -30px;
 }
