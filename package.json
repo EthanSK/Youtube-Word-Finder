@@ -2,7 +2,7 @@
   "name": "youtuberwordfinderbot",
   "version": "1.0.0",
   "description": "Finds clips of youtubers saying certain words",
-  "main": "dist/main.js",
+  "main": "dist/botDeleteThisFileSoon.js",
   "scripts": {
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
