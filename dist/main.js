@@ -6,10 +6,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const electron_1 = require("electron");
 const constants_1 = __importDefault(require("./constants"));
 const path_1 = __importDefault(require("path"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 let mainWindow;
+require("electron-reload")(__dirname);
 function createWindow() {
     // Create the browser window.
     mainWindow = new electron_1.BrowserWindow({
+        backgroundColor: "#282828",
+        //remember to add icon here for linux coz appaz u need it. wow it didn't work in postilkesbot test
         width: 800,
         height: 600,
         minWidth: 300,
@@ -20,10 +25,18 @@ function createWindow() {
         // titleBarStyle: "hiddenInset",
         title: constants_1.default.app.name
     });
-    // and load the index.html of the app.
-    mainWindow.loadFile(path_1.default.join(__dirname, "../public/index.html"));
     // Open the DevTools.
     //   win.webContents.openDevTools()
+    if (process.env.NODE_ENV === "development") {
+        mainWindow.setPosition(300, 300);
+        // and load the index.html of the app.
+        mainWindow.loadFile(path_1.default.join(__dirname, "../public/index.html"));
+    }
+    else {
+        // and load  index.html of the app.
+        mainWindow.loadFile(path_1.default.join(__dirname, "http://localhost:3000"));
+    }
+    mainWindow.webContents.once("did-finish-load", () => { });
     // Emitted when the window is closed.
     mainWindow.on("closed", () => {
         // Dereference the window object, usually you would store windows

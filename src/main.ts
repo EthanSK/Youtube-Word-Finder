@@ -1,12 +1,18 @@
 import { app, BrowserWindow } from "electron"
-import constants from "../playground/constants"
+import constants from "./constants"
 import path from "path"
+import dotenv from "dotenv"
 
+dotenv.config()
 let mainWindow: BrowserWindow | null
+
+require("electron-reload")(__dirname)
 
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
+    backgroundColor: "#282828",
+    //remember to add icon here for linux coz appaz u need it. wow it didn't work in postilkesbot test
     width: 800,
     height: 600,
     minWidth: 300,
@@ -18,11 +24,18 @@ function createWindow() {
     title: constants.app.name
   })
 
-  // and load the index.html of the app.
-  mainWindow.loadFile(path.join(__dirname, "../public/index.html"))
-
   // Open the DevTools.
   //   win.webContents.openDevTools()
+  if (process.env.NODE_ENV === "development") {
+    mainWindow.setPosition(300, 300)
+    // and load the index.html of the app.
+    mainWindow.loadFile(path.join(__dirname, "../public/index.html"))
+  } else {
+    // and load  index.html of the app.
+    mainWindow.loadURL(path.join(__dirname, "http://localhost:3000"))
+  }
+
+  mainWindow.webContents.once("did-finish-load", () => {})
 
   // Emitted when the window is closed.
   mainWindow.on("closed", () => {

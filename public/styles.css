@@ -1,3 +1,12 @@
+:root {
+  --border-radius: 10px;
+  --tint-color: red;
+  --text-color: white;
+  --big-border-width: 3px;
+  --big-background-color: transparent;
+  --hover-color: rgba(255, 0, 0, 0.5);
+}
+
 @font-face {
   font-family: youtube-font;
   src: url("assets/Trade Gothic LT Bold Condensed No. 20.ttf");
@@ -18,4 +27,57 @@ h1 {
   justify-content: center;
   background-color: transparent;
   margin-top: -30px;
+}
+
+.bodyContainer {
+  display: flex;
+  background-color: transparent;
+  height: 80vh;
+}
+
+.rightBodyContainer {
+  background-color: transparent;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.leftBodyContainer {
+  background-color: transparent;
+  flex: 2;
+}
+
+.consoleOutput {
+  background-color: var(--big-background-color);
+  border-radius: var(--border-radius);
+  border-color: var(--tint-color);
+  border-width: var(--big-border-width);
+  resize: none;
+  outline: 0px;
+  margin: 10px;
+  padding: 10px;
+
+  height: 100%;
+}
+.consoleOutput::-webkit-scrollbar {
+  display: none;
+}
+
+.bigButton {
+  background-color: var(--big-background-color);
+  border-radius: var(--border-radius);
+  border-color: var(--tint-color);
+  border-width: var(--big-border-width);
+  color: var(--text-color);
+  font-family: youtube-font;
+  font-size: 25px;
+  cursor: pointer;
+  outline: 0px;
+  margin: 10px;
+  padding: 10px;
+}
+.bigButton:hover,
+.bigButton:focus {
+  border-color: var(--hover-color);
 }
