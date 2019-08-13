@@ -5,6 +5,7 @@
   "main": "dist/main.js",
   "scripts": {
     "start": "electron .",
+    "build": "npm run build-react",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start-react": "cd view && npm start",
     "build-react": "cd view && npm run build"
