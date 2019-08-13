@@ -3,36 +3,51 @@ import { path as ffmpegPath } from "@ffmpeg-installer/ffmpeg"
 import youtubedl from "youtube-dl"
 import path from "path"
 
-// const ffmpeg = spawn(ffmpegPath, [
+// const proc = spawn(ffmpegPath, [
 //   "-i",
 //   "./playground/testVideo.mp4",
 //   "./playground/testFfmpegOut.mp4"
 // ])
+youtubedl.getInfo(
+  "https://www.youtube.com/watch?v=aLFgbkN3-hM",
+  // ["--get-url"],
+  (err: any, info: any) => {
+    console.log("info :", info.url)
+  }
+)
 
-const ffmpeg = spawn(ffmpegPath, [
-  "-ss",
-  "0",
-  "-i",
-  "./playground/testVideo.mp4",
-  "./playground/testFfmpegOut.mp4",
-  "-t",
-  "1"
-])
+// const ffmpeg = spawn(ffmpegPath, [
+//   "-ss",
+//   "0",
+//   "-i",
+//   "./playground/testVideo.mp4",
+//   "./playground/testFfmpegOut.mp4",
+//   "-t",
+//   "1"
+// ])
 
-ffmpeg.stdout.setEncoding("utf8")
+// const proc = spawn("./node_modules/youtube-dl/bin/youtube-dl", [
+//   "-f",
+//   "22",
+//   "-g",
+//   "https://www.youtube.com/watch?v=aLFgbkN3-hM"
+// ])
 
-ffmpeg.stdout.on("data", function(data) {
-  console.log("stdout data: ", data)
-})
+// proc.stdout.setEncoding("utf8")
 
-ffmpeg.stderr.setEncoding("utf8")
-ffmpeg.stderr.on("data", function(data) {
-  console.log("stderr data: ", data)
-})
+// proc.stdout.on("data", function(data) {
+//   console.log("stdout data: ", data)
+// })
 
-ffmpeg.on("close", (code, signal) => {
-  console.log(code, signal)
-})
+// proc.stderr.setEncoding("utf8")
+// proc.stderr.on("data", function(data) {
+//   console.log("stderr data: ", data)
+// })
+
+// proc.on("close", (code, signal) => {
+//   console.log(code, signal)
+// })
+
 // const pathsubs = path.join(process.cwd(), "subs")
 
 // console.log("path:", pathsubs)
