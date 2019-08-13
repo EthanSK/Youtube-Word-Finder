@@ -2,9 +2,9 @@
   "name": "youtuberwordfinderbot",
   "version": "1.0.0",
   "description": "Finds clips of youtubers saying certain words",
-  "main": "dist/index.js",
+  "main": "dist/main.js",
   "scripts": {
-    "start": "node .",
+    "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
