@@ -1,5 +1,5 @@
 import { app, BrowserWindow } from "electron"
-import constants from "./constants"
+import constants from "../playground/constants"
 import path from "path"
 
 let mainWindow: BrowserWindow | null
