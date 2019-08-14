@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"
-import logo from "./logo.svg"
 import "./App.css"
 import { IpcRenderer } from "electron"
+import Header from "../Header/Header"
 declare global {
   interface Window {
     require: (
@@ -11,7 +11,6 @@ declare global {
     }
   }
 }
-
 const { ipcRenderer } = window.require("electron")
 
 const App: React.FC = () => {
@@ -27,20 +26,7 @@ const App: React.FC = () => {
   }, [])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header title="Youtuber Word Finder Bot" />
     </div>
   )
 }

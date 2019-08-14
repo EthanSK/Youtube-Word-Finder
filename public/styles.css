@@ -1,17 +1,3 @@
-:root {
-  --border-radius: 10px;
-  --tint-color: red;
-  --text-color: white;
-  --big-border-width: 3px;
-  --big-background-color: transparent;
-  --hover-color: rgba(255, 0, 0, 0.5);
-}
-
-@font-face {
-  font-family: youtube-font;
-  src: url("assets/Trade Gothic LT Bold Condensed No. 20.ttf");
-}
-
 body {
   background-color: rgb(40, 40, 40);
 }

@@ -5,6 +5,10 @@ eg dts-gen -m @ffmpeg-installer/ffmpeg needs an @ffmpeg-installer dir in root. i
 for some fucked reason, I need to keep @ffmpeg-installer folder top level idk and idc
 
 
+# To start dev env
+
+- In one shell, do npm run react-start
+- Once that's loaded, in another shell, do npm start
 
 # For setting up with typescript, electron, and react:
 

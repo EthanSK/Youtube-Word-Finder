@@ -33,7 +33,7 @@ function createWindow() {
     }
     else {
         // and load  index.html of the app.
-        // mainWindow.loadFile(path.join(__dirname, "../public/index.html"))
+        // mainWindow.loadFile(path.join(__dirnamed , "../public/index.html"))
         mainWindow.loadFile(path_1.default.join(__dirname, "../view/build/index.html"));
     }
     mainWindow.webContents.once("did-finish-load", () => {

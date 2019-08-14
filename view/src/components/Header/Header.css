@@ -1,0 +1,12 @@
+h1 {
+  color: white;
+  font-family: youtube-font;
+  font-size: 40px;
+}
+
+.titleContainer {
+  display: flex;
+  justify-content: center;
+  background-color: transparent;
+  margin-top: -30px;
+}

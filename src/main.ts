@@ -30,7 +30,7 @@ function createWindow() {
     mainWindow.loadURL("http://localhost:3000")
   } else {
     // and load  index.html of the app.
-    // mainWindow.loadFile(path.join(__dirname, "../public/index.html"))
+    // mainWindow.loadFile(path.join(__dirnamed , "../public/index.html"))
     mainWindow.loadFile(path.join(__dirname, "../view/build/index.html"))
   }
 
