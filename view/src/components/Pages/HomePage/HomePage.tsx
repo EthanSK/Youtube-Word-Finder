@@ -1,9 +1,9 @@
 import React from "react"
 import "./HomePage.css"
-import ConsoleOutput from "../../Elements/ConsoleOutput/ConsoleOutput"
-import BigButton from "../../Elements/BigButton/BigButton"
-import TextBoxContainer from "../../Containers/TextBoxContainer/TextBoxContainer"
-import DropdownContainer from "../../Containers/DropdownContainer/DropdownContainer"
+import ConsoleOutput from "../../elements/ConsoleOutput/ConsoleOutput"
+import BigButton from "../../elements/BigButton/BigButton"
+import TextBoxContainer from "../../elements/TextBox/TextBoxContainer"
+import DropdownContainer from "../../elements/Dropdown/DropdownContainer"
 
 const HomePage = () => {
   return (
