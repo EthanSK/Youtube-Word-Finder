@@ -1,10 +1,11 @@
 :root {
-  --border-radius: 10px;
+  --border-radius: 20px;
   --tint-color: red;
   --text-color: white;
-  --big-border-width: 3px;
-  --big-background-color: transparent;
+  --item-border-width: 3px;
+  --item-background-color: transparent;
   --hover-color: rgba(255, 0, 0, 0.5);
+  --clicked-text-color: rgba(255, 255, 255, 0.5);
 }
 
 @font-face {

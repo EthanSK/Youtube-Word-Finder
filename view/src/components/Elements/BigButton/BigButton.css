@@ -1,8 +1,8 @@
 .bigButton {
-  background-color: var(--big-background-color);
+  background-color: var(--item-background-color);
   border-radius: var(--border-radius);
   border-color: var(--tint-color);
-  border-width: var(--big-border-width);
+  border-width: var(--item-border-width);
   color: var(--text-color);
   font-family: youtube-font;
   font-size: 25px;
@@ -10,8 +10,13 @@
   outline: 0px;
   margin: 10px;
   padding: 10px;
+  transition: 0.2s;
+  border-style: solid; /*this was causing that weird diagonal split in colour*/
 }
-.bigButton:hover,
-.bigButton:focus {
+.bigButton:hover {
   border-color: var(--hover-color);
+}
+
+.bigButton:active {
+  color: var(--clicked-text-color);
 }

@@ -1,8 +1,8 @@
 import React, { useEffect } from "react"
 import "./App.css"
 import { IpcRenderer } from "electron"
-import Header from "../Header/Header"
-import HomePage from "../HomePage/HomePage"
+import Header from "../Elements/Header/Header"
+import HomePage from "../Pages/HomePage/HomePage"
 declare global {
   interface Window {
     require: (

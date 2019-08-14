@@ -1,0 +1,26 @@
+.textBoxContainer {
+  display: flex;
+  background-color: transparent;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px;
+}
+
+.textBox {
+  background-color: var(--item-background-color);
+  border-radius: var(--border-radius);
+  border-color: var(--tint-color);
+  border-width: var(--item-border-width);
+  color: var(--text-color);
+  font-family: youtube-font;
+  font-size: 12px;
+  padding: 5px;
+  border-style: solid; /*this was causing that weird diagonal split in colour*/
+  outline: none;
+  flex: 2;
+}
+
+.textBoxLabel {
+  flex: 1;
+  color: var(--text-color);
+}
