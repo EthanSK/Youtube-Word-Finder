@@ -36,7 +36,9 @@ function createWindow() {
         // mainWindow.loadFile(path.join(__dirname, "../public/index.html"))
         mainWindow.loadFile(path_1.default.join(__dirname, "../view/build/index.html"));
     }
-    mainWindow.webContents.once("did-finish-load", () => { });
+    mainWindow.webContents.once("did-finish-load", () => {
+        mainWindow.webContents.send("test", "69 test message");
+    });
     // Emitted when the window is closed.
     mainWindow.on("closed", () => {
         // Dereference the window object, usually you would store windows

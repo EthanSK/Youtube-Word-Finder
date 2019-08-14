@@ -3,3 +3,10 @@ Apparently, to create a dts-gen for a scoped package, (one with @ already in fro
 eg dts-gen -m @ffmpeg-installer/ffmpeg needs an @ffmpeg-installer dir in root. it's weird but it works
 
 for some fucked reason, I need to keep @ffmpeg-installer folder top level idk and idc
+
+
+
+# For setting up with typescript, electron, and react:
+
+- in view package json, homepage must be set to . or it won't work.
+- if importing ipc, do it like this https://github.com/electron/electron/issues/9920#issuecomment-511162952

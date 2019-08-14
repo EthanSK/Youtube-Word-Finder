@@ -7,10 +7,10 @@
     "start": "electron .",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "build": "npm run build-react",
+    "build": "npm run react-build",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start-react": "cd view && npm start",
-    "build-react": "cd view && npm run build"
+    "react-start": "cd view && npm start",
+    "react-build": "cd view && npm run build"
   },
   "repository": {
     "type": "git",
@@ -24,6 +24,7 @@
   "devDependencies": {
     "@types/dotenv": "^6.1.1",
     "@types/youtube-dl": "^1.12.2",
+    "concurrently": "^4.1.1",
     "electron": "^6.0.1",
     "electron-builder": "^21.2.0",
     "electron-reload": "^1.5.0"

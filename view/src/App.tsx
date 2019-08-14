@@ -1,8 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react"
+import logo from "./logo.svg"
+import "./App.css"
+import { IpcRenderer } from "electron"
+declare global {
+  interface Window {
+    require: (
+      module: "electron"
+    ) => {
+      ipcRenderer: IpcRenderer
+    }
+  }
+}
+
+const { ipcRenderer } = window.require("electron")
 
 const App: React.FC = () => {
+  useEffect(() => {
+    ipcRenderer.on("test", (event, data) => {
+      console.log("ipc registered test event", data)
+    })
+    return () => {
+      ipcRenderer.removeListener("test", () => {
+        console.log("ipc removed test event listener")
+      })
+    }
+  }, [])
   return (
     <div className="App">
       <header className="App-header">
@@ -20,7 +42,7 @@ const App: React.FC = () => {
         </a>
       </header>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
