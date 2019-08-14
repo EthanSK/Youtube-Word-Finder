@@ -1,5 +1,5 @@
 import "./Header.css"
-import React, { useEffect } from "react"
+import React from "react"
 
 const Header = (props: { title: string }) => {
   return (

@@ -2,6 +2,7 @@ import React, { useEffect } from "react"
 import "./App.css"
 import { IpcRenderer } from "electron"
 import Header from "../Header/Header"
+import HomePage from "../HomePage/HomePage"
 declare global {
   interface Window {
     require: (
@@ -27,6 +28,7 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <Header title="Youtuber Word Finder Bot" />
+      <HomePage />
     </div>
   )
 }
