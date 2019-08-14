@@ -4,6 +4,7 @@ import ConsoleOutput from "../../elements/ConsoleOutput/ConsoleOutput"
 import BigButton from "../../elements/BigButton/BigButton"
 import TextBoxContainer from "../../elements/TextBox/TextBoxContainer"
 import DropdownContainer from "../../elements/Dropdown/DropdownContainer"
+import SplitRow from "../../containers/SplitRow/SplitRow"
 
 const HomePage = () => {
   return (
@@ -14,21 +15,39 @@ const HomePage = () => {
           labelText="channel ID"
           placeholder="A channel ID e.g. UCivXNaaNhyuQQO-0V9L6nFA"
         />
-        <DropdownContainer
-          selectId="videoSource"
-          labelText="labeletxtt"
-          options={[
-            {
-              value: "lol",
-              text: "poop"
-            },
-            {
-              value: "aaa",
-              text: "poeeuoaeuop",
-              isSelected: true
-            }
-          ]}
-        />
+
+        <SplitRow>
+          <DropdownContainer
+            selectId="videoSource"
+            labelText="labeletxtt"
+            options={[
+              {
+                value: "lol",
+                text: "poop"
+              },
+              {
+                value: "aaa",
+                text: "poeeuoaeuop",
+                isSelected: true
+              }
+            ]}
+          />
+          <DropdownContainer
+            selectId="videoSource"
+            labelText="labeletxtt"
+            options={[
+              {
+                value: "lol",
+                text: "poop"
+              },
+              {
+                value: "aaa",
+                text: "poeeuoaeuop",
+                isSelected: true
+              }
+            ]}
+          />
+        </SplitRow>
       </div>
       <div className="homePageRightSide">
         <ConsoleOutput placeholder="👋 This app finds and downloads clips from youtube of specified words being spoken! This is the output box." />

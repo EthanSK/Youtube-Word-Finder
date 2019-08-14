@@ -20,8 +20,8 @@ const DropdownContainer = (props: {
 export default DropdownContainer
 
 const Dropdown = (props: { selectId: SelectId; options: Option[] }) => {
-  function createOptionElems(options: Option[]) {
-    return options.map(option => {
+  function createOptionElems() {
+    return props.options.map(option => {
       return (
         <option value={option.value} selected={option.isSelected}>
           {option.text}
@@ -32,7 +32,7 @@ const Dropdown = (props: { selectId: SelectId; options: Option[] }) => {
 
   return (
     <select className="dropdown" id={props.selectId}>
-      {createOptionElems(props.options)}
+      {createOptionElems()}
     </select>
   )
 }
