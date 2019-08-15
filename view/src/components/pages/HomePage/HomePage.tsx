@@ -2,8 +2,8 @@ import React from "react"
 import "./HomePage.css"
 import ConsoleOutput from "../../elements/ConsoleOutput/ConsoleOutput"
 import BigButton from "../../elements/BigButton/BigButton"
-import TextBoxContainer from "../../elements/TextBox/TextBoxContainer"
-import DropdownContainer from "../../elements/Dropdown/DropdownContainer"
+import TextBoxContainer from "../../elements/TextBox/TextBox"
+import DropdownContainer from "../../elements/Dropdown/Dropdown"
 import SplitRow from "../../containers/SplitRow/SplitRow"
 
 const HomePage = () => {

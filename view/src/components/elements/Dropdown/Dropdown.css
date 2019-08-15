@@ -1,4 +1,4 @@
-.textBoxContainer {
+.dropdownContainer {
   display: flex;
   background-color: transparent;
   justify-content: space-between;
@@ -6,22 +6,25 @@
   margin: 10px;
 }
 
-.textBox {
+.dropdown {
   background-color: var(--item-background-color);
-  border-radius: var(--border-radius);
+  /* border-radius: 4px; don't set this property, the os sets it*/
   border-color: var(--tint-color);
   border-width: var(--item-border-width);
   color: var(--text-color);
   font-family: youtube-font;
-  font-size: 12px;
-  padding: 5px;
+  font-size: 15px;
   border-style: solid; /*this was causing that weird diagonal split in colour*/
   outline: none;
   flex: 2;
 }
 
-.textBoxLabel {
-  /* flex: 1; */
+.dropdownLabel {
   color: var(--text-color);
+  /* flex: 1; */
   margin: 10px;
+}
+
+.dropdown option {
+  background-color: var(--background-color);
 }

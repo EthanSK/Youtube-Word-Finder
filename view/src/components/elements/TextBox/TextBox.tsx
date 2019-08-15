@@ -1,5 +1,5 @@
 import React from "react"
-import "./TextBoxContainer.css"
+import "./TextBox.css"
 import FileChooserButton from "../FileChooserButton/FileChooserButton"
 
 export type TextBoxId = "channelId" | "textFile"
