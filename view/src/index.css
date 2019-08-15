@@ -9,8 +9,12 @@
 }
 
 @font-face {
+  font-family: youtube-font-title;
+  src: url("./assets/fonts/tradeGothicBoldCondensed.ttf");
+}
+@font-face {
   font-family: youtube-font;
-  src: url("./assets/fonts/tradeGothicLTBoldCondensed.ttf");
+  src: url("./assets/fonts/tradeGothicNormal.ttf");
 }
 
 body {

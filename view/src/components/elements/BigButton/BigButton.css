@@ -4,7 +4,7 @@
   border-color: var(--tint-color);
   border-width: var(--item-border-width);
   color: var(--text-color);
-  font-family: youtube-font;
+  font-family: youtube-font-title;
   font-size: 25px;
   cursor: pointer;
   outline: 0px;

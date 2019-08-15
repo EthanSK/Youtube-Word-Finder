@@ -24,3 +24,7 @@
   /* flex: 1; */
   margin: 10px;
 }
+
+.dropdown option {
+  background-color: orange;
+}
