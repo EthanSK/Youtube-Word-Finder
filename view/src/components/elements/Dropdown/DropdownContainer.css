@@ -8,7 +8,7 @@
 
 .dropdown {
   background-color: var(--item-background-color);
-  border-radius: var(--border-radius);
+  border-radius: 2px;
   border-color: var(--tint-color);
   border-width: var(--item-border-width);
   color: var(--text-color);
@@ -26,5 +26,5 @@
 }
 
 .dropdown option {
-  background-color: orange;
+  background-color: var(--background-color);
 }
