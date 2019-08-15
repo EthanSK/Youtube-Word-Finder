@@ -17,11 +17,13 @@
   padding-left: 7px;
   border-style: solid; /*this was causing that weird diagonal split in colour*/
   outline: none;
-  flex: 2;
+
+  flex-grow: 2;
 }
 
 .textBoxLabel {
-  /* flex: 1; */
+  width: 30%;
   color: var(--text-color);
   margin: 10px;
+  background-color: green;
 }
