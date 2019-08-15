@@ -1,10 +1,15 @@
-import React, { ReactNode } from "react"
+import React from "react"
 import "./SplitRow.css"
 
 const SplitRow = (props: { children: any[] }) => {
   function createSections() {
     return props.children.map(child => {
-      return <div className="splitRowSection">{child}</div>
+      console.log("child key: ", child.key)
+      return (
+        <div className="splitRowSection" key={child.key}>
+          {child}
+        </div>
+      )
     })
   }
 

@@ -21,5 +21,6 @@
 
 .dropdownLabel {
   color: var(--text-color);
-  flex: 1;
+  /* flex: 1; */
+  margin: 10px;
 }

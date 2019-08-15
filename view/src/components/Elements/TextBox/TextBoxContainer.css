@@ -21,6 +21,7 @@
 }
 
 .textBoxLabel {
-  flex: 1;
+  /* flex: 1; */
   color: var(--text-color);
+  margin: 10px;
 }

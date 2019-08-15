@@ -10,44 +10,39 @@ const HomePage = () => {
   return (
     <div className="homePageContainer">
       <div className="homePageLeftSide">
-        <TextBoxContainer
-          textBoxId="channelId"
-          labelText="channel ID"
-          placeholder="A channel ID e.g. UCivXNaaNhyuQQO-0V9L6nFA"
-        />
-
         <SplitRow>
           <DropdownContainer
+            key="videoSource"
             selectId="videoSource"
-            labelText="labeletxtt"
+            labelText="Video source"
             options={[
               {
-                value: "lol",
-                text: "poop"
+                value: "Channel",
+                isDefaultSelected: true
               },
               {
-                value: "aaa",
-                text: "poeeuoaeuop",
-                isSelected: true
+                value: "Playlist"
+              },
+              {
+                value: "Text file"
               }
             ]}
           />
-          <DropdownContainer
-            selectId="videoSource"
-            labelText="labeletxtt"
-            options={[
-              {
-                value: "lol",
-                text: "poop"
-              },
-              {
-                value: "aaa",
-                text: "poeeuoaeuop",
-                isSelected: true
-              }
-            ]}
-          />
+          <div />
         </SplitRow>
+        <TextBoxContainer
+          key="channelId"
+          textBoxId="channelId"
+          labelText="Channel ID"
+          placeholder="e.g. UCivXNaaNhyuQQO-0V9L6nFA"
+        />
+        <TextBoxContainer
+          key="textFile"
+          textBoxId="textFile"
+          labelText="Text file"
+          placeholder="containing the words"
+          fileChooserType="file"
+        />
       </div>
       <div className="homePageRightSide">
         <ConsoleOutput placeholder="👋 This app finds and downloads clips from youtube of specified words being spoken! This is the output box." />

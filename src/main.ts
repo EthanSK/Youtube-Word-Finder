@@ -11,7 +11,7 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     backgroundColor: "#282828",
     //remember to add icon here for linux coz appaz u need it. wow it didn't work in postilkesbot test
-    width: 800,
+    width: 850,
     height: 600,
     minWidth: 300,
     minHeight: 400,
