@@ -7,7 +7,11 @@ const FileChooserButton = (props: { fileChooserType: "file" | "folder" }) => {
   const image = props.fileChooserType === "file" ? fileIcon : folderIcon
   return (
     <button className="fileChooserButton">
-      <img src={image} className="folderIcon" />
+      <img
+        src={image}
+        className="folderIcon fileIcon"
+        alt={props.fileChooserType + " icon"}
+      />
     </button>
   )
 }
