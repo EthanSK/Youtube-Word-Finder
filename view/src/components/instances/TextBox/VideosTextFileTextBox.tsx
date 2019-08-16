@@ -2,7 +2,7 @@ import React, { useContext } from "react"
 import TextBoxContainer from "../../elements/TextBox/TextBox"
 import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext"
 
-const ChannelIdTextBox = (props: { key: string }) => {
+const VideosTextFileTextBox = (props: { key: string }) => {
   const {
     state: userDefaultsState,
     dispatch: userDefaultsDispatch
@@ -10,20 +10,21 @@ const ChannelIdTextBox = (props: { key: string }) => {
 
   return (
     <TextBoxContainer
-      key="ChannelIdTextBox"
-      textBoxId="channelId"
-      labelText="Channel ID"
-      placeholder="e.g. UCivXNaaNhyuQQO-0V9L6nFA"
+      key="VideosTextFileTextBox"
+      textBoxId="textFileVideoSource"
+      labelText="Videos"
+      fileChooserType="file"
+      placeholder="Text file containing the videos"
       onFinishEditing={function(event) {
         const newText = event.target.value
         userDefaultsDispatch({
-          channelId: newText
+          videoTextFile: newText
         })
       }}
-      initialText={userDefaultsState.channelId}
-      isHidden={userDefaultsState.videoSource !== "channel"}
+      initialText={userDefaultsState.videoTextFile}
+      isHidden={userDefaultsState.videoSource !== "textFile"}
     />
   )
 }
 
-export default ChannelIdTextBox
+export default VideosTextFileTextBox

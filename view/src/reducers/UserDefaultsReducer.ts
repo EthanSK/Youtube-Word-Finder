@@ -1,16 +1,17 @@
 export type UserDefaultsState = {
   videoSource: "channel" | "playlist" | "textFile"
   channelId: string
+  videoTextFile: string
 }
 
-export type UserDefaultAction = Partial<UserDefaultsState> //because we usually only change one thing at a time
+export type UserDefaultsAction = Partial<UserDefaultsState> //because we usually only change one thing at a time
 
 const userDefaultsReducer = (
   state: UserDefaultsState,
-  action: UserDefaultAction
+  action: UserDefaultsAction
 ) => {
   const newState = { ...state, ...action } //the last object spead takes priority for dup keys
-  console.log("new state: ", newState)
+  // console.log("new state: ", newState)
   return newState //override/set the new values got in action
 }
 

@@ -1,11 +1,12 @@
 import React, { useContext } from "react"
 import DropdownContainer from "../../elements/Dropdown/Dropdown"
 import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext"
+import { ConsoleOutputContext } from "../../../contexts/ConsoleOutputContext"
 
 enum Values {
   Channel = "Channel",
   Playlist = "Playlist",
-  TextFile = "TextFile"
+  TextFile = "Text File"
 }
 
 const VideoSourceDropdown = (props: {
@@ -15,6 +16,7 @@ const VideoSourceDropdown = (props: {
     state: userDefaultsState,
     dispatch: userDefaultsDispatch
   } = useContext(UserDefaultsContext)
+  const { dispatch: consoleOutputDispatch } = useContext(ConsoleOutputContext)
   console.log("video source dropdown rerendered") //i honestly don't think it matters that much if the whole ui reloads because of one small change. it's really inexpensive.
   return (
     <DropdownContainer
@@ -40,6 +42,13 @@ const VideoSourceDropdown = (props: {
           default:
             break
         }
+        consoleOutputDispatch({
+          type: "addNewMessage",
+          payload: {
+            message: "Changed source to scan videos to " + value,
+            messageType: "userDefault"
+          }
+        })
       }}
       selectId="videoSource"
       labelText="Video source"
