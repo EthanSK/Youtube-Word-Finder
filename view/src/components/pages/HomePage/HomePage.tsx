@@ -6,9 +6,10 @@ import TextBoxContainer from "../../elements/TextBox/TextBox"
 import SplitRow from "../../containers/SplitRow/SplitRow"
 import UserDefaultsContextProvider from "../../../contexts/UserDefaultsContext"
 import VideoSourceDropdown from "../../instances/Dropdown/VideoSourceDropdown"
-import ChannelIdTextBox from "../../instances/TextBox/ChannelIdTextBox"
+import VideosChannelIdTextBox from "../../instances/TextBox/VideosChannelIdTextBox"
 import VideosTextFileTextBox from "../../instances/TextBox/VideosTextFileTextBox"
 import ConsoleOutputContextProvider from "../../../contexts/ConsoleOutputContext"
+import VideosPlaylistIdTextBox from "../../instances/TextBox/VideosPlaylistIdTextBox"
 
 const HomePage = () => {
   return (
@@ -20,7 +21,8 @@ const HomePage = () => {
               <VideoSourceDropdown key="VideoSourceDropdownInstance" />
               <div />
             </SplitRow>
-            <ChannelIdTextBox key="ChannelIdTextBoxInstance" />
+            <VideosChannelIdTextBox key="VideosChannelIdTextBoxInstance" />
+            <VideosPlaylistIdTextBox key="VideosPlaylistIdTextBoxInstance" />
             <VideosTextFileTextBox key="VideosTextFileTextBoxInstance" />
 
             <TextBoxContainer

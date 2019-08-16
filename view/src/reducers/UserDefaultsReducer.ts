@@ -1,6 +1,7 @@
 export type UserDefaultsState = {
   videoSource: "channel" | "playlist" | "textFile"
   channelId: string
+  playlistId: string
   videoTextFile: string
 }
 

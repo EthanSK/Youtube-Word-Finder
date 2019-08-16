@@ -2,7 +2,11 @@ import React from "react"
 import "./TextBox.css"
 import FileChooserButton from "../FileChooserButton/FileChooserButton"
 
-export type TextBoxId = "channelId" | "textFileWords" | "textFileVideoSource"
+export type TextBoxId =
+  | "videosChannelId"
+  | "videosPlaylistId"
+  | "textFileWords"
+  | "textFileVideoSource"
 
 const TextBoxContainer = (props: {
   textBoxId: TextBoxId
@@ -15,7 +19,6 @@ const TextBoxContainer = (props: {
   key: string //not used here, just to make sure we add a key when adding this element
 }) => {
   const style = props.isHidden ? { display: "none" } : {}
-  console.log("text box container rerender, style: ", style)
 
   return (
     <div className="textBoxContainer" key={props.textBoxId} style={style}>

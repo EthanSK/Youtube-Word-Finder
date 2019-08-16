@@ -2,7 +2,7 @@ import React, { useContext } from "react"
 import TextBoxContainer from "../../elements/TextBox/TextBox"
 import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext"
 
-const ChannelIdTextBox = (props: { key: string }) => {
+const VideosChannelIdTextBox = (props: { key: string }) => {
   const {
     state: userDefaultsState,
     dispatch: userDefaultsDispatch
@@ -10,10 +10,10 @@ const ChannelIdTextBox = (props: { key: string }) => {
 
   return (
     <TextBoxContainer
-      key="ChannelIdTextBox"
-      textBoxId="channelId"
-      labelText="Channel ID"
-      placeholder="e.g. UCivXNaaNhyuQQO-0V9L6nFA"
+      key="VideosChannelIdTextBox"
+      textBoxId="videosChannelId"
+      labelText="Videos"
+      placeholder="Channel ID e.g. UCivXNaaNhyuQQO-0V9L6nFA"
       onFinishEditing={function(event) {
         const newText = event.target.value
         userDefaultsDispatch({
@@ -26,4 +26,4 @@ const ChannelIdTextBox = (props: { key: string }) => {
   )
 }
 
-export default ChannelIdTextBox
+export default VideosChannelIdTextBox

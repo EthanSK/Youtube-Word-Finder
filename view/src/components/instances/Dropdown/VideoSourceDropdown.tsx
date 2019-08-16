@@ -23,21 +23,27 @@ const VideoSourceDropdown = (props: {
       key="VideoSourceDropdown"
       onChange={function(event) {
         const value: Values = event.target.value as Values
+        let consoleMesage = `Changed source to scan videos to ${value}.`
+
         switch (value) {
           case Values.Channel:
             userDefaultsDispatch({
               videoSource: "channel"
             })
+            consoleMesage += " Ensure you provided a channel ID"
             break
           case Values.Playlist:
             userDefaultsDispatch({
               videoSource: "playlist"
             })
+            consoleMesage += " Ensure you provided a playlist ID"
             break
           case Values.TextFile:
             userDefaultsDispatch({
               videoSource: "textFile"
             })
+            consoleMesage +=
+              " Ensure you provided a text file with each video URL on a new line"
             break
           default:
             break
@@ -45,7 +51,7 @@ const VideoSourceDropdown = (props: {
         consoleOutputDispatch({
           type: "addNewMessage",
           payload: {
-            message: "Changed source to scan videos to " + value,
+            message: consoleMesage,
             messageType: "userDefault"
           }
         })

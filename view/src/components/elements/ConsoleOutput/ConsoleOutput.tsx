@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, useRef, useEffect } from "react"
 import "./ConsoleOutput.css"
 import { ConsoleOutputContext } from "../../../contexts/ConsoleOutputContext"
 import { ConsoleOutputMessageType } from "../../../reducers/ConsoleOutputReducer"
@@ -6,6 +6,7 @@ import constants from "../../../constants"
 
 const ConsoleOutput = (props: { placeholder: string }) => {
   const { state: consoleOutputState } = useContext(ConsoleOutputContext)
+  const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
   function emoji(messageType: ConsoleOutputMessageType) {
     switch (messageType) {
@@ -27,14 +28,20 @@ const ConsoleOutput = (props: { placeholder: string }) => {
         return "🏁"
     }
   }
-
+  useEffect(() => {
+    if (textAreaRef.current) {
+      textAreaRef.current.scrollTop = textAreaRef.current.scrollHeight
+    }
+  })
   function toDisplay(): string {
     const cutDownOutput = consoleOutputState.slice(
       -constants.maxConsoleOutputMessagesToDisplay
     ) //so the app doesn't lag out coz too many messages are showing in the console.
     let output = ""
     for (const payload of cutDownOutput) {
-      output += `${emoji(payload.messageType)} ${payload.message}\n\n`
+      output += `${output !== "" ? "\n\n" : ""}${emoji(payload.messageType)} ${
+        payload.message
+      }`
     }
     return output
   }
@@ -45,6 +52,7 @@ const ConsoleOutput = (props: { placeholder: string }) => {
       placeholder={props.placeholder}
       readOnly={true}
       value={toDisplay()}
+      ref={textAreaRef}
     />
   )
 }

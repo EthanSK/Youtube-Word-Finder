@@ -13,6 +13,7 @@ type UserDefaultsContextType = {
 const initState: UserDefaultsState = {
   videoSource: "channel",
   channelId: "",
+  playlistId: "",
   videoTextFile: ""
 }
 
