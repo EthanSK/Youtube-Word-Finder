@@ -1,8 +1,8 @@
 .consoleOutput {
-  background-color: var(--big-background-color);
+  background-color: var(--item-background-color);
   border-radius: var(--border-radius);
   border-color: var(--tint-color);
-  border-width: var(--big-border-width);
+  border-width: var(--item-border-width);
   resize: none;
   outline: 0px;
   margin: 10px;

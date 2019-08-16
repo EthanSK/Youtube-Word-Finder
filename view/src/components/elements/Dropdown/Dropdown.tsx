@@ -12,18 +12,27 @@ const DropdownContainer = (props: {
   options: Option[]
   selectId: SelectId
   key: string //not used here, just to make sure we add a key when adding this element
+  onChange(event: React.ChangeEvent<HTMLSelectElement>): void //
 }) => {
   return (
     <div className="dropdownContainer">
       <label className="dropdownLabel">{props.labelText}</label>
-      <Dropdown options={props.options} selectId={props.selectId} />
+      <Dropdown
+        options={props.options}
+        selectId={props.selectId}
+        onChange={event => props.onChange(event)}
+      />
     </div>
   )
 }
 
 export default DropdownContainer
 
-const Dropdown = (props: { selectId: SelectId; options: Option[] }) => {
+const Dropdown = (props: {
+  selectId: SelectId
+  options: Option[]
+  onChange(event: React.ChangeEvent<HTMLSelectElement>): void
+}) => {
   function createOptionElems() {
     return props.options.map(option => {
       return (
@@ -41,6 +50,7 @@ const Dropdown = (props: { selectId: SelectId; options: Option[] }) => {
       defaultValue={
         props.options.filter(option => option.isDefaultSelected)[0].value
       }
+      onChange={event => props.onChange(event)}
     >
       {createOptionElems()}
     </select>

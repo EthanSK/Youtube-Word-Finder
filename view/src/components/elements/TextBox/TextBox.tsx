@@ -22,6 +22,9 @@ const TextBoxContainer = (props: {
         id={props.textBoxId}
         className="textBox"
         placeholder={props.placeholder}
+        readOnly={
+          props.fileChooserType === "file" || props.fileChooserType === "folder"
+        }
       />
       {(function() {
         if (props.fileChooserType) {

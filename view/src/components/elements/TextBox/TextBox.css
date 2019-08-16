@@ -22,8 +22,7 @@
 }
 
 .textBoxLabel {
-  width: 30%;
+  width: 20%;
   color: var(--text-color);
   margin: 10px;
-  background-color: green;
 }

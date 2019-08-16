@@ -3,7 +3,7 @@
   --border-radius: 20px;
   --tint-color: red;
   --text-color: white;
-  --item-border-width: 3px;
+  --item-border-width: 1px;
   --item-background-color: transparent;
   --hover-color: rgba(255, 0, 0, 0.5);
   --clicked-text-color: rgba(255, 255, 255, 0.5);
