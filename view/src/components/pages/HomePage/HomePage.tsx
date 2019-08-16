@@ -1,41 +1,20 @@
-import React, { useContext } from "react"
+import React from "react"
 import "./HomePage.css"
 import ConsoleOutput from "../../elements/ConsoleOutput/ConsoleOutput"
 import BigButton from "../../elements/BigButton/BigButton"
 import TextBoxContainer from "../../elements/TextBox/TextBox"
 import DropdownContainer from "../../elements/Dropdown/Dropdown"
 import SplitRow from "../../containers/SplitRow/SplitRow"
-import VideoSourceContextProvider, {
-  VideoSourceContext
-} from "../../../contexts/VideoSourceContext"
+import UserDefaultsContextProvider from "../../../contexts/UserDefaultsContext"
+import VideoSourceDropdown from "../../instances/VideoSourceDropdown"
 
 const HomePage = () => {
-  const { state, dispatch } = useContext(VideoSourceContext)
   return (
-    <VideoSourceContextProvider>
+    <UserDefaultsContextProvider>
       <div className="homePageContainer">
         <div className="homePageLeftSide">
           <SplitRow>
-            <DropdownContainer
-              key="videoSource"
-              onChange={function(e) {
-                console.log("on change detected", e.target.value)
-              }}
-              selectId="videoSource"
-              labelText="Video source"
-              options={[
-                {
-                  value: "Channel",
-                  isDefaultSelected: true
-                },
-                {
-                  value: "Playlist"
-                },
-                {
-                  value: "Text file"
-                }
-              ]}
-            />
+            <VideoSourceDropdown />
             <div />
           </SplitRow>
           <TextBoxContainer
@@ -57,7 +36,7 @@ const HomePage = () => {
           <BigButton title="Start" />
         </div>
       </div>
-    </VideoSourceContextProvider>
+    </UserDefaultsContextProvider>
   )
 }
 
