@@ -24,17 +24,17 @@ const VideoSourceDropdown = (props: {
         switch (value) {
           case Values.Channel:
             userDefaultsDispatch({
-              videoSourceState: "channel"
+              videoSource: "channel"
             })
             break
           case Values.Playlist:
             userDefaultsDispatch({
-              videoSourceState: "playlist"
+              videoSource: "playlist"
             })
             break
           case Values.TextFile:
             userDefaultsDispatch({
-              videoSourceState: "textFile"
+              videoSource: "textFile"
             })
             break
           default:
@@ -46,15 +46,15 @@ const VideoSourceDropdown = (props: {
       options={[
         {
           value: Values.Channel,
-          isDefaultSelected: userDefaultsState.videoSourceState === "channel"
+          isDefaultSelected: userDefaultsState.videoSource === "channel"
         },
         {
           value: Values.Playlist,
-          isDefaultSelected: userDefaultsState.videoSourceState === "playlist"
+          isDefaultSelected: userDefaultsState.videoSource === "playlist"
         },
         {
           value: Values.TextFile,
-          isDefaultSelected: userDefaultsState.videoSourceState === "textFile"
+          isDefaultSelected: userDefaultsState.videoSource === "textFile"
         }
       ]}
     />

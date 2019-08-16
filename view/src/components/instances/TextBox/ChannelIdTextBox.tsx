@@ -8,19 +8,21 @@ const ChannelIdTextBox = (props: { key: string }) => {
     dispatch: userDefaultsDispatch
   } = useContext(UserDefaultsContext)
 
+  console.log("channel id text box rerender", userDefaultsState.videoSource)
   return (
     <TextBoxContainer
       key="ChannelIdTextBox"
       textBoxId="channelId"
       labelText="Channel ID"
       placeholder="e.g. UCivXNaaNhyuQQO-0V9L6nFA"
-      onChange={function(event) {
+      onFinishEditing={function(event) {
         const newText = event.target.value
         userDefaultsDispatch({
           channelId: newText
         })
       }}
       initialText={userDefaultsState.channelId}
+      isHidden={userDefaultsState.videoSource !== "channel"}
     />
   )
 }

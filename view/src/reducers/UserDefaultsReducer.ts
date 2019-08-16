@@ -1,5 +1,5 @@
 export type UserDefaultsState = {
-  videoSourceState: "channel" | "playlist" | "textFile"
+  videoSource: "channel" | "playlist" | "textFile"
   channelId: string
 }
 
@@ -9,7 +9,9 @@ const userDefaultsReducer = (
   state: UserDefaultsState,
   action: UserDefaultAction
 ) => {
-  return { ...state, action } //override/set the new values got in action
+  const newState = { ...state, ...action } //the last object spead takes priority for dup keys
+  console.log("new state: ", newState)
+  return newState //override/set the new values got in action
 }
 
 export default userDefaultsReducer
