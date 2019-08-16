@@ -1,37 +1,15 @@
 export type UserDefaultsState = {
   videoSourceState: "channel" | "playlist" | "textFile"
+  channelId: string
 }
 
-export type UserDefaultAction = {
-  type: {
-    videoSourceAction:
-      | "useChannelState"
-      | "usePlaylistState"
-      | "useTextFileState"
-  }
-}
+export type UserDefaultAction = Partial<UserDefaultsState> //because we usually only change one thing at a time
 
 const userDefaultsReducer = (
   state: UserDefaultsState,
   action: UserDefaultAction
 ) => {
-  let newState: UserDefaultsState = state
-
-  switch (action.type.videoSourceAction) {
-    case "useChannelState":
-      newState.videoSourceState = "channel"
-      break
-    case "usePlaylistState":
-      newState.videoSourceState = "playlist"
-      break
-    case "useTextFileState":
-      newState.videoSourceState = "textFile"
-      break
-    default:
-      newState = state
-  }
-
-  return newState
+  return { ...state, action } //override/set the new values got in action
 }
 
 export default userDefaultsReducer

@@ -3,10 +3,10 @@ import "./HomePage.css"
 import ConsoleOutput from "../../elements/ConsoleOutput/ConsoleOutput"
 import BigButton from "../../elements/BigButton/BigButton"
 import TextBoxContainer from "../../elements/TextBox/TextBox"
-import DropdownContainer from "../../elements/Dropdown/Dropdown"
 import SplitRow from "../../containers/SplitRow/SplitRow"
 import UserDefaultsContextProvider from "../../../contexts/UserDefaultsContext"
-import VideoSourceDropdown from "../../instances/VideoSourceDropdown"
+import VideoSourceDropdown from "../../instances/Dropdown/VideoSourceDropdown"
+import ChannelIdTextBox from "../../instances/TextBox/ChannelIdTextBox"
 
 const HomePage = () => {
   return (
@@ -14,21 +14,25 @@ const HomePage = () => {
       <div className="homePageContainer">
         <div className="homePageLeftSide">
           <SplitRow>
-            <VideoSourceDropdown />
+            <VideoSourceDropdown key="VideoSourceDropdownInstance" />
             <div />
           </SplitRow>
-          <TextBoxContainer
-            key="channelId"
-            textBoxId="channelId"
-            labelText="Channel ID"
-            placeholder="e.g. UCivXNaaNhyuQQO-0V9L6nFA"
-          />
+          <ChannelIdTextBox key="ChannelIdTextBoxInstance" />
           <TextBoxContainer
             key="textFile"
-            textBoxId="textFile"
-            labelText="Text file"
-            placeholder="containing the words"
+            textBoxId="textFileVideoSource"
+            labelText="Words to find"
+            placeholder="Text file containing the words"
             fileChooserType="file"
+            initialText=""
+          />
+          <TextBoxContainer
+            key="textFileWords"
+            textBoxId="textFileWords"
+            labelText="Videos"
+            placeholder="Text file containing the videos"
+            fileChooserType="file"
+            initialText=""
           />
         </div>
         <div className="homePageRightSide">

@@ -9,8 +9,10 @@ type UserDefaultsContextType = {
   dispatch: React.Dispatch<UserDefaultAction>
 }
 
+//init state important to have to set init values of ui elems
 const initState: UserDefaultsState = {
-  videoSourceState: "textFile"
+  videoSourceState: "textFile",
+  channelId: "aeou"
 }
 
 export const UserDefaultsContext = createContext<UserDefaultsContextType>(
@@ -18,7 +20,10 @@ export const UserDefaultsContext = createContext<UserDefaultsContextType>(
 )
 
 const UserDefaultsContextProvider = (props: { children?: any }) => {
-  const [state, dispatch] = useReducer(userDefaultsReducer, initState)
+  const [state, dispatch] = useReducer(userDefaultsReducer, {
+    action: {},
+    ...initState
+  })
   return (
     <UserDefaultsContext.Provider value={{ state, dispatch: dispatch }}>
       {props.children}

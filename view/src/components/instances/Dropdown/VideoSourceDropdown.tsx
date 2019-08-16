@@ -1,6 +1,6 @@
 import React, { useContext } from "react"
-import DropdownContainer from "../elements/Dropdown/Dropdown"
-import { UserDefaultsContext } from "../../contexts/UserDefaultsContext"
+import DropdownContainer from "../../elements/Dropdown/Dropdown"
+import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext"
 
 enum Values {
   Channel = "Channel",
@@ -8,32 +8,33 @@ enum Values {
   TextFile = "TextFile"
 }
 
-const VideoSourceDropdown = () => {
+const VideoSourceDropdown = (props: {
+  key: string //not used here, just to make sure we add a key when adding this element
+}) => {
   const {
     state: userDefaultsState,
     dispatch: userDefaultsDispatch
   } = useContext(UserDefaultsContext)
-
+  console.log("video source dropdown rerendered") //i honestly don't think it matters that much if the whole ui reloads because of one small change. it's really inexpensive.
   return (
     <DropdownContainer
-      key="videoSource"
+      key="VideoSourceDropdown"
       onChange={function(event) {
         const value: Values = event.target.value as Values
-        console.log("on change detected", value)
         switch (value) {
           case Values.Channel:
             userDefaultsDispatch({
-              type: { videoSourceAction: "useChannelState" }
+              videoSourceState: "channel"
             })
             break
           case Values.Playlist:
             userDefaultsDispatch({
-              type: { videoSourceAction: "usePlaylistState" }
+              videoSourceState: "playlist"
             })
             break
           case Values.TextFile:
             userDefaultsDispatch({
-              type: { videoSourceAction: "useTextFileState" }
+              videoSourceState: "textFile"
             })
             break
           default:
