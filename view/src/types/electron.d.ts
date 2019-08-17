@@ -1,4 +1,4 @@
-import { IpcRenderer, Remote } from "electron"
+import { IpcRenderer, Remote, OpenDialogSyncOptions } from "electron"
 
 declare global {
   interface Window {

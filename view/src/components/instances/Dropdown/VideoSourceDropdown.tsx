@@ -36,7 +36,7 @@ const VideoSourceDropdown = (props: {
             userDefaultsDispatch({
               videoSource: "playlist"
             })
-            consoleMesage += " Ensure you provided a playlist ID"
+            consoleMesage += " Ensure you provided a playlist ID that is public"
             break
           case Values.TextFile:
             userDefaultsDispatch({

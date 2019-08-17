@@ -30,7 +30,7 @@ const ConsoleOutput = (props: { placeholder: string }) => {
   }
   useEffect(() => {
     if (textAreaRef.current) {
-      textAreaRef.current.scrollTop = textAreaRef.current.scrollHeight
+      textAreaRef.current.scrollTop = textAreaRef.current.scrollHeight //scroll to bottom
     }
   })
   function toDisplay(): string {

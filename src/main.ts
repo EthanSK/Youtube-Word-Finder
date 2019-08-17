@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from "electron"
+import { app, BrowserWindow, ipcMain as ipc } from "electron"
 import constants from "./constants"
 import path from "path"
 import dotenv from "dotenv"
@@ -47,6 +47,12 @@ function createWindow() {
   })
 }
 
+ipc.on("testres", (event, data) => {
+  console.log("main received test event")
+})
+ipc.on("log-console-output", (event, data) => {
+  console.log("main console log received test event")
+})
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.

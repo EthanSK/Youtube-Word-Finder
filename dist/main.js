@@ -47,6 +47,12 @@ function createWindow() {
         mainWindow = null;
     });
 }
+electron_1.ipcMain.on("testres", (event, data) => {
+    console.log("main received test event");
+});
+electron_1.ipcMain.on("log-console-output", (event, data) => {
+    console.log("main console log received test event");
+});
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.

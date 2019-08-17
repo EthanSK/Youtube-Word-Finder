@@ -24,15 +24,16 @@
   "homepage": "https://github.com/EthanSK/YoutuberWordFinderBot#readme",
   "devDependencies": {
     "@types/dotenv": "^6.1.1",
+    "@types/electron-store": "^3.2.0",
     "@types/youtube-dl": "^1.12.2",
-    "concurrently": "^4.1.1",
     "electron": "^6.0.1",
-    "electron-builder": "^21.2.0",
-    "electron-reload": "^1.5.0"
+    "electron-builder": "^21.2.0"
   },
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.0.19",
     "dotenv": "^8.0.0",
+    "electron-log": "^3.0.7",
+    "electron-store": "^4.0.0",
     "youtube-dl": "^2.0.1"
   },
   "postinstall": "electron-builder install-app-deps",

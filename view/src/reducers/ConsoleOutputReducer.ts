@@ -1,3 +1,4 @@
+import { ipcSend } from "../ipc"
 interface ConsoleOutputActionPayload {
   message: string
   messageType: ConsoleOutputMessageType
@@ -13,7 +14,7 @@ export type ConsoleOutputMessageType =
   | "sadtimes"
   | "startstop"
 
-interface ConsoleOutputPayload extends ConsoleOutputActionPayload {
+export interface ConsoleOutputPayload extends ConsoleOutputActionPayload {
   timestamp: Date
 }
 
@@ -34,6 +35,7 @@ const consoleOutputReducer = (
         ...action.payload,
         timestamp: new Date()
       }
+      ipcSend("log-console-output", newPayload)
       return [...state, newPayload] //cut down it only when showing in console. don't wanna lose data.
     default:
       return state

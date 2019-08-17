@@ -1,5 +1,6 @@
 import React from "react"
 import FileChooserButton from "../../elements/FileChooserButton/FileChooserButton"
+import constants from "../../../constants"
 const { remote } = window.require("electron")
 
 const VideosTextFileButton = () => {
@@ -7,7 +8,9 @@ const VideosTextFileButton = () => {
     <FileChooserButton
       fileChooserType="file"
       onClick={function() {
-        remote.dialog.showOpenDialog({ properties: ["openFile"] })
+        let options = constants.fileChooserDefaultOptions
+        options.message = "Choose a text file containing the video URLs"
+        remote.dialog.showOpenDialogSync(options)
       }}
     />
   )

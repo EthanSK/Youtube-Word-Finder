@@ -9,6 +9,7 @@ const App: React.FC = () => {
   useEffect(() => {
     ipcRenderer.on("test", (event, data) => {
       console.log("ipc registered test event", data)
+      event.sender.send("testres", "testresdata")
     })
     return () => {
       ipcRenderer.removeListener("test", () => {
