@@ -1,17 +1,8 @@
 import React, { useEffect } from "react"
 import "./App.css"
-import { IpcRenderer } from "electron"
 import Header from "../elements/Header/Header"
 import HomePage from "../pages/HomePage/HomePage"
-declare global {
-  interface Window {
-    require: (
-      module: "electron"
-    ) => {
-      ipcRenderer: IpcRenderer
-    }
-  }
-}
+
 const { ipcRenderer } = window.require("electron")
 
 const App: React.FC = () => {

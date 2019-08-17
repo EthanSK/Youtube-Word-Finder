@@ -1,6 +1,7 @@
 import React, { useContext } from "react"
 import TextBoxContainer from "../../elements/TextBox/TextBox"
 import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext"
+import VideosTextFileButton from "../FileChooserButton/VideosTextFileButton"
 
 const VideosTextFileTextBox = (props: { key: string }) => {
   const {
@@ -13,7 +14,7 @@ const VideosTextFileTextBox = (props: { key: string }) => {
       key="VideosTextFileTextBox"
       textBoxId="textFileVideoSource"
       labelText="Videos"
-      fileChooserType="file"
+      fileChooser={<VideosTextFileButton />}
       placeholder="Text file containing the videos"
       onFinishEditing={function(event) {
         const newText = event.target.value

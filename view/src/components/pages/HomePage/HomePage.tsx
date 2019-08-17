@@ -10,6 +10,7 @@ import VideosChannelIdTextBox from "../../instances/TextBox/VideosChannelIdTextB
 import VideosTextFileTextBox from "../../instances/TextBox/VideosTextFileTextBox"
 import ConsoleOutputContextProvider from "../../../contexts/ConsoleOutputContext"
 import VideosPlaylistIdTextBox from "../../instances/TextBox/VideosPlaylistIdTextBox"
+import FileChooserButton from "../../elements/FileChooserButton/FileChooserButton"
 
 const HomePage = () => {
   return (
@@ -30,8 +31,14 @@ const HomePage = () => {
               textBoxId="textFileWords"
               labelText="Words to find"
               placeholder="Text file containing the words"
-              fileChooserType="file"
+              fileChooser={
+                <FileChooserButton
+                  fileChooserType="file"
+                  onClick={function() {}}
+                />
+              }
               initialText=""
+              onFinishEditing={function() {}}
             />
           </div>
           <div className="homePageRightSide">

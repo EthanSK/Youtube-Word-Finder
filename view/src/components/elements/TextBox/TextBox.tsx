@@ -1,4 +1,4 @@
-import React from "react"
+import React, { ReactNode } from "react"
 import "./TextBox.css"
 import FileChooserButton from "../FileChooserButton/FileChooserButton"
 
@@ -12,10 +12,10 @@ const TextBoxContainer = (props: {
   textBoxId: TextBoxId
   labelText: string
   placeholder: string
-  fileChooserType?: "file" | "folder"
+  fileChooser?: ReactNode
   initialText: string
   isHidden?: boolean
-  onFinishEditing?(event: React.ChangeEvent<HTMLInputElement>): void
+  onFinishEditing(event: React.ChangeEvent<HTMLInputElement>): void
   key: string //not used here, just to make sure we add a key when adding this element
 }) => {
   const style = props.isHidden ? { display: "none" } : {}
@@ -30,15 +30,13 @@ const TextBoxContainer = (props: {
         id={props.textBoxId}
         className="textBox"
         placeholder={props.placeholder}
-        readOnly={
-          props.fileChooserType === "file" || props.fileChooserType === "folder"
-        }
-        onBlur={event => props.onFinishEditing && props.onFinishEditing(event)} //if it exists, then call it
+        readOnly={props.fileChooser !== undefined}
+        onBlur={event => props.onFinishEditing(event)}
         defaultValue={props.initialText}
       />
       {(function() {
-        if (props.fileChooserType) {
-          return <FileChooserButton fileChooserType={props.fileChooserType} />
+        if (props.fileChooser) {
+          return props.fileChooser
         }
         return null
       })()}

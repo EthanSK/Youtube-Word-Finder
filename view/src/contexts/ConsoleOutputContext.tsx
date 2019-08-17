@@ -9,7 +9,7 @@ type ConsoleOutputContextType = {
   dispatch: React.Dispatch<ConsoleOutputAction>
 }
 
-//init state important to have to restore console from previous app session
+//init state important to have to restore console from previous app session. when restoring make sure to only restore most recent n payloads
 const initState: ConsoleOutputState = []
 
 export const ConsoleOutputContext = createContext<ConsoleOutputContextType>(
