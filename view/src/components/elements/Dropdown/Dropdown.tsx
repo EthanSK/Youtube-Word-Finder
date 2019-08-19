@@ -4,7 +4,7 @@ import "./Dropdown.css"
 export type SelectId = "videoSource"
 export type Option = {
   value: string
-  isDefaultSelected?: boolean
+  isSelected?: boolean
 }
 
 const DropdownContainer = (props: {
@@ -47,9 +47,7 @@ const Dropdown = (props: {
     <select
       className="dropdown"
       id={props.selectId}
-      defaultValue={
-        props.options.filter(option => option.isDefaultSelected)[0].value
-      }
+      value={props.options.filter(option => option.isSelected)[0].value}
       onChange={event => props.onChange(event)}
     >
       {createOptionElems()}

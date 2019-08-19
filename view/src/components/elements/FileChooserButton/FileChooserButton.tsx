@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React from "react"
 import "./FileChooserButton.css"
 import folderIcon from "../../../assets/images/folderIcon.png"
 import fileIcon from "../../../assets/images/fileIcon.png"

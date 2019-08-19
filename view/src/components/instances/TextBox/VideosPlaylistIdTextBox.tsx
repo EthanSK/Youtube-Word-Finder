@@ -17,7 +17,10 @@ const VideosPlaylistIdTextBox = (props: { key: string }) => {
       onFinishEditing={function(event) {
         const newText = event.target.value
         userDefaultsDispatch({
-          playlistId: newText
+          type: "set",
+          payload: {
+            playlistId: newText
+          }
         })
       }}
       initialText={userDefaultsState.playlistId}

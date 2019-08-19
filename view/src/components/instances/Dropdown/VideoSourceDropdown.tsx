@@ -17,7 +17,7 @@ const VideoSourceDropdown = (props: {
     dispatch: userDefaultsDispatch
   } = useContext(UserDefaultsContext)
   const { dispatch: consoleOutputDispatch } = useContext(ConsoleOutputContext)
-  console.log("video source dropdown rerendered") //i honestly don't think it matters that much if the whole ui reloads because of one small change. it's really inexpensive.
+  console.log("video source dropdown rerendered", userDefaultsState.videoSource) //i honestly don't think it matters that much if the whole ui reloads because of one small change. it's really inexpensive.
   return (
     <DropdownContainer
       key="VideoSourceDropdown"
@@ -28,19 +28,28 @@ const VideoSourceDropdown = (props: {
         switch (value) {
           case Values.Channel:
             userDefaultsDispatch({
-              videoSource: "channel"
+              type: "set",
+              payload: {
+                videoSource: "channel"
+              }
             })
             consoleMesage += " Ensure you provided a channel ID"
             break
           case Values.Playlist:
             userDefaultsDispatch({
-              videoSource: "playlist"
+              type: "set",
+              payload: {
+                videoSource: "playlist"
+              }
             })
             consoleMesage += " Ensure you provided a playlist ID that is public"
             break
           case Values.TextFile:
             userDefaultsDispatch({
-              videoSource: "textFile"
+              type: "set",
+              payload: {
+                videoSource: "textFile"
+              }
             })
             consoleMesage +=
               " Ensure you provided a text file with each video URL on a new line"
@@ -61,15 +70,15 @@ const VideoSourceDropdown = (props: {
       options={[
         {
           value: Values.Channel,
-          isDefaultSelected: userDefaultsState.videoSource === "channel"
+          isSelected: userDefaultsState.videoSource === "channel"
         },
         {
           value: Values.Playlist,
-          isDefaultSelected: userDefaultsState.videoSource === "playlist"
+          isSelected: userDefaultsState.videoSource === "playlist"
         },
         {
           value: Values.TextFile,
-          isDefaultSelected: userDefaultsState.videoSource === "textFile"
+          isSelected: userDefaultsState.videoSource === "textFile"
         }
       ]}
     />

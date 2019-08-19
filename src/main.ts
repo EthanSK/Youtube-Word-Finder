@@ -5,6 +5,8 @@ import dotenv from "dotenv"
 import "./ipc"
 import { sendToConsoleOutput } from "./logger"
 
+import { restoreUserDefaults } from "./store"
+
 dotenv.config()
 
 export let mainWindow: BrowserWindow | null
@@ -39,6 +41,7 @@ function createWindow() {
 
   mainWindow.webContents.once("did-finish-load", () => {
     // sendToConsoleOutput("hello word", "sadtimes")
+    restoreUserDefaults()
   })
 
   // Emitted when the window is closed.

@@ -14,34 +14,32 @@ import FileChooserButton from "../../elements/FileChooserButton/FileChooserButto
 
 const HomePage = () => {
   return (
-    <UserDefaultsContextProvider>
-      <ConsoleOutputContextProvider>
-        <div className="homePageContainer">
-          <div className="homePageLeftSide">
-            <SplitRow>
-              <VideoSourceDropdown key="VideoSourceDropdownInstance" />
-              <div />
-            </SplitRow>
-            <VideosChannelIdTextBox key="VideosChannelIdTextBoxInstance" />
-            <VideosPlaylistIdTextBox key="VideosPlaylistIdTextBoxInstance" />
-            <VideosTextFileTextBox key="VideosTextFileTextBoxInstance" />
+    <ConsoleOutputContextProvider>
+      <div className="homePageContainer">
+        <div className="homePageLeftSide">
+          <SplitRow>
+            <VideoSourceDropdown key="VideoSourceDropdownInstance" />
+            <div />
+          </SplitRow>
+          <VideosChannelIdTextBox key="VideosChannelIdTextBoxInstance" />
+          <VideosPlaylistIdTextBox key="VideosPlaylistIdTextBoxInstance" />
+          <VideosTextFileTextBox key="VideosTextFileTextBoxInstance" />
 
-            <TextBoxContainer
-              key="textFileWords"
-              textBoxId="textFileWords"
-              labelText="Words to find"
-              placeholder="Text file containing the words"
-              initialText=""
-              onFinishEditing={function() {}}
-            />
-          </div>
-          <div className="homePageRightSide">
-            <ConsoleOutput placeholder="👋 This app finds and downloads clips from youtube of specified words being spoken! This is the output box." />
-            <BigButton title="Start" />
-          </div>
+          <TextBoxContainer
+            key="textFileWords"
+            textBoxId="textFileWords"
+            labelText="Words to find"
+            placeholder="Text file containing the words"
+            initialText=""
+            onFinishEditing={function() {}}
+          />
         </div>
-      </ConsoleOutputContextProvider>
-    </UserDefaultsContextProvider>
+        <div className="homePageRightSide">
+          <ConsoleOutput placeholder="👋 This app finds and downloads clips from youtube of specified words being spoken! This is the output box." />
+          <BigButton title="Start" />
+        </div>
+      </div>
+    </ConsoleOutputContextProvider>
   )
 }
 

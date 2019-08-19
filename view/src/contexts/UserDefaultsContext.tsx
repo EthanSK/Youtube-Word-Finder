@@ -11,7 +11,7 @@ type UserDefaultsContextType = {
 
 //init state important to have to set init values of ui elems
 const initState: UserDefaultsState = {
-  videoSource: "channel",
+  videoSource: "playlist",
   channelId: "",
   playlistId: "",
   videoTextFile: ""

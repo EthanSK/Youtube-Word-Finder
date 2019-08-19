@@ -1,3 +1,4 @@
+import { ipcSend } from "../ipc"
 export type UserDefaultsState = {
   videoSource: "channel" | "playlist" | "textFile"
   channelId: string
@@ -5,14 +6,20 @@ export type UserDefaultsState = {
   videoTextFile: string
 }
 
-export type UserDefaultsAction = Partial<UserDefaultsState> //because we usually only change one thing at a time
+export interface UserDefaultsAction {
+  type: "set" | "restore"
+  payload: Partial<UserDefaultsState>
+}
 
 const userDefaultsReducer = (
   state: UserDefaultsState,
   action: UserDefaultsAction
 ) => {
-  const newState = { ...state, ...action } //the last object spead takes priority for dup keys
-  // console.log("new state: ", newState)
+  const newState = { ...state, ...action.payload } //the last object spead takes priority for dup keys
+  if (action.type !== "restore") {
+    ipcSend("save-user-default", action.payload)
+  }
+  // console.log("new state; ", newState)
   return newState //override/set the new values got in action
 }
 

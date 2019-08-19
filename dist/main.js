@@ -8,6 +8,7 @@ const constants_1 = __importDefault(require("./constants"));
 const path_1 = __importDefault(require("path"));
 const dotenv_1 = __importDefault(require("dotenv"));
 require("./ipc");
+const store_1 = require("./store");
 dotenv_1.default.config();
 function createWindow() {
     // Create the browser window.
@@ -38,6 +39,7 @@ function createWindow() {
     }
     exports.mainWindow.webContents.once("did-finish-load", () => {
         // sendToConsoleOutput("hello word", "sadtimes")
+        store_1.restoreUserDefaults();
     });
     // Emitted when the window is closed.
     exports.mainWindow.on("closed", () => {

@@ -17,7 +17,10 @@ const VideosChannelIdTextBox = (props: { key: string }) => {
       onFinishEditing={function(event) {
         const newText = event.target.value
         userDefaultsDispatch({
-          channelId: newText
+          type: "set",
+          payload: {
+            channelId: newText
+          }
         })
       }}
       initialText={userDefaultsState.channelId}
