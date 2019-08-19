@@ -37,7 +37,7 @@ function createWindow() {
         // mainWindow.loadFile(path.join(__dirnamed , "../public/index.html"))
         exports.mainWindow.loadFile(path_1.default.join(__dirname, "../view/build/index.html"));
     }
-    exports.mainWindow.webContents.once("did-finish-load", () => {
+    exports.mainWindow.webContents.once("did-frame-finish-load", () => {
         store_1.restoreUserDefaults();
     });
     // Emitted when the window is closed.

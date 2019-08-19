@@ -9,6 +9,15 @@
   --clicked-text-color: rgba(255, 255, 255, 0.5);
 }
 
+.fadeIn {
+  z-index: 2;
+  background-color: var(--background-color);
+  width: 100vw;
+  height: 100vh;
+  transition: opacity 0.3s;
+  opacity: 0;
+}
+
 @font-face {
   font-family: youtube-font-title;
   src: url("./assets/fonts/tradeGothicBoldCondensed.ttf");

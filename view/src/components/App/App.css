@@ -1,0 +1,18 @@
+.fadeIn {
+  z-index: 2;
+  position: fixed;
+  background-color: var(--background-color);
+  width: 150vw;
+  height: 150vh;
+  -webkit-animation: fadeout 0.5s;
+  pointer-events: none;
+}
+
+@keyframes fadeout {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

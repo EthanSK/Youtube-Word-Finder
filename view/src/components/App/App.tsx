@@ -11,6 +11,7 @@ const { ipcRenderer } = window.require("electron")
 const App: React.FC = () => {
   return (
     <UserDefaultsContextProvider>
+      <div className="fadeIn" />
       <UserDefaults />
       <div className="App">
         <Header title="Youtuber Word Finder Bot" />

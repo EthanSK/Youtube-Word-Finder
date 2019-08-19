@@ -39,7 +39,7 @@ function createWindow() {
     mainWindow.loadFile(path.join(__dirname, "../view/build/index.html"))
   }
 
-  mainWindow.webContents.once("did-finish-load", () => {
+  mainWindow.webContents.once("did-frame-finish-load", () => {
     restoreUserDefaults()
   })
 
