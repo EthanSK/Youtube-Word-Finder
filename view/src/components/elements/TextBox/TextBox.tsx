@@ -14,7 +14,7 @@ const TextBoxContainer = (props: {
   fileChooser?: ReactNode
   initialText: string
   isHidden?: boolean
-  onFinishEditing(event: React.ChangeEvent<HTMLInputElement>): void
+  onFinishEditing?(event: React.ChangeEvent<HTMLInputElement>): void //optional because if its a file chooser, we don't let user edit the text box anyway
   key: string //not used here, just to make sure we add a key when adding this element
 }) => {
   const style = props.isHidden ? { display: "none" } : {}
@@ -30,7 +30,7 @@ const TextBoxContainer = (props: {
         className="textBox"
         placeholder={props.placeholder}
         readOnly={props.fileChooser !== undefined}
-        onBlur={event => props.onFinishEditing(event)}
+        onBlur={event => props.onFinishEditing && props.onFinishEditing(event)}
         defaultValue={props.initialText}
       />
       {(function() {
