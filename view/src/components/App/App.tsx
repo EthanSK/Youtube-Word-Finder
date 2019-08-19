@@ -2,6 +2,7 @@ import React, { useEffect, useContext } from "react"
 import "./App.css"
 import Header from "../elements/Header/Header"
 import HomePage from "../pages/HomePage/HomePage"
+import { UserDefaultsState } from "../../reducers/UserDefaultsReducer"
 import UserDefaultsContextProvider, {
   UserDefaultsContext
 } from "../../contexts/UserDefaultsContext"
@@ -26,12 +27,15 @@ const UserDefaults = () => {
   const { dispatch: userDefaultsDispatch } = useContext(UserDefaultsContext)
   useEffect(() => {
     const channel = "restore-user-defaults"
-    ipcRenderer.on(channel, (event, data) => {
-      // console.log("restore user def: ", data)
+    var handleUserDefaultRestore = function(
+      event: Electron.IpcRendererEvent,
+      data: UserDefaultsState
+    ) {
       userDefaultsDispatch({ type: "restore", payload: data })
-    })
+    }
+    ipcRenderer.on(channel, handleUserDefaultRestore)
     return () => {
-      ipcRenderer.removeListener(channel, () => {})
+      ipcRenderer.removeListener(channel, handleUserDefaultRestore)
     }
   })
   return null

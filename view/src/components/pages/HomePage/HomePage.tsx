@@ -32,6 +32,10 @@ const HomePage = () => {
             placeholder="Text file containing the words"
             initialText=""
             onFinishEditing={function() {}}
+            consoleOutputOptions={{
+              useDefaultIfUndefined: false,
+              payload: { shouldOutput: false }
+            }}
           />
         </div>
         <div className="homePageRightSide">

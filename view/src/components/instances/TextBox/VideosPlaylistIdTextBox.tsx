@@ -23,6 +23,7 @@ const VideosPlaylistIdTextBox = (props: { key: string }) => {
           }
         })
       }}
+      consoleOutputOptions={{ useDefaultIfUndefined: true }}
       initialText={userDefaultsState.playlistId}
       isHidden={userDefaultsState.videoSource !== "Playlist"}
     />

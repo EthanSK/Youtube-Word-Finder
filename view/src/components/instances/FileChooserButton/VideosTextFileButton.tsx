@@ -2,7 +2,6 @@ import React, { useContext } from "react"
 import FileChooserButton from "../../elements/FileChooserButton/FileChooserButton"
 import constants from "../../../constants"
 import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext"
-const { remote } = window.require("electron")
 
 const VideosTextFileButton = () => {
   const { dispatch: userDefaultsDispatch } = useContext(UserDefaultsContext)
@@ -13,6 +12,10 @@ const VideosTextFileButton = () => {
     <FileChooserButton
       fileChooserType="file"
       options={options}
+      consoleOutputOptions={{
+        useDefaultIfUndefined: true,
+        payload: { name: "Videos text file" }
+      }}
       onFilesOrFolderChosen={async filePaths => {
         if (filePaths && filePaths[0]) {
           userDefaultsDispatch({

@@ -23,6 +23,7 @@ const VideosChannelIdTextBox = (props: { key: string }) => {
           }
         })
       }}
+      consoleOutputOptions={{ useDefaultIfUndefined: true }}
       initialText={userDefaultsState.channelId}
       isHidden={userDefaultsState.videoSource !== "Channel"}
     />

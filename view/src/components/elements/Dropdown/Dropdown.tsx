@@ -28,6 +28,18 @@ const DropdownContainer = (props: {
   } = useContext(UserDefaultsContext)
   const { dispatch: consoleOutputDispatch } = useContext(ConsoleOutputContext)
 
+  function consoleOutput(event: React.ChangeEvent<HTMLSelectElement>) {
+    let payload = props.consoleOutputOptions.payload
+    if (!payload) payload = {}
+    if (props.consoleOutputOptions.useDefaultIfUndefined) {
+      if (payload.name === undefined) payload.name = props.labelText
+      if (payload.value === undefined) payload.value = event.target.value
+    }
+    payload!.appendToMessage = props.options.filter(
+      option => option.value === payload!.value
+    )[0].appendToMessage
+    consoleOutputDispatch({ type: "componentChanged", payload })
+  }
   return (
     <div className="dropdownContainer">
       <label className="dropdownLabel">{props.labelText}</label>
@@ -35,16 +47,7 @@ const DropdownContainer = (props: {
         options={props.options}
         selectId={props.selectId}
         onChange={event => {
-          let payload = props.consoleOutputOptions.payload
-          if (!payload) payload = {}
-          if (props.consoleOutputOptions.useDefaultIfUndefined) {
-            if (payload.name === undefined) payload.name = props.labelText
-            if (payload.value === undefined) payload.value = event.target.value
-          }
-          payload!.appendToMessage = props.options.filter(
-            option => option.value === payload!.value
-          )[0].appendToMessage
-          consoleOutputDispatch({ type: "componentChanged", payload })
+          consoleOutput(event)
           props.onChange(event)
         }}
       />
