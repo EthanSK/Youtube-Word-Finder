@@ -12,7 +12,7 @@ const VideosPlaylistIdTextBox = (props: { key: string }) => {
     <TextBoxContainer
       key="VideosPlaylistIdTextBox"
       textBoxId="videosPlaylistId"
-      labelText="Videos"
+      labelText="Videos playlist ID"
       placeholder="Playlist ID e.g. PLRcWcsa00Z7RW_ule-9-woT0wQxCkwVGB"
       onFinishEditing={function(event) {
         const newText = event.target.value

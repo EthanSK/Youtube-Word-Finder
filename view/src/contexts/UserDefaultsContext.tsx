@@ -15,7 +15,8 @@ const initState: UserDefaultsState = {
   videoSource: "Playlist",
   channelId: "",
   playlistId: "",
-  videoTextFile: ""
+  videoTextFile: "",
+  outputLocation: ""
 }
 
 export const UserDefaultsContext = createContext<UserDefaultsContextType>(

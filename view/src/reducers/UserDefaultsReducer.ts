@@ -6,6 +6,7 @@ export type UserDefaultsState = {
   channelId: string
   playlistId: string
   videoTextFile: string
+  outputLocation: string
 }
 
 export interface UserDefaultsAction {

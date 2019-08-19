@@ -33,7 +33,9 @@ const FileChooserButton = (props: {
       if (payload.value === undefined && filePaths && filePaths[0])
         payload.value = filePaths[0]
     }
-    consoleOutputDispatch({ type: "componentChanged", payload })
+    if (payload.value !== undefined) {
+      consoleOutputDispatch({ type: "componentChanged", payload })
+    }
   }
 
   return (

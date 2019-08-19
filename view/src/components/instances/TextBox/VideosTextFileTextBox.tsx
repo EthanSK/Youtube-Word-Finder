@@ -10,7 +10,7 @@ const VideosTextFileTextBox = (props: { key: string }) => {
     <TextBoxContainer
       key="VideosTextFileTextBox"
       textBoxId="textFileVideoSource"
-      labelText="Videos"
+      labelText="Videos text file"
       fileChooser={<VideosTextFileButton />}
       placeholder="Text file containing the videos"
       initialText={userDefaultsState.videoTextFile}

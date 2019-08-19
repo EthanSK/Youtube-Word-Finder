@@ -8,6 +8,7 @@ export type TextBoxId =
   | "videosPlaylistId"
   | "textFileWords"
   | "textFileVideoSource"
+  | "outputLocation"
 
 const TextBoxContainer = (props: {
   textBoxId: TextBoxId

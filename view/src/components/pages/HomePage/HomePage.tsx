@@ -11,6 +11,7 @@ import VideosTextFileTextBox from "../../instances/TextBox/VideosTextFileTextBox
 import ConsoleOutputContextProvider from "../../../contexts/ConsoleOutputContext"
 import VideosPlaylistIdTextBox from "../../instances/TextBox/VideosPlaylistIdTextBox"
 import FileChooserButton from "../../elements/FileChooserButton/FileChooserButton"
+import OutputLocationTextBox from "../../instances/TextBox/OutputLocationTextBox"
 
 const HomePage = () => {
   return (
@@ -24,7 +25,7 @@ const HomePage = () => {
           <VideosChannelIdTextBox key="VideosChannelIdTextBoxInstance" />
           <VideosPlaylistIdTextBox key="VideosPlaylistIdTextBoxInstance" />
           <VideosTextFileTextBox key="VideosTextFileTextBoxInstance" />
-
+          <OutputLocationTextBox key="OutputLocationTextBoxInstance" />
           <TextBoxContainer
             key="textFileWords"
             textBoxId="textFileWords"

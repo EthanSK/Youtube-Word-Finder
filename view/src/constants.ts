@@ -1,6 +1,6 @@
-import { OpenDialogSyncOptions } from "electron"
+import { OpenDialogOptions } from "electron"
 
-const fileChooserDefaultOptions: OpenDialogSyncOptions = {
+const fileChooserDefaultOptions: OpenDialogOptions = {
   title: "Choose a file!",
   message: "Choose a file!", //this is what actually shows up in the dialog...
   buttonLabel: "Choose",
@@ -13,15 +13,16 @@ const fileChooserDefaultOptions: OpenDialogSyncOptions = {
   properties: ["openFile", "createDirectory"]
 }
 
+const folderChooserDefaultOptions: OpenDialogOptions = {
+  title: "Choose a folder!",
+  buttonLabel: "Choose",
+  properties: ["openDirectory", "createDirectory"]
+}
+
 const constants = {
   maxConsoleOutputMessagesToDisplay: 500,
   fileChooserDefaultOptions,
-
-  folderChooserDefaultOptions: {
-    title: "Choose a folder!",
-    buttonLabel: "Choose",
-    properties: ["openDirectory", "createDirectory"]
-  }
+  folderChooserDefaultOptions
 }
 
 export default constants

@@ -1,8 +1,9 @@
 import React, { useContext } from "react"
 import TextBoxContainer from "../../elements/TextBox/TextBox"
 import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext"
+import OutputLocationFolderButton from "../FileChooserButton/OutputLocationFolderChooser"
 
-const VideosChannelIdTextBox = (props: { key: string }) => {
+const OutputLocationTextBox = (props: { key: string }) => {
   const {
     state: userDefaultsState,
     dispatch: userDefaultsDispatch
@@ -10,24 +11,24 @@ const VideosChannelIdTextBox = (props: { key: string }) => {
 
   return (
     <TextBoxContainer
-      key="VideosChannelIdTextBox"
-      textBoxId="videosChannelId"
-      labelText="Videos channel ID"
-      placeholder="Channel ID e.g. UCivXNaaNhyuQQO-0V9L6nFA"
+      key="OutputLocationTextBox"
+      textBoxId="outputLocation"
+      labelText="Output location"
+      placeholder="Folder to put output files"
       onFinishEditing={function(event) {
         const newText = event.target.value
         userDefaultsDispatch({
           type: "set",
           payload: {
-            channelId: newText
+            outputLocation: newText
           }
         })
       }}
       consoleOutputOptions={{ useDefaultIfUndefined: true }}
-      initialText={userDefaultsState.channelId}
-      isHidden={userDefaultsState.videoSource !== "Channel"}
+      initialText={userDefaultsState.outputLocation}
+      fileChooser={<OutputLocationFolderButton />}
     />
   )
 }
 
-export default VideosChannelIdTextBox
+export default OutputLocationTextBox
