@@ -17,10 +17,24 @@ export function restoreUserDefaults() {
 }
 
 export function save(key: string, value: any) {
-  console.log("store val ", value)
+  // console.log("store val ", value)
   store.set(key, value)
 }
 
 export function load(key: string): any {
   return store.get(key)
+}
+
+export function loadUserDefault(
+  key:
+    | "videoSource"
+    | "channelId"
+    | "playlistId"
+    | "videoTextFile"
+    | "outputLocation"
+    | "wordsToFindTextFile"
+    | "outputFolderName"
+    | "paddingToAdd"
+) {
+  return load(`${userDefaultsKey}.${key}`)
 }

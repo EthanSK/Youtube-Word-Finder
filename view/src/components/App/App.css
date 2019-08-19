@@ -4,7 +4,7 @@
   background-color: var(--background-color);
   width: 150vw;
   height: 150vh;
-  -webkit-animation: fade 0.5s;
+  -webkit-animation: fade 1s;
   pointer-events: none;
   opacity: 0;
 }

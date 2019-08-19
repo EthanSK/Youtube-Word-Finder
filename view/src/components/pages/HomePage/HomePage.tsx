@@ -14,6 +14,8 @@ import OutputLocationTextBox from "../../instances/TextBox/OutputLocationTextBox
 import WordsTextFileTextBox from "../../instances/TextBox/WordsTextFileTextBox"
 import OutputFolderNameTextBox from "../../instances/TextBox/OutputFolderNameTextBox"
 import PaddingToAddTextBox from "../../instances/TextBox/PaddingToAddTextBox"
+import MaxNumberOfVidsTextBox from "../../instances/TextBox/MaxNumberOfVidsTextBox"
+import NumberOfWordRepetitionsTextBox from "../../instances/TextBox/NumberOfWordRepetitionsTextBox"
 
 const HomePage = () => {
   return (
@@ -28,7 +30,11 @@ const HomePage = () => {
           <WordsTextFileTextBox key="WordsTextFileTextBoxInstance" />
           <OutputLocationTextBox key="OutputLocationTextBoxInstance" />
           <OutputFolderNameTextBox key="OutputFolderNameTextBoxInstance" />
-          <PaddingToAddTextBox key="PaddingToAddTextBoxInstance" />
+          <SplitRow>
+            <PaddingToAddTextBox key="PaddingToAddTextBoxInstance" />
+            <MaxNumberOfVidsTextBox key="MaxNumberOfVidsTextBoxInstance" />
+            <NumberOfWordRepetitionsTextBox key="NumberOfWordRepetitionsTextBox" />
+          </SplitRow>
         </div>
         <div className="homePageRightSide">
           <ConsoleOutput placeholder="👋 This app finds and downloads clips from youtube of specified words being spoken! This is the output box." />

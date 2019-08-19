@@ -24,7 +24,8 @@
 }
 
 .textBoxLabel {
-  width: 25%;
   color: var(--text-color);
   margin: 10px;
+  white-space: nowrap;
+  min-width: 25%;
 }

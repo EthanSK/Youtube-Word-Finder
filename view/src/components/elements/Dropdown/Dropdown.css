@@ -21,8 +21,8 @@
 
 .dropdownLabel {
   color: var(--text-color);
-  width: 25%;
-
+  white-space: nowrap;
+  min-width: 25%;
   margin: 10px;
 }
 

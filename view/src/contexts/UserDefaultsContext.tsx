@@ -12,6 +12,7 @@ type UserDefaultsContextType = {
 
 //init state important to have to set init values of ui elems
 const initState: UserDefaultsState = {
+  hasUserDefaultsLoaded: false,
   videoSource: "Playlist",
   channelId: "",
   playlistId: "",
@@ -19,7 +20,9 @@ const initState: UserDefaultsState = {
   outputLocation: "",
   wordsToFindTextFile: "",
   outputFolderName: "",
-  paddingToAdd: null
+  paddingToAdd: 0,
+  maxNumberOfVideos: 10,
+  numberOfWordReps: 5
 }
 
 export const UserDefaultsContext = createContext<UserDefaultsContextType>(

@@ -6,6 +6,7 @@ import "./ipc"
 import { sendToConsoleOutput } from "./logger"
 
 import { restoreUserDefaults } from "./store"
+import { delay } from "./utils"
 
 dotenv.config()
 
@@ -39,8 +40,9 @@ function createWindow() {
     mainWindow.loadFile(path.join(__dirname, "../view/build/index.html"))
   }
 
-  mainWindow.webContents.once("did-frame-finish-load", () => {
-    restoreUserDefaults()
+  mainWindow.webContents.once("did-finish-load", async () => {
+    await delay(1000)
+    restoreUserDefaults() //even did-finish-frame-load is buggy
   })
 
   // Emitted when the window is closed.

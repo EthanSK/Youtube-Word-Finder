@@ -2,38 +2,37 @@ import React, { useContext } from "react"
 import TextBoxContainer from "../../elements/TextBox/TextBox"
 import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext"
 
-const PaddingToAddTextBox = (props: { key: string }) => {
+const MaxNumberOfVidsTextBox = (props: { key: string }) => {
   const {
     state: userDefaultsState,
     dispatch: userDefaultsDispatch
   } = useContext(UserDefaultsContext)
-
   return (
     <TextBoxContainer
-      key="PaddingToAddTextBox"
-      textBoxId="paddingToAdd"
-      labelText="Padding to add"
-      placeholder="Extra time in seconds to add to start and end of clips"
+      key="NumberOfVidsTextBox"
+      textBoxId="maxNumberOfVids"
+      labelText="Max vids"
+      placeholder="Max number of videos to search"
       initialText={
-        userDefaultsState.paddingToAdd !== null
-          ? userDefaultsState.paddingToAdd.toString()
+        userDefaultsState.maxNumberOfVideos !== null
+          ? userDefaultsState.maxNumberOfVideos.toString()
           : undefined
       }
-      numberInputOptions={{ step: 0.2, min: 0, max: 10 }}
+      numberInputOptions={{ step: 1, min: 1, max: 100, isInt: true }}
       consoleOutputOptions={{
         useDefaultIfUndefined: true,
         payload: {
           appendToMessage:
-            "This is the extra time in seconds to add to the start and end of clips"
+            "This is the maximum number of videos to search through. Don't set it too high or the bot will take a long time to run"
         }
       }}
       onFinishEditing={function(event) {
-        let newText: number | null = parseFloat(event.target.value)
+        let newText: number | null = parseInt(event.target.value)
         if (Number.isNaN(newText)) newText = null
         userDefaultsDispatch({
           type: "set",
           payload: {
-            paddingToAdd: newText
+            maxNumberOfVideos: newText
           }
         })
       }}
@@ -41,4 +40,4 @@ const PaddingToAddTextBox = (props: { key: string }) => {
   )
 }
 
-export default PaddingToAddTextBox
+export default MaxNumberOfVidsTextBox

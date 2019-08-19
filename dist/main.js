@@ -9,6 +9,7 @@ const path_1 = __importDefault(require("path"));
 const dotenv_1 = __importDefault(require("dotenv"));
 require("./ipc");
 const store_1 = require("./store");
+const utils_1 = require("./utils");
 dotenv_1.default.config();
 function createWindow() {
     // Create the browser window.
@@ -37,8 +38,9 @@ function createWindow() {
         // mainWindow.loadFile(path.join(__dirnamed , "../public/index.html"))
         exports.mainWindow.loadFile(path_1.default.join(__dirname, "../view/build/index.html"));
     }
-    exports.mainWindow.webContents.once("did-frame-finish-load", () => {
-        store_1.restoreUserDefaults();
+    exports.mainWindow.webContents.once("did-finish-load", async () => {
+        await utils_1.delay(1000);
+        store_1.restoreUserDefaults(); //even did-finish-frame-load is buggy
     });
     // Emitted when the window is closed.
     exports.mainWindow.on("closed", () => {

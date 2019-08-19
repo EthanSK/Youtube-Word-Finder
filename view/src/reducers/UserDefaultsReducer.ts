@@ -2,6 +2,7 @@ import { ipcSend } from "../ipc"
 import { VideoSource } from "../components/instances/Dropdown/VideoSourceDropdown"
 
 export type UserDefaultsState = {
+  hasUserDefaultsLoaded: boolean
   videoSource: VideoSource
   channelId: string
   playlistId: string
@@ -10,6 +11,8 @@ export type UserDefaultsState = {
   wordsToFindTextFile: string
   outputFolderName: string
   paddingToAdd: number | null
+  maxNumberOfVideos: number | null
+  numberOfWordReps: number | null
 }
 
 export interface UserDefaultsAction {
@@ -25,6 +28,7 @@ const userDefaultsReducer = (
   if (action.type !== "restore") {
     ipcSend("save-user-default", action.payload)
   }
+
   // console.log("new state; ", newState)
   return newState //override/set the new values got in action
 }

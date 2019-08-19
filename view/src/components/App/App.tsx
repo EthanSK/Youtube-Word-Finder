@@ -32,9 +32,10 @@ const UserDefaults = () => {
       data: UserDefaultsState
     ) {
       console.log("restoring: ", data)
+      data.hasUserDefaultsLoaded = true
       userDefaultsDispatch({ type: "restore", payload: data })
     }
-    ipcRenderer.on(channel, handleUserDefaultRestore)
+    ipcRenderer.once(channel, handleUserDefaultRestore) //one time thing
     return () => {
       ipcRenderer.removeListener(channel, handleUserDefaultRestore)
     }
