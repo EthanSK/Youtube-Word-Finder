@@ -4,11 +4,12 @@
   background-color: var(--background-color);
   width: 150vw;
   height: 150vh;
-  -webkit-animation: fadeout 0.5s;
+  -webkit-animation: fade 0.5s;
   pointer-events: none;
+  opacity: 0;
 }
 
-@keyframes fadeout {
+@keyframes fade {
   from {
     opacity: 1;
   }
