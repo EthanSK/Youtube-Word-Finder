@@ -31,12 +31,6 @@ const HomePage = () => {
               textBoxId="textFileWords"
               labelText="Words to find"
               placeholder="Text file containing the words"
-              fileChooser={
-                <FileChooserButton
-                  fileChooserType="file"
-                  onClick={function() {}}
-                />
-              }
               initialText=""
               onFinishEditing={function() {}}
             />

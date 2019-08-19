@@ -16,12 +16,6 @@ const VideosTextFileTextBox = (props: { key: string }) => {
       labelText="Videos"
       fileChooser={<VideosTextFileButton />}
       placeholder="Text file containing the videos"
-      onFinishEditing={function(event) {
-        const newText = event.target.value
-        userDefaultsDispatch({
-          videoTextFile: newText
-        })
-      }}
       initialText={userDefaultsState.videoTextFile}
       isHidden={userDefaultsState.videoSource !== "textFile"}
     />

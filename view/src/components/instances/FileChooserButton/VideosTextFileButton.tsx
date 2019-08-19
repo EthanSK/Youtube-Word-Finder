@@ -9,16 +9,16 @@ const VideosTextFileButton = () => {
     state: userDefaultsState,
     dispatch: userDefaultsDispatch
   } = useContext(UserDefaultsContext)
+  let options = constants.fileChooserDefaultOptions
+  options.message = "Choose a text file containing the video URLs"
+
   return (
     <FileChooserButton
       fileChooserType="file"
-      onClick={async function() {
-        let options = constants.fileChooserDefaultOptions
-        options.message = "Choose a text file containing the video URLs"
-        const file = await remote.dialog.showOpenDialog(options)
-        // console.log("file: ", file.filePaths)
-        if (file.filePaths && file.filePaths[0]) {
-          userDefaultsDispatch({ videoTextFile: file.filePaths[0] })
+      options={options}
+      onFilesOrFolderChosen={async filePaths => {
+        if (filePaths && filePaths[0]) {
+          userDefaultsDispatch({ videoTextFile: filePaths[0] })
         }
       }}
     />
