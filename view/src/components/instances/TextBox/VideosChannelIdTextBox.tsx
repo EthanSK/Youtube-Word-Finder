@@ -24,7 +24,7 @@ const VideosChannelIdTextBox = (props: { key: string }) => {
         })
       }}
       initialText={userDefaultsState.channelId}
-      isHidden={userDefaultsState.videoSource !== "channel"}
+      isHidden={userDefaultsState.videoSource !== "Channel"}
     />
   )
 }

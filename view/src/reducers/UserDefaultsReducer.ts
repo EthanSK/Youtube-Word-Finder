@@ -1,6 +1,8 @@
 import { ipcSend } from "../ipc"
+import { VideoSource } from "../components/instances/Dropdown/VideoSourceDropdown"
+
 export type UserDefaultsState = {
-  videoSource: "channel" | "playlist" | "textFile"
+  videoSource: VideoSource
   channelId: string
   playlistId: string
   videoTextFile: string

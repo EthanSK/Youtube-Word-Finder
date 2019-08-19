@@ -1,4 +1,5 @@
 import React, { createContext, useReducer } from "react"
+import { VideoSource } from "../components/instances/Dropdown/VideoSourceDropdown"
 import userDefaultsReducer, {
   UserDefaultsState,
   UserDefaultsAction
@@ -11,7 +12,7 @@ type UserDefaultsContextType = {
 
 //init state important to have to set init values of ui elems
 const initState: UserDefaultsState = {
-  videoSource: "playlist",
+  videoSource: "Playlist",
   channelId: "",
   playlistId: "",
   videoTextFile: ""

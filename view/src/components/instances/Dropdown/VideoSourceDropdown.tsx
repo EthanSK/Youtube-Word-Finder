@@ -1,13 +1,8 @@
 import React, { useContext } from "react"
 import DropdownContainer from "../../elements/Dropdown/Dropdown"
 import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext"
-import { ConsoleOutputContext } from "../../../contexts/ConsoleOutputContext"
 
-enum Values {
-  Channel = "Channel",
-  Playlist = "Playlist",
-  TextFile = "Text File"
-}
+export type VideoSource = "Channel" | "Playlist" | "Text file" //enums suck complete dick. getting reference erro cannot acces enum before initialization. WTF IS ENUM INITIALIZATION!!!! ITS A TYPE
 
 const VideoSourceDropdown = (props: {
   key: string //not used here, just to make sure we add a key when adding this element
@@ -16,51 +11,17 @@ const VideoSourceDropdown = (props: {
     state: userDefaultsState,
     dispatch: userDefaultsDispatch
   } = useContext(UserDefaultsContext)
-  const { dispatch: consoleOutputDispatch } = useContext(ConsoleOutputContext)
+
   return (
     <DropdownContainer
       key="VideoSourceDropdown"
+      consoleOutputOptions={{ useDefaultIfUndefined: true }}
       onChange={function(event) {
-        const value: Values = event.target.value as Values
-        let consoleMesage = `Changed source to scan videos to ${value}.`
-
-        switch (value) {
-          case Values.Channel:
-            userDefaultsDispatch({
-              type: "set",
-              payload: {
-                videoSource: "channel"
-              }
-            })
-            consoleMesage += " Ensure you provided a channel ID"
-            break
-          case Values.Playlist:
-            userDefaultsDispatch({
-              type: "set",
-              payload: {
-                videoSource: "playlist"
-              }
-            })
-            consoleMesage += " Ensure you provided a playlist ID that is public"
-            break
-          case Values.TextFile:
-            userDefaultsDispatch({
-              type: "set",
-              payload: {
-                videoSource: "textFile"
-              }
-            })
-            consoleMesage +=
-              " Ensure you provided a text file with each video URL on a new line"
-            break
-          default:
-            break
-        }
-        consoleOutputDispatch({
-          type: "addNewMessage",
+        const value: VideoSource = event.target.value as VideoSource
+        userDefaultsDispatch({
+          type: "set",
           payload: {
-            message: consoleMesage,
-            messageType: "settings"
+            videoSource: value
           }
         })
       }}
@@ -68,16 +29,16 @@ const VideoSourceDropdown = (props: {
       labelText="Video source"
       options={[
         {
-          value: Values.Channel,
-          isSelected: userDefaultsState.videoSource === "channel"
+          value: "Channel",
+          isSelected: userDefaultsState.videoSource === "Channel"
         },
         {
-          value: Values.Playlist,
-          isSelected: userDefaultsState.videoSource === "playlist"
+          value: "Playlist",
+          isSelected: userDefaultsState.videoSource === "Playlist"
         },
         {
-          value: Values.TextFile,
-          isSelected: userDefaultsState.videoSource === "textFile"
+          value: "Text file",
+          isSelected: userDefaultsState.videoSource === "Text file"
         }
       ]}
     />

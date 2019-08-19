@@ -24,7 +24,7 @@ const VideosPlaylistIdTextBox = (props: { key: string }) => {
         })
       }}
       initialText={userDefaultsState.playlistId}
-      isHidden={userDefaultsState.videoSource !== "playlist"}
+      isHidden={userDefaultsState.videoSource !== "Playlist"}
     />
   )
 }
