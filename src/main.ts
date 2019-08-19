@@ -41,7 +41,7 @@ function createWindow() {
   }
 
   mainWindow.webContents.once("did-finish-load", async () => {
-    await delay(1000)
+    await delay(10)
     restoreUserDefaults() //even did-finish-frame-load is buggy
   })
 

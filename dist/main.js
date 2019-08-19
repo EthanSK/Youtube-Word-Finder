@@ -39,7 +39,7 @@ function createWindow() {
         exports.mainWindow.loadFile(path_1.default.join(__dirname, "../view/build/index.html"));
     }
     exports.mainWindow.webContents.once("did-finish-load", async () => {
-        await utils_1.delay(1000);
+        await utils_1.delay(10);
         store_1.restoreUserDefaults(); //even did-finish-frame-load is buggy
     });
     // Emitted when the window is closed.
