@@ -7,11 +7,11 @@ const electron_1 = require("electron");
 const constants_1 = __importDefault(require("./constants"));
 const path_1 = __importDefault(require("path"));
 const dotenv_1 = __importDefault(require("dotenv"));
+require("./ipc");
 dotenv_1.default.config();
-let mainWindow;
 function createWindow() {
     // Create the browser window.
-    mainWindow = new electron_1.BrowserWindow({
+    exports.mainWindow = new electron_1.BrowserWindow({
         backgroundColor: "#282828",
         //remember to add icon here for linux coz appaz u need it. wow it didn't work in postilkesbot test
         width: 850,
@@ -27,32 +27,26 @@ function createWindow() {
     // Open the DevTools.
     //   win.webContents.openDevTools()
     if (process.env.NODE_ENV === "development") {
-        mainWindow.setPosition(300, 300);
+        exports.mainWindow.setPosition(300, 300);
         // and load the index.html of the app.
-        mainWindow.loadURL("http://localhost:3000");
+        exports.mainWindow.loadURL("http://localhost:3000");
     }
     else {
         // and load  index.html of the app.
         // mainWindow.loadFile(path.join(__dirnamed , "../public/index.html"))
-        mainWindow.loadFile(path_1.default.join(__dirname, "../view/build/index.html"));
+        exports.mainWindow.loadFile(path_1.default.join(__dirname, "../view/build/index.html"));
     }
-    mainWindow.webContents.once("did-finish-load", () => {
-        mainWindow.webContents.send("test", "69 test message");
+    exports.mainWindow.webContents.once("did-finish-load", () => {
+        // sendToConsoleOutput("hello word", "sadtimes")
     });
     // Emitted when the window is closed.
-    mainWindow.on("closed", () => {
+    exports.mainWindow.on("closed", () => {
         // Dereference the window object, usually you would store windows
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
-        mainWindow = null;
+        exports.mainWindow = null;
     });
 }
-electron_1.ipcMain.on("testres", (event, data) => {
-    console.log("main received test event");
-});
-electron_1.ipcMain.on("log-console-output", (event, data) => {
-    console.log("main console log received test event");
-});
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -68,7 +62,7 @@ electron_1.app.on("window-all-closed", () => {
 electron_1.app.on("activate", () => {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
-    if (mainWindow === null) {
+    if (exports.mainWindow === null) {
         createWindow();
     }
 });

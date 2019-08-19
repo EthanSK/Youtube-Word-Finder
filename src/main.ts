@@ -2,9 +2,12 @@ import { app, BrowserWindow, ipcMain as ipc } from "electron"
 import constants from "./constants"
 import path from "path"
 import dotenv from "dotenv"
+import "./ipc"
+import { sendToConsoleOutput } from "./logger"
 
 dotenv.config()
-let mainWindow: BrowserWindow | null
+
+export let mainWindow: BrowserWindow | null
 
 function createWindow() {
   // Create the browser window.
@@ -35,7 +38,7 @@ function createWindow() {
   }
 
   mainWindow.webContents.once("did-finish-load", () => {
-    mainWindow!.webContents.send("test", "69 test message")
+    // sendToConsoleOutput("hello word", "sadtimes")
   })
 
   // Emitted when the window is closed.
@@ -47,12 +50,6 @@ function createWindow() {
   })
 }
 
-ipc.on("testres", (event, data) => {
-  console.log("main received test event")
-})
-ipc.on("log-console-output", (event, data) => {
-  console.log("main console log received test event")
-})
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.

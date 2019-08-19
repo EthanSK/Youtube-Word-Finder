@@ -1,5 +1,6 @@
 import { ipcSend } from "../ipc"
-interface ConsoleOutputActionPayload {
+
+export interface ConsoleOutputActionPayload {
   message: string
   messageType: ConsoleOutputMessageType
 }
@@ -10,7 +11,7 @@ export type ConsoleOutputMessageType =
   | "error"
   | "loading"
   | "success"
-  | "userDefault"
+  | "settings"
   | "sadtimes"
   | "startstop"
 
@@ -20,7 +21,7 @@ export interface ConsoleOutputPayload extends ConsoleOutputActionPayload {
 
 export type ConsoleOutputState = ConsoleOutputPayload[]
 
-export type ConsoleOutputAction = {
+export interface ConsoleOutputAction {
   type: "addNewMessage"
   payload: ConsoleOutputActionPayload
 }

@@ -52,7 +52,7 @@ const VideoSourceDropdown = (props: {
           type: "addNewMessage",
           payload: {
             message: consoleMesage,
-            messageType: "userDefault"
+            messageType: "settings"
           }
         })
       }}

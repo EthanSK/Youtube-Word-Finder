@@ -7,6 +7,4 @@ export function ipcSend(channel: IPCRendererSendChannel, data: any) {
   ipc.send(channel, data)
 }
 
-ipc.on("testres", (event, data) => {
-  console.log("renderer received test event")
-})
+//ipc listen events are done in the components themselves

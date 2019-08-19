@@ -1,11 +1,18 @@
 import React, { useContext, useRef, useEffect } from "react"
 import "./ConsoleOutput.css"
 import { ConsoleOutputContext } from "../../../contexts/ConsoleOutputContext"
-import { ConsoleOutputMessageType } from "../../../reducers/ConsoleOutputReducer"
+import {
+  ConsoleOutputMessageType,
+  ConsoleOutputActionPayload
+} from "../../../reducers/ConsoleOutputReducer"
 import constants from "../../../constants"
+const ipc = window.require("electron").ipcRenderer
 
 const ConsoleOutput = (props: { placeholder: string }) => {
-  const { state: consoleOutputState } = useContext(ConsoleOutputContext)
+  const {
+    state: consoleOutputState,
+    dispatch: consoleOutputDispatch
+  } = useContext(ConsoleOutputContext)
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
   function emoji(messageType: ConsoleOutputMessageType) {
@@ -20,7 +27,7 @@ const ConsoleOutput = (props: { placeholder: string }) => {
         return "⏳"
       case "success":
         return "✅"
-      case "userDefault":
+      case "settings":
         return "⚙️"
       case "sadtimes":
         return "😭"
@@ -33,6 +40,21 @@ const ConsoleOutput = (props: { placeholder: string }) => {
       textAreaRef.current.scrollTop = textAreaRef.current.scrollHeight //scroll to bottom
     }
   })
+
+  useEffect(() => {
+    const channel = "write-to-console-output"
+    let handleConsoleWriteRequest = function(
+      event: Electron.IpcRendererEvent,
+      data: ConsoleOutputActionPayload
+    ) {
+      consoleOutputDispatch({ type: "addNewMessage", payload: data })
+    }
+    ipc.on(channel, handleConsoleWriteRequest)
+    return () => {
+      ipc.removeListener(channel, handleConsoleWriteRequest)
+    }
+  })
+
   function toDisplay(): string {
     const cutDownOutput = consoleOutputState.slice(
       -constants.maxConsoleOutputMessagesToDisplay
