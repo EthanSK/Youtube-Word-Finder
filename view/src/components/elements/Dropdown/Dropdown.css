@@ -16,12 +16,13 @@
   font-size: 15px;
   border-style: solid; /*this was causing that weird diagonal split in colour*/
   outline: none;
-  flex: 2;
+  flex-grow: 2;
 }
 
 .dropdownLabel {
   color: var(--text-color);
-  /* flex: 1; */
+  width: 25%;
+
   margin: 10px;
 }
 

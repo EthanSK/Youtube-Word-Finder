@@ -1,7 +1,7 @@
 import React, { useContext } from "react"
 import TextBoxContainer from "../../elements/TextBox/TextBox"
 import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext"
-import VideosTextFileButton from "../FileChooserButton/VideosTextFileButton"
+import VideosTextFileButton from "../FileChooserButton/VideosTextFileChooser"
 
 const VideosTextFileTextBox = (props: { key: string }) => {
   const { state: userDefaultsState } = useContext(UserDefaultsContext)

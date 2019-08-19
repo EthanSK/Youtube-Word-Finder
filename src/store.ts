@@ -17,6 +17,7 @@ export function restoreUserDefaults() {
 }
 
 export function save(key: string, value: any) {
+  console.log("store val ", value)
   store.set(key, value)
 }
 

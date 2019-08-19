@@ -10,34 +10,25 @@ import VideosChannelIdTextBox from "../../instances/TextBox/VideosChannelIdTextB
 import VideosTextFileTextBox from "../../instances/TextBox/VideosTextFileTextBox"
 import ConsoleOutputContextProvider from "../../../contexts/ConsoleOutputContext"
 import VideosPlaylistIdTextBox from "../../instances/TextBox/VideosPlaylistIdTextBox"
-import FileChooserButton from "../../elements/FileChooserButton/FileChooserButton"
 import OutputLocationTextBox from "../../instances/TextBox/OutputLocationTextBox"
+import WordsTextFileTextBox from "../../instances/TextBox/WordsTextFileTextBox"
+import OutputFolderNameTextBox from "../../instances/TextBox/OutputFolderNameTextBox"
+import PaddingToAddTextBox from "../../instances/TextBox/PaddingToAddTextBox"
 
 const HomePage = () => {
   return (
     <ConsoleOutputContextProvider>
       <div className="homePageContainer">
         <div className="homePageLeftSide">
-          <SplitRow>
-            <VideoSourceDropdown key="VideoSourceDropdownInstance" />
-            <div />
-          </SplitRow>
+          <VideoSourceDropdown key="VideoSourceDropdownInstance" />
+
           <VideosChannelIdTextBox key="VideosChannelIdTextBoxInstance" />
           <VideosPlaylistIdTextBox key="VideosPlaylistIdTextBoxInstance" />
           <VideosTextFileTextBox key="VideosTextFileTextBoxInstance" />
+          <WordsTextFileTextBox key="WordsTextFileTextBoxInstance" />
           <OutputLocationTextBox key="OutputLocationTextBoxInstance" />
-          <TextBoxContainer
-            key="textFileWords"
-            textBoxId="textFileWords"
-            labelText="Words to find"
-            placeholder="Text file containing the words"
-            initialText=""
-            onFinishEditing={function() {}}
-            consoleOutputOptions={{
-              useDefaultIfUndefined: false,
-              payload: { shouldOutput: false }
-            }}
-          />
+          <OutputFolderNameTextBox key="OutputFolderNameTextBoxInstance" />
+          <PaddingToAddTextBox key="PaddingToAddTextBoxInstance" />
         </div>
         <div className="homePageRightSide">
           <ConsoleOutput placeholder="👋 This app finds and downloads clips from youtube of specified words being spoken! This is the output box." />

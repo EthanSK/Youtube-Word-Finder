@@ -33,8 +33,8 @@ const DropdownContainer = (props: {
     if (!payload) payload = {}
     if (props.consoleOutputOptions.useDefaultIfUndefined) {
       if (payload.name === undefined) payload.name = props.labelText
-      if (payload.value === undefined) payload.value = event.target.value
     }
+    payload.value = event.target.value
     payload!.appendToMessage = props.options.filter(
       option => option.value === payload!.value
     )[0].appendToMessage

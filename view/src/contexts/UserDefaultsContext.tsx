@@ -16,7 +16,10 @@ const initState: UserDefaultsState = {
   channelId: "",
   playlistId: "",
   videoTextFile: "",
-  outputLocation: ""
+  outputLocation: "",
+  wordsToFindTextFile: "",
+  outputFolderName: "",
+  paddingToAdd: null
 }
 
 export const UserDefaultsContext = createContext<UserDefaultsContextType>(

@@ -18,6 +18,7 @@ function restoreUserDefaults() {
 }
 exports.restoreUserDefaults = restoreUserDefaults;
 function save(key, value) {
+    console.log("store val ", value);
     store.set(key, value);
 }
 exports.save = save;

@@ -7,6 +7,9 @@ export type UserDefaultsState = {
   playlistId: string
   videoTextFile: string
   outputLocation: string
+  wordsToFindTextFile: string
+  outputFolderName: string
+  paddingToAdd: number | null
 }
 
 export interface UserDefaultsAction {

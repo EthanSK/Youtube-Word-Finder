@@ -15,7 +15,7 @@ const App: React.FC = () => {
       <div className="fadeIn" />
       <UserDefaults />
       <div className="App">
-        <Header title="Youtuber Word Finder Bot" />
+        <Header title="Youtuber Word Finder" />
         <HomePage />
       </div>
     </UserDefaultsContextProvider>
@@ -31,6 +31,7 @@ const UserDefaults = () => {
       event: Electron.IpcRendererEvent,
       data: UserDefaultsState
     ) {
+      console.log("restoring: ", data)
       userDefaultsDispatch({ type: "restore", payload: data })
     }
     ipcRenderer.on(channel, handleUserDefaultRestore)
