@@ -7,7 +7,9 @@ const store = new Store()
 const userDefaultsKey = "userDefaults"
 
 ipcMain.on("save-user-default", (event, data) => {
-  save(userDefaultsKey, data)
+  for (const key in data) {
+    save(`${userDefaultsKey}.${key}`, data[key])
+  }
 })
 
 export function restoreUserDefaults() {

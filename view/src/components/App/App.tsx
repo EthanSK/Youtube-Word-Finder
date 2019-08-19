@@ -26,7 +26,7 @@ const UserDefaults = () => {
   useEffect(() => {
     const channel = "restore-user-defaults"
     ipcRenderer.on(channel, (event, data) => {
-      console.log("restore user def: ", data)
+      // console.log("restore user def: ", data)
       userDefaultsDispatch({ type: "restore", payload: data })
     })
     return () => {

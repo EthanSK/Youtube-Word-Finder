@@ -12,6 +12,6 @@ export function ipcSend(channel: IPCMainSendChannel, data: any) {
     throw new Error(
       "main window is undefined when trying to send ipc to web contents"
     )
-  console.log("sending ipc from main: ", channel, data)
+  // console.log("sending ipc from main: ", channel, data)
   mainWindow.webContents.send(channel, data)
 }

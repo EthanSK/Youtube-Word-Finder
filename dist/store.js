@@ -9,7 +9,9 @@ const ipc_1 = require("./ipc");
 const store = new electron_store_1.default();
 const userDefaultsKey = "userDefaults";
 electron_1.ipcMain.on("save-user-default", (event, data) => {
-    save(userDefaultsKey, data);
+    for (const key in data) {
+        save(`${userDefaultsKey}.${key}`, data[key]);
+    }
 });
 function restoreUserDefaults() {
     ipc_1.ipcSend("restore-user-defaults", load(userDefaultsKey));

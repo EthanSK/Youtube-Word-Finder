@@ -5,7 +5,7 @@ const main_1 = require("./main");
 function ipcSend(channel, data) {
     if (!main_1.mainWindow)
         throw new Error("main window is undefined when trying to send ipc to web contents");
-    console.log("sending ipc from main: ", channel, data);
+    // console.log("sending ipc from main: ", channel, data)
     main_1.mainWindow.webContents.send(channel, data);
 }
 exports.ipcSend = ipcSend;

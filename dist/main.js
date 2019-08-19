@@ -38,7 +38,6 @@ function createWindow() {
         exports.mainWindow.loadFile(path_1.default.join(__dirname, "../view/build/index.html"));
     }
     exports.mainWindow.webContents.once("did-finish-load", () => {
-        // sendToConsoleOutput("hello word", "sadtimes")
         store_1.restoreUserDefaults();
     });
     // Emitted when the window is closed.

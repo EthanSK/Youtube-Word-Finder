@@ -40,7 +40,6 @@ function createWindow() {
   }
 
   mainWindow.webContents.once("did-finish-load", () => {
-    // sendToConsoleOutput("hello word", "sadtimes")
     restoreUserDefaults()
   })
 

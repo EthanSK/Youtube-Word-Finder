@@ -17,7 +17,6 @@ const VideoSourceDropdown = (props: {
     dispatch: userDefaultsDispatch
   } = useContext(UserDefaultsContext)
   const { dispatch: consoleOutputDispatch } = useContext(ConsoleOutputContext)
-  console.log("video source dropdown rerendered", userDefaultsState.videoSource) //i honestly don't think it matters that much if the whole ui reloads because of one small change. it's really inexpensive.
   return (
     <DropdownContainer
       key="VideoSourceDropdown"
