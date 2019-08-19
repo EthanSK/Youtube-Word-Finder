@@ -8,6 +8,7 @@ export type SelectId = "videoSource"
 export type Option = {
   value: string
   isSelected?: boolean
+  appendToMessage?: string
 }
 
 const DropdownContainer = (props: {
@@ -38,11 +39,11 @@ const DropdownContainer = (props: {
           if (!payload) payload = {}
           if (props.consoleOutputOptions.useDefaultIfUndefined) {
             if (payload.name === undefined) payload.name = props.labelText
-            if (payload.value === undefined)
-              payload.value = props.options.filter(
-                option => option.isSelected
-              )[0].value
+            if (payload.value === undefined) payload.value = event.target.value
           }
+          payload!.appendToMessage = props.options.filter(
+            option => option.value === payload!.value
+          )[0].appendToMessage
           consoleOutputDispatch({ type: "componentChanged", payload })
           props.onChange(event)
         }}
