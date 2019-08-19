@@ -1,5 +1,8 @@
 private.md
-executables/
+executables
+node_modules
+playground
+*.mp4
 
 *.map
 #STANDARD THINGS TO IGNORE - COPYPASTA:

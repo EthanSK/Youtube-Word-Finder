@@ -24,7 +24,7 @@ const PaddingToAddTextBox = (props: { key: string }) => {
         useDefaultIfUndefined: true,
         payload: {
           appendToMessage:
-            "This is the extra time in seconds to add to the start and end of clips"
+            "This is the extra time in seconds to add to the start and end of downloaded clips"
         }
       }}
       onFinishEditing={function(event) {

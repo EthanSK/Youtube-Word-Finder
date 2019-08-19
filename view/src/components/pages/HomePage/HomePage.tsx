@@ -1,7 +1,7 @@
 import React from "react"
 import "./HomePage.css"
 import ConsoleOutput from "../../elements/ConsoleOutput/ConsoleOutput"
-import BigButton from "../../elements/BigButton/BigButton"
+import Button from "../../elements/Button/Button"
 import TextBoxContainer from "../../elements/TextBox/TextBox"
 import SplitRow from "../../containers/SplitRow/SplitRow"
 import UserDefaultsContextProvider from "../../../contexts/UserDefaultsContext"
@@ -16,6 +16,7 @@ import OutputFolderNameTextBox from "../../instances/TextBox/OutputFolderNameTex
 import PaddingToAddTextBox from "../../instances/TextBox/PaddingToAddTextBox"
 import MaxNumberOfVidsTextBox from "../../instances/TextBox/MaxNumberOfVidsTextBox"
 import NumberOfWordRepetitionsTextBox from "../../instances/TextBox/NumberOfWordRepetitionsTextBox"
+import WordOptionsButton from "../../instances/Button/WordOptionsButton"
 
 const HomePage = () => {
   return (
@@ -28,17 +29,22 @@ const HomePage = () => {
           <VideosPlaylistIdTextBox key="VideosPlaylistIdTextBoxInstance" />
           <VideosTextFileTextBox key="VideosTextFileTextBoxInstance" />
           <WordsTextFileTextBox key="WordsTextFileTextBoxInstance" />
-          <OutputLocationTextBox key="OutputLocationTextBoxInstance" />
-          <OutputFolderNameTextBox key="OutputFolderNameTextBoxInstance" />
+          <SplitRow>
+            <div />
+            <WordOptionsButton />
+            <div />
+          </SplitRow>
           <SplitRow>
             <PaddingToAddTextBox key="PaddingToAddTextBoxInstance" />
             <MaxNumberOfVidsTextBox key="MaxNumberOfVidsTextBoxInstance" />
             <NumberOfWordRepetitionsTextBox key="NumberOfWordRepetitionsTextBox" />
           </SplitRow>
+          <OutputLocationTextBox key="OutputLocationTextBoxInstance" />
+          <OutputFolderNameTextBox key="OutputFolderNameTextBoxInstance" />
         </div>
         <div className="homePageRightSide">
-          <ConsoleOutput placeholder="👋 This app finds and downloads clips from youtube of specified words being spoken! This is the output box." />
-          <BigButton title="Start" />
+          <ConsoleOutput placeholder="👋 This app finds and downloads clips from YouTube of specified words being spoken! This is the output box." />
+          <Button title="Start" style="big" onClick={event => {}} />
         </div>
       </div>
     </ConsoleOutputContextProvider>
