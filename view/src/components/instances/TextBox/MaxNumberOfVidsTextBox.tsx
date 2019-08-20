@@ -14,7 +14,7 @@ const MaxNumberOfVidsTextBox = (props: { key: string }) => {
       labelText="Max vids"
       placeholder="Max number of videos to search"
       initialText={
-        userDefaultsState.maxNumberOfVideos !== null
+        userDefaultsState.maxNumberOfVideos !== undefined
           ? userDefaultsState.maxNumberOfVideos.toString()
           : undefined
       }
@@ -27,8 +27,8 @@ const MaxNumberOfVidsTextBox = (props: { key: string }) => {
         }
       }}
       onFinishEditing={function(event) {
-        let newText: number | null = parseInt(event.target.value)
-        if (Number.isNaN(newText)) newText = null
+        let newText: number | undefined = parseInt(event.target.value)
+        if (Number.isNaN(newText)) newText = undefined
         userDefaultsDispatch({
           type: "set",
           payload: {

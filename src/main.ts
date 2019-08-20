@@ -3,10 +3,8 @@ import constants from "./constants"
 import path from "path"
 import dotenv from "dotenv"
 import "./ipc"
-
-import { restoreUserDefaults } from "./store"
-import { delay } from "./utils"
 import "./wordOptionsWindow"
+import "./userDefaults"
 
 dotenv.config()
 
@@ -43,8 +41,8 @@ function createWindow() {
   }
 
   mainWindow.webContents.once("did-finish-load", async () => {
-    await delay(10)
-    restoreUserDefaults() //even did-finish-frame-load is buggy
+    // await delay(10)
+    // restoreUserDefaults() //now responds to request from renderer
   })
 
   // Emitted when the window is closed.

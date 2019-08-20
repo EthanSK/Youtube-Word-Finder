@@ -3,18 +3,18 @@ import { VideoSource } from "../components/instances/Dropdown/VideoSourceDropdow
 import { Word } from "../components/containers/WordOptionRow/WordOptionRow"
 
 export type UserDefaultsState = {
-  hasUserDefaultsLoaded: boolean
-  videoSource: VideoSource
-  channelId: string
-  playlistId: string
-  videoTextFile: string
-  outputLocation: string
-  wordsToFindTextFile: string
-  outputFolderName: string
-  paddingToAdd: number | null
-  maxNumberOfVideos: number | null
-  numberOfWordReps: number | null
-  words: Word[]
+  hasUserDefaultsLoaded?: boolean
+  videoSource?: VideoSource
+  channelId?: string
+  playlistId?: string
+  videoTextFile?: string
+  outputLocation?: string
+  wordsToFindTextFile?: string
+  outputFolderName?: string
+  paddingToAdd?: number
+  maxNumberOfVideos?: number
+  numberOfWordReps?: number
+  words?: Word[]
 }
 
 export interface UserDefaultsAction {

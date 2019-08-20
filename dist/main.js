@@ -8,9 +8,8 @@ const constants_1 = __importDefault(require("./constants"));
 const path_1 = __importDefault(require("path"));
 const dotenv_1 = __importDefault(require("dotenv"));
 require("./ipc");
-const store_1 = require("./store");
-const utils_1 = require("./utils");
 require("./wordOptionsWindow");
+require("./userDefaults");
 dotenv_1.default.config();
 function createWindow() {
     // Create the browser window.
@@ -41,8 +40,8 @@ function createWindow() {
         );
     }
     exports.mainWindow.webContents.once("did-finish-load", async () => {
-        await utils_1.delay(10);
-        store_1.restoreUserDefaults(); //even did-finish-frame-load is buggy
+        // await delay(10)
+        // restoreUserDefaults() //now responds to request from renderer
     });
     // Emitted when the window is closed.
     exports.mainWindow.on("closed", () => {

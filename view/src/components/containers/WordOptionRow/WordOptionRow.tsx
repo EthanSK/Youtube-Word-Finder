@@ -3,7 +3,8 @@ import "./WordOptionRow.css"
 
 export interface Word {
   mainWord: string
-  isDeleted: boolean
+  originalUnfilteredWord: string
+  isDeleted?: boolean
   alternativeWords?: {
     word: string
     isBeingUsed: boolean

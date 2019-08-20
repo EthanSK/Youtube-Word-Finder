@@ -76,7 +76,11 @@ const Dropdown = (props: {
     <select
       className="dropdown"
       id={props.selectId}
-      value={props.options.filter(option => option.isSelected)[0].value}
+      value={(function() {
+        if (props.options.filter(option => option.isSelected)[0]) {
+          return props.options.filter(option => option.isSelected)[0].value
+        }
+      })()}
       onChange={event => props.onChange(event)}
     >
       {createOptionElems()}

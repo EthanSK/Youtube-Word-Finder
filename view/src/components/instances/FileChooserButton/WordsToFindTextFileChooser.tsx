@@ -2,6 +2,7 @@ import React, { useContext } from "react"
 import FileChooserButton from "../../elements/FileChooserButton/FileChooserButton"
 import constants from "../../../constants"
 import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext"
+import { ipcSend } from "../../../ipc"
 
 const WordsToFindTextFileButton = () => {
   const { dispatch: userDefaultsDispatch } = useContext(UserDefaultsContext)

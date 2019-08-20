@@ -31,14 +31,14 @@ const HomePage = () => {
           <VideosTextFileTextBox key="VideosTextFileTextBoxInstance" />
           <WordsTextFileTextBox key="WordsTextFileTextBoxInstance" />
           <SplitRow>
-            <div />
+            <div key="div2" />
             <WordOptionsButton />
-            <div />
+            <div key="div1" />
           </SplitRow>
           <SplitRow>
             <PaddingToAddTextBox key="PaddingToAddTextBoxInstance" />
             <MaxNumberOfVidsTextBox key="MaxNumberOfVidsTextBoxInstance" />
-            <NumberOfWordRepetitionsTextBox key="NumberOfWordRepetitionsTextBox" />
+            <NumberOfWordRepetitionsTextBox key="NumberOfWordRepetitionsTextBoxInstance" />
           </SplitRow>
           <OutputLocationTextBox key="OutputLocationTextBoxInstance" />
           <OutputFolderNameTextBox key="OutputFolderNameTextBoxInstance" />

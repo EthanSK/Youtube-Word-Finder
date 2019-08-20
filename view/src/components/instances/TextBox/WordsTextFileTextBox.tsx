@@ -15,6 +15,7 @@ const WordsTextFileTextBox = (props: { key: string }) => {
       placeholder="Text file containing the words to find"
       initialText={userDefaultsState.wordsToFindTextFile}
       consoleOutputOptions={{ useDefaultIfUndefined: true }}
+      //no onfinishediting here because it can't be edited, it is done in the file choose
     />
   )
 }

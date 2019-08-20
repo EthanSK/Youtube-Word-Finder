@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, useState, useCallback } from "react"
 import TextBoxContainer from "../../elements/TextBox/TextBox"
 import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext"
 
@@ -7,7 +7,8 @@ const NumberOfWordRepetitionsTextBox = (props: { key: string }) => {
     state: userDefaultsState,
     dispatch: userDefaultsDispatch
   } = useContext(UserDefaultsContext)
-
+  // const [, updateState] = useState()
+  // const forceUpdate = useCallback(() => updateState({}), [])
   return (
     <TextBoxContainer
       key={"NumberOfVidsTextBox"}
@@ -15,7 +16,7 @@ const NumberOfWordRepetitionsTextBox = (props: { key: string }) => {
       labelText="No. word reps"
       placeholder="Number of times to get same word"
       initialText={
-        userDefaultsState.numberOfWordReps !== null
+        userDefaultsState.numberOfWordReps !== undefined
           ? userDefaultsState.numberOfWordReps.toString()
           : undefined
       }
@@ -28,8 +29,8 @@ const NumberOfWordRepetitionsTextBox = (props: { key: string }) => {
         }
       }}
       onFinishEditing={function(event) {
-        let newText: number | null = parseInt(event.target.value)
-        if (Number.isNaN(newText)) newText = null
+        let newText: number | undefined = parseInt(event.target.value)
+        if (Number.isNaN(newText)) newText = undefined
         userDefaultsDispatch({
           type: "set",
           payload: {

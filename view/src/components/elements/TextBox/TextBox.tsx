@@ -76,7 +76,7 @@ const TextBoxContainer = (props: {
   return (
     <div
       className="textBoxContainer"
-      key={props.textBoxId + userDefaultsState.hasUserDefaultsLoaded} //so we can reset the initial value
+      // key={props.textBoxId + userDefaultsState.hasUserDefaultsLoaded} //so we can reset the initial value. this breaks things like file text boxes because it doesn't change while the key is the same.
       style={style}
     >
       <label className="textBoxLabel" htmlFor={props.textBoxId}>

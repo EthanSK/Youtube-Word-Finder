@@ -15,7 +15,7 @@ const PaddingToAddTextBox = (props: { key: string }) => {
       labelText="Padding to add"
       placeholder="Extra time in seconds to add to start and end of clips"
       initialText={
-        userDefaultsState.paddingToAdd !== null
+        userDefaultsState.paddingToAdd !== undefined
           ? userDefaultsState.paddingToAdd.toString()
           : undefined
       }
@@ -28,8 +28,8 @@ const PaddingToAddTextBox = (props: { key: string }) => {
         }
       }}
       onFinishEditing={function(event) {
-        let newText: number | null = parseFloat(event.target.value)
-        if (Number.isNaN(newText)) newText = null
+        let newText: number | undefined = parseFloat(event.target.value)
+        if (Number.isNaN(newText)) newText = undefined
         userDefaultsDispatch({
           type: "set",
           payload: {

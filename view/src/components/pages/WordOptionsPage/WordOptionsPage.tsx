@@ -5,9 +5,13 @@ import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext"
 
 const WordOptionsList = () => {
   const { state: userDefaultsState } = useContext(UserDefaultsContext)
-  const list = userDefaultsState.words.map(word => (
-    <WordOptionRow word={word} key={word.mainWord} />
-  ))
+  let list: JSX.Element[] = []
+  if (userDefaultsState.words) {
+    list = userDefaultsState.words.map(word => (
+      <WordOptionRow word={word} key={word.mainWord} />
+    ))
+  }
+
   return <ol>{list}</ol>
 }
 
