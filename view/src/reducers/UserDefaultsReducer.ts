@@ -1,5 +1,6 @@
 import { ipcSend } from "../ipc"
 import { VideoSource } from "../components/instances/Dropdown/VideoSourceDropdown"
+import { Word } from "../components/containers/WordOptionRow/WordOptionRow"
 
 export type UserDefaultsState = {
   hasUserDefaultsLoaded: boolean
@@ -13,6 +14,7 @@ export type UserDefaultsState = {
   paddingToAdd: number | null
   maxNumberOfVideos: number | null
   numberOfWordReps: number | null
+  words: Word[]
 }
 
 export interface UserDefaultsAction {

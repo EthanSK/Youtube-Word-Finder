@@ -22,7 +22,8 @@ const initState: UserDefaultsState = {
   outputFolderName: "",
   paddingToAdd: 0,
   maxNumberOfVideos: 10,
-  numberOfWordReps: 5
+  numberOfWordReps: 5,
+  words: []
 }
 
 export const UserDefaultsContext = createContext<UserDefaultsContextType>(

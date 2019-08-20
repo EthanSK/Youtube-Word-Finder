@@ -19,7 +19,9 @@
 
   border-style: solid; /*this was causing that weird diagonal split in colour*/
   outline: none;
+}
 
+.homePageTextBox {
   flex-grow: 2;
 }
 

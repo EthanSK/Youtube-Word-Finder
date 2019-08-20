@@ -3,15 +3,14 @@ import constants from "./constants"
 import path from "path"
 import dotenv from "dotenv"
 import "./ipc"
-import { sendToConsoleOutput } from "./logger"
 
 import { restoreUserDefaults } from "./store"
 import { delay } from "./utils"
+import "./wordOptionsWindow"
 
 dotenv.config()
 
 export let mainWindow: BrowserWindow | null
-export let wordOptionsWindow: BrowserWindow | null
 
 function createWindow() {
   // Create the browser window.
@@ -28,15 +27,6 @@ function createWindow() {
     // titleBarStyle: "hiddenInset",
     title: constants.app.name
   })
-  // wordOptionsWindow = new BrowserWindow({
-  //   width: 400,
-  //   height: 300,
-  //   webPreferences: {
-  //     nodeIntegration: true
-  //   },
-  //   parent: mainWindow
-  // })
-  // wordOptionsWindow.loadURL("https://google.com")
 
   // Open the DevTools.
   //   win.webContents.openDevTools()

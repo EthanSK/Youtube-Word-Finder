@@ -35,6 +35,9 @@ export function loadUserDefault(
     | "wordsToFindTextFile"
     | "outputFolderName"
     | "paddingToAdd"
+    | "maxNumberOfVideos"
+    | "numberOfWordReps"
+    | "words"
 ) {
   return load(`${userDefaultsKey}.${key}`)
 }

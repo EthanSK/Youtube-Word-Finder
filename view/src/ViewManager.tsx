@@ -1,11 +1,13 @@
 import React from "react"
 import { BrowserRouter as Router, Route } from "react-router-dom"
 import App from "./components/App/App"
+import WordOptionsPage from "./components/pages/WordOptionsPage/WordOptionsPage"
 
 const ViewManager = () => {
   function views(): any {
     return {
-      app: <App />
+      app: <App />,
+      wordOptions: <WordOptionsPage />
     }
   }
 

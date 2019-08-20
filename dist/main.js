@@ -10,6 +10,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 require("./ipc");
 const store_1 = require("./store");
 const utils_1 = require("./utils");
+require("./wordOptionsWindow");
 dotenv_1.default.config();
 function createWindow() {
     // Create the browser window.
@@ -26,15 +27,6 @@ function createWindow() {
         // titleBarStyle: "hiddenInset",
         title: constants_1.default.app.name
     });
-    // wordOptionsWindow = new BrowserWindow({
-    //   width: 400,
-    //   height: 300,
-    //   webPreferences: {
-    //     nodeIntegration: true
-    //   },
-    //   parent: mainWindow
-    // })
-    // wordOptionsWindow.loadURL("https://google.com")
     // Open the DevTools.
     //   win.webContents.openDevTools()
     if (process.env.NODE_ENV === "development") {

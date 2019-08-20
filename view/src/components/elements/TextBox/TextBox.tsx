@@ -89,7 +89,7 @@ const TextBoxContainer = (props: {
         min={props.numberInputOptions && props.numberInputOptions.min}
         max={props.numberInputOptions && props.numberInputOptions.max}
         id={props.textBoxId}
-        className="textBox"
+        className="textBox homePageTextBox"
         placeholder={props.placeholder}
         readOnly={props.fileChooser !== undefined}
         onBlur={event => {

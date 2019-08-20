@@ -1,0 +1,11 @@
+.wordOptionRow {
+  display: flex;
+}
+
+.deleteButton {
+  background-color: transparent;
+  border: none;
+  background: none;
+  cursor: pointer;
+  outline: 0px;
+}
