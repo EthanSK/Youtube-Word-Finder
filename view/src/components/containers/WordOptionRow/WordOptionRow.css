@@ -1,5 +1,8 @@
 .wordOptionRow {
   display: flex;
+  margin: 10px;
+  margin-left: -25px;
+  background-color: transparent;
 }
 
 .deleteButton {

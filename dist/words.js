@@ -10,7 +10,8 @@ async function handleNewWordsTextFile() {
     const wordArr = await parseNewWordsTextFile();
     //make it an object for easy access to each word so we can change each one individually
     const wordObjs = wordArr.map(word => {
-        return { [word.mainWord]: word };
+        // return { [word.mainWord]: word }
+        return word;
     });
     userDefaults_1.saveUserDefault("words", wordObjs); //technically not REALLY a user default, but makes life 1million x easier since we have everythnig set up to handle user defaults easily. also it's kinda a user default. kinda.
 }
@@ -22,7 +23,7 @@ async function parseNewWordsTextFile() {
                 reject(err);
             else {
                 // console.log("words; ", data)
-                const words = data.split(" ");
+                const words = data.split(/\s+/);
                 const wordsPkg = words.map(word => {
                     const pkg = {
                         mainWord: filterWord(word),
@@ -36,6 +37,6 @@ async function parseNewWordsTextFile() {
     });
 }
 function filterWord(word) {
-    return word;
+    return word.replace(/[^a-z]/gi, "");
 }
 exports.filterWord = filterWord;
