@@ -15,7 +15,6 @@ const App: React.FC = () => {
       <div className="fadeIn" />
       <UserDefaults />
       <div className="App">
-        <Header title="YouTuber Word Finder" />
         <HomePage />
       </div>
     </UserDefaultsContextProvider>

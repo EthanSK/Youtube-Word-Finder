@@ -17,14 +17,15 @@ import PaddingToAddTextBox from "../../instances/TextBox/PaddingToAddTextBox"
 import MaxNumberOfVidsTextBox from "../../instances/TextBox/MaxNumberOfVidsTextBox"
 import NumberOfWordRepetitionsTextBox from "../../instances/TextBox/NumberOfWordRepetitionsTextBox"
 import WordOptionsButton from "../../instances/Button/WordOptionsButton"
+import Header from "../../elements/Header/Header"
 
 const HomePage = () => {
   return (
     <ConsoleOutputContextProvider>
+      <Header title="YouTuber Word Finder" />
       <div className="homePageContainer">
         <div className="homePageLeftSide">
           <VideoSourceDropdown key="VideoSourceDropdownInstance" />
-
           <VideosChannelIdTextBox key="VideosChannelIdTextBoxInstance" />
           <VideosPlaylistIdTextBox key="VideosPlaylistIdTextBoxInstance" />
           <VideosTextFileTextBox key="VideosTextFileTextBoxInstance" />

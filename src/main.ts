@@ -11,6 +11,7 @@ import { delay } from "./utils"
 dotenv.config()
 
 export let mainWindow: BrowserWindow | null
+export let wordOptionsWindow: BrowserWindow | null
 
 function createWindow() {
   // Create the browser window.
@@ -27,17 +28,28 @@ function createWindow() {
     // titleBarStyle: "hiddenInset",
     title: constants.app.name
   })
+  // wordOptionsWindow = new BrowserWindow({
+  //   width: 400,
+  //   height: 300,
+  //   webPreferences: {
+  //     nodeIntegration: true
+  //   },
+  //   parent: mainWindow
+  // })
+  // wordOptionsWindow.loadURL("https://google.com")
 
   // Open the DevTools.
   //   win.webContents.openDevTools()
   if (process.env.NODE_ENV === "development") {
     mainWindow.setPosition(300, 300)
     // and load the index.html of the app.
-    mainWindow.loadURL("http://localhost:3000")
+    mainWindow.loadURL("http://localhost:3000?app")
   } else {
     // and load  index.html of the app.
-    // mainWindow.loadFile(path.join(__dirnamed , "../public/index.html"))
-    mainWindow.loadFile(path.join(__dirname, "../view/build/index.html"))
+    // mainWindow.loadFile(path.join(__dirname, "../view/build/index.html")) //DON'T DIRECTLY LOAD FILE. DO LOAD URL
+    mainWindow.loadURL(
+      `file://${path.join(__dirname, "../view/build/index.html?app")}` //must use loadurl if using the query string ? to have multiple pages
+    )
   }
 
   mainWindow.webContents.once("did-finish-load", async () => {
