@@ -1,46 +1,43 @@
-import React, { useContext, useEffect, useState } from "react"
-import "./WordOptionRow.css"
-import Button from "../../elements/Button/Button"
-import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext"
-import { ipcSend } from "../../../ipc"
+import React, { useContext, useEffect, useState } from "react";
+import "./WordOptionRow.css";
+import Button from "../../elements/Button/Button";
+import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext";
+import { ipcSend } from "../../../ipc";
 
-const { ipcRenderer } = window.require("electron")
+const { ipcRenderer } = window.require("electron");
 
 export interface Word {
-  mainWord: string
-  originalUnfilteredWord: string
-  isDeleted?: boolean
+  mainWord: string;
+  originalUnfilteredWord: string;
+  isDeleted?: boolean;
   alternativeWords?: {
-    word: string
-    isBeingUsed: boolean
-    isFromSuggestion: boolean
-  }
+    word: string;
+    isBeingUsed: boolean;
+    isFromSuggestion: boolean;
+  };
 }
 
-
 const WordOptionRow = (props: {
-  word: Word
-  key: string
-  arrIndex: number
+  word: Word;
+  key: string;
+  arrIndex: number;
 }) => {
   const {
     state: userDefaultState,
     dispatch: userDefaultsDispatch
-  } = useContext(UserDefaultsContext)
-
-
+  } = useContext(UserDefaultsContext);
 
   //this currently won't work if we add a new row or change one. it really ought to be a function to evals the key from userstate
-  let key = props.arrIndex.toString() //to identify the row.
+  let key = props.arrIndex.toString(); //to identify the row.
 
   function handleAddRowClick() {
-    let newWords = [...userDefaultState.words!]
+    let newWords = [...userDefaultState.words!];
     newWords.splice(props.arrIndex + 1, 0, {
       mainWord: "",
       originalUnfilteredWord: ""
-    })
+    });
     // console.log("newWords", newWords)
-    userDefaultsDispatch({ type: "set", payload: { words: newWords } })
+    userDefaultsDispatch({ type: "set", payload: { words: newWords } });
   }
 
   function handleTextBoxFinishEditing(
@@ -48,40 +45,35 @@ const WordOptionRow = (props: {
       | React.ChangeEvent<HTMLInputElement>
       | React.KeyboardEvent<HTMLInputElement>
   ) {
-    console.log("text changed")
+    console.log("text changed");
     //make sure we send ipc req to main to get it to filter the word, and then ONCE we receive a response, we update the state of the text box to the new text.
     const filterWordObj = {
       word: event.currentTarget.value,
       key //so we can identify the correct box if multiple are listening
-    }
-    ipcSend("filter-word", filterWordObj)
-  }
+    };
+    ipcSend("filter-word", filterWordObj);
 
-  useEffect(() => {
-    const channel = "word-filtered"
+    const channel = "word-filtered";
     var handleWordFiltered = function(
       event: Electron.IpcRendererEvent,
       data: { word: string; key: string }
     ) {
-      if (data.key !== key ) return //it's not for us!
-      console.log("word filtered", data)
-      let newWords = [...userDefaultState.words!]
-      newWords[props.arrIndex].mainWord = data.word
-      userDefaultsDispatch({ type: "set", payload: { words: newWords } })
-    }
-      ipcRenderer.once(channel, handleWordFiltered) //one time thing
-        return () => {
-        ipcRenderer.removeListener(channel, handleWordFiltered)
-    }
-  })
+      if (data.key !== key) return; //it's not for us!
+      console.log("word filtered", data);
+      let newWords = [...userDefaultState.words!];
+      newWords[props.arrIndex].mainWord = data.word;
+      userDefaultsDispatch({ type: "set", payload: { words: newWords } });
+    };
+    ipcRenderer.once(channel, handleWordFiltered); //one time thing
+  }
 
   function handleDeleteButtonPressed() {
-    let newWords = [...userDefaultState.words!]
+    let newWords = [...userDefaultState.words!];
     if (newWords.length <= 1) {
-      return
+      return;
     } //only delete if there is more than one word left
-    newWords.splice(props.arrIndex, 1)
-    userDefaultsDispatch({ type: "set", payload: { words: newWords } })
+    newWords.splice(props.arrIndex, 1);
+    userDefaultsDispatch({ type: "set", payload: { words: newWords } });
   }
 
   function handleFindManuallyPressed() {}
@@ -103,9 +95,10 @@ const WordOptionRow = (props: {
         className="textBox wordOptionTextBox"
         onBlur={event => handleTextBoxFinishEditing(event)}
         defaultValue={props.word.mainWord} //doesn't accept input if using just value
+        placeholder="Enter a word to find"
         onKeyPress={event => {
           if (event.key === "Enter") {
-            event.currentTarget.blur()
+            event.currentTarget.blur();
           }
         }}
       />
@@ -116,7 +109,7 @@ const WordOptionRow = (props: {
         onClick={handleFindManuallyPressed}
       />
     </div>
-  )
-}
+  );
+};
 
-export default WordOptionRow
+export default WordOptionRow;
