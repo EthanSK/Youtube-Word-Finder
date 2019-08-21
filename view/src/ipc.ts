@@ -5,6 +5,7 @@ export type IPCRendererSendChannel =
   | "save-user-default"
   | "open-word-options"
   | "restore-user-defaults"
+  | "filter-word"
 
 export function ipcSend(channel: IPCRendererSendChannel, data?: any) {
   // console.log("sending ipc from renderer: ", channel, data)

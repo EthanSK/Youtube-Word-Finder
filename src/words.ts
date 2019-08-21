@@ -1,5 +1,6 @@
 import fs from "fs"
 import { loadUserDefault, saveUserDefault } from "./userDefaults"
+import { ipcMain } from "electron"
 
 // THIS IS DISGUSTING PRACTICE - I COPIED AND PASTED THIS WORD INTERFACE FROM THE REACT PART OF THE APP. I COULDN'T FIGURE OUT ANOTHER WAY THAT WOULDN'T TAKE LOADS OF EFFORT. FORGIVE ME O GREATER ONE.
 export interface Word {
@@ -49,3 +50,11 @@ async function parseNewWordsTextFile() {
 export function filterWord(word: string): string {
   return word.replace(/[^0-9a-z]/gi, "").toLowerCase() //allow letters and numbers, since yt subs use number numbers and word number interchangeably
 }
+
+ipcMain.on("filter-word", (event, data: { word: string; key: string }) => {
+  const filterWordObj = {
+    word: filterWord(data.word),
+    key: data.key //so we can identify the correct box if multiple are listening
+  }
+  event.sender.send("word-filtered", filterWordObj)
+})

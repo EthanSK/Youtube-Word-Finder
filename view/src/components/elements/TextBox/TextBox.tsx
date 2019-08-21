@@ -96,6 +96,11 @@ const TextBoxContainer = (props: {
           consoleOutput(event)
           props.onFinishEditing && props.onFinishEditing(event)
         }}
+        onKeyPress={event => {
+          if (event.key === "Enter") {
+            event.currentTarget.blur()
+          }
+        }}
         defaultValue={props.initialText} //doesn't accept input if using just value
       />
       {(function() {
