@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import "./WordOptionRow.css";
 import Button from "../../elements/Button/Button";
 import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext";
@@ -23,7 +23,7 @@ const WordOptionRow = (props: {
   arrIndex: number;
 }) => {
   const {
-    state: userDefaultState,
+    state: userDefaultsState,
     dispatch: userDefaultsDispatch
   } = useContext(UserDefaultsContext);
 
@@ -31,7 +31,7 @@ const WordOptionRow = (props: {
   let key = props.arrIndex.toString(); //to identify the row.
 
   function handleAddRowClick() {
-    let newWords = [...userDefaultState.words!];
+    let newWords = [...userDefaultsState.words!];
     newWords.splice(props.arrIndex + 1, 0, {
       mainWord: "",
       originalUnfilteredWord: ""
@@ -60,15 +60,17 @@ const WordOptionRow = (props: {
     ) {
       if (data.key !== key) return; //it's not for us!
       console.log("word filtered", data);
-      let newWords = [...userDefaultState.words!];
+      let newWords = [...userDefaultsState.words!];
       newWords[props.arrIndex].mainWord = data.word;
+      newWords[props.arrIndex].originalUnfilteredWord = filterWordObj.word;
+
       userDefaultsDispatch({ type: "set", payload: { words: newWords } });
     };
     ipcRenderer.once(channel, handleWordFiltered); //one time thing
   }
 
   function handleDeleteButtonPressed() {
-    let newWords = [...userDefaultState.words!];
+    let newWords = [...userDefaultsState.words!];
     if (newWords.length <= 1) {
       return;
     } //only delete if there is more than one word left
