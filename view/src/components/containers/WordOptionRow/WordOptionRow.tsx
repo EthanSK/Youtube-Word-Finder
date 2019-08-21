@@ -30,7 +30,7 @@ const WordOptionRow = (props: {
       mainWord: "",
       originalUnfilteredWord: ""
     })
-    console.log("newWords", newWords)
+    // console.log("newWords", newWords)
     userDefaultsDispatch({ type: "set", payload: { words: newWords } })
   }
 
@@ -41,7 +41,12 @@ const WordOptionRow = (props: {
   }
 
   function handleDeleteButtonPressed() {
-    //make sure to only delete if there is more than one word left
+    let newWords = [...userDefaultState.words!]
+    if (newWords.length <= 1) {
+      return
+    } //only delete if there is more than one word left
+    newWords.splice(props.arrIndex, 1)
+    userDefaultsDispatch({ type: "set", payload: { words: newWords } })
   }
 
   function handleFindManuallyPressed() {}

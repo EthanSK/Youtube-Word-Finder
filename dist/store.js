@@ -8,6 +8,7 @@ const store = new electron_store_1.default();
 function save(key, value) {
     // console.log("store val ", value)
     store.set(key, value);
+    // store.clear()
 }
 exports.save = save;
 function load(key) {
