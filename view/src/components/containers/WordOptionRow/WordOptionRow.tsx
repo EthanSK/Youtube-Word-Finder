@@ -1,5 +1,6 @@
 import React from "react"
 import "./WordOptionRow.css"
+import Button from "../../elements/Button/Button"
 
 export interface Word {
   mainWord: string
@@ -23,6 +24,12 @@ const WordOptionRow = (props: { word: Word; key: string }) => {
         onBlur={event => {}}
         defaultValue={props.word.mainWord} //doesn't accept input if using just value
       />
+      <button
+        className={`smallButton findManuallyButton`}
+        onClick={event => {}}
+      >
+        {"Find manually"}
+      </button>
     </div>
   )
 }

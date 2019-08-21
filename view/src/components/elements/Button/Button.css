@@ -1,3 +1,15 @@
+.bigButton:hover,
+.smallButton:hover,
+.mediumButton:hover {
+  border-color: var(--hover-color);
+}
+
+.bigButton:active,
+.smallButton:active,
+.mediumButton:active {
+  color: var(--clicked-text-color);
+}
+
 .bigButton {
   background-color: var(--item-background-color);
   border-radius: var(--border-radius);
@@ -13,15 +25,8 @@
   transition: 0.2s;
   border-style: solid; /*this was causing that weird diagonal split in colour*/
 }
-.bigButton:hover {
-  border-color: var(--hover-color);
-}
 
-.bigButton:active {
-  color: var(--clicked-text-color);
-}
-
-.smallButton {
+.mediumButton {
   background-color: var(--item-background-color);
   border-radius: var(--border-radius);
   border-color: var(--tint-color);
@@ -37,10 +42,19 @@
   border-style: solid;
 }
 
-.smallButton:hover {
-  border-color: var(--hover-color);
-}
-
-.smallButton:active {
-  color: var(--clicked-text-color);
+.smallButton {
+  background-color: var(--item-background-color);
+  border-radius: var(--border-radius);
+  border-color: var(--tint-color);
+  border-width: var(--item-border-width);
+  color: var(--text-color);
+  font-family: youtube-font;
+  font-size: 15px;
+  cursor: pointer;
+  outline: 0px;
+  margin: 10px;
+  padding-left: 7px;
+  padding-right: 7px;
+  transition: 0.2s;
+  border-style: solid;
 }

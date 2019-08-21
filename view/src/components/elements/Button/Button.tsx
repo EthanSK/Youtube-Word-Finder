@@ -3,7 +3,7 @@ import "./Button.css"
 
 const Button = (props: {
   title: string
-  style: "big" | "small"
+  style: "big" | "medium" | "small"
   onClick(event: React.MouseEvent<HTMLButtonElement>): void
 }) => {
   return (

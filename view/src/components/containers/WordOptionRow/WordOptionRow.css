@@ -13,7 +13,15 @@
   background: none;
   cursor: pointer;
   outline: 0px;
+  flex: 0.1;
 }
 
 .wordOptionTextBox {
+  flex: 1;
+}
+
+.findManuallyButton {
+  margin: 0;
+  margin-left: 10px;
+  margin-right: 10px;
 }
