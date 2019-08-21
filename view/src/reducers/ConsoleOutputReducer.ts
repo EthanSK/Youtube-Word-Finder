@@ -65,6 +65,7 @@ const consoleOutputReducer = (
         ipcSend("log-console-output", newPayload)
         return [...state, newPayload]
       }
+      return state
     default:
       return state
   }

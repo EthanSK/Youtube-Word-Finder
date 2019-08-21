@@ -17,6 +17,7 @@ export interface Word {
   }
 }
 
+
 const WordOptionRow = (props: {
   word: Word
   key: string
@@ -27,11 +28,10 @@ const WordOptionRow = (props: {
     dispatch: userDefaultsDispatch
   } = useContext(UserDefaultsContext)
 
-  const [isWaitingForFilteredWord, setIsWaitingForFilteredWord] = useState(
-    false
-  )
 
-  const key = props.word.mainWord + props.arrIndex.toString()
+
+  //this currently won't work if we add a new row or change one. it really ought to be a function to evals the key from userstate
+  let key = props.arrIndex.toString() //to identify the row.
 
   function handleAddRowClick() {
     let newWords = [...userDefaultState.words!]
@@ -55,7 +55,6 @@ const WordOptionRow = (props: {
       key //so we can identify the correct box if multiple are listening
     }
     ipcSend("filter-word", filterWordObj)
-    setIsWaitingForFilteredWord(true)
   }
 
   useEffect(() => {
@@ -64,16 +63,15 @@ const WordOptionRow = (props: {
       event: Electron.IpcRendererEvent,
       data: { word: string; key: string }
     ) {
-      if (data.key !== key) return //it's not for us!
+      if (data.key !== key ) return //it's not for us!
       console.log("word filtered", data)
-      setIsWaitingForFilteredWord(false)
       let newWords = [...userDefaultState.words!]
       newWords[props.arrIndex].mainWord = data.word
       userDefaultsDispatch({ type: "set", payload: { words: newWords } })
     }
-    if (isWaitingForFilteredWord) ipcRenderer.once(channel, handleWordFiltered) //one time thing
-    return () => {
-      ipcRenderer.removeListener(channel, handleWordFiltered)
+      ipcRenderer.once(channel, handleWordFiltered) //one time thing
+        return () => {
+        ipcRenderer.removeListener(channel, handleWordFiltered)
     }
   })
 

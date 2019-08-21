@@ -25,7 +25,7 @@ function createWindow() {
     // Open the DevTools.
     //   win.webContents.openDevTools()
     if (process.env.NODE_ENV === "development") {
-        exports.wordOptionsWindow.setPosition(600, 600);
+        // wordOptionsWindow.setPosition(600, 600)
         // and load the index.html of the app.
         exports.wordOptionsWindow.loadURL("http://localhost:3000?wordOptions");
     }

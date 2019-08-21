@@ -4,6 +4,9 @@ import WordOptionRow from "../../containers/WordOptionRow/WordOptionRow"
 import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext"
 import "./WordOptionsPage.css"
 
+
+const { ipcRenderer } = window.require("electron")
+
 const WordOptionsList = () => {
   const { state: userDefaultsState } = useContext(UserDefaultsContext)
   let list = []
@@ -20,6 +23,7 @@ const WordOptionsList = () => {
       )
     }
   }
+  ipcRenderer.setMaxListeners(list.length) //tbh it's 2019 computers are fast enough to handle these listeners. 
 
   return <ol className="wordOptionList">{list}</ol>
 }
