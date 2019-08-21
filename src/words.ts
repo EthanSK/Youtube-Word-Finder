@@ -15,13 +15,9 @@ export interface Word {
 
 //called in store userdefaults ipc listener
 export async function handleNewWordsTextFile() {
-  const wordArr = await parseNewWordsTextFile()
-  //make it an object for easy access to each word so we can change each one individually
-  const wordObjs = wordArr.map(word => {
-    // return { [word.mainWord]: word }
-    return word
-  })
-  saveUserDefault("words", wordObjs) //technically not REALLY a user default, but makes life 1million x easier since we have everythnig set up to handle user defaults easily. also it's kinda a user default. kinda.
+  const words = await parseNewWordsTextFile()
+  saveUserDefault("words", words)
+  console.log("word: ", words)
 }
 
 async function parseNewWordsTextFile() {
@@ -45,5 +41,5 @@ async function parseNewWordsTextFile() {
 }
 
 export function filterWord(word: string): string {
-  return word.replace(/[^a-z]/gi, "")
+  return word.replace(/[^0-9a-z]/gi, "") //allow letters and numbers, since yt subs use number numbers and word number interchangeably
 }

@@ -13,9 +13,9 @@ function createWindow() {
         backgroundColor: "#282828",
         //remember to add icon here for linux coz appaz u need it. wow it didn't work in postilkesbot test
         width: 600,
-        height: 400,
-        minWidth: 300,
-        minHeight: 400,
+        height: 700,
+        minWidth: 200,
+        minHeight: 200,
         webPreferences: {
             nodeIntegration: true
         },

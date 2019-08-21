@@ -3,6 +3,8 @@
   margin: 10px;
   margin-left: -25px;
   background-color: transparent;
+  /* justify-content: space-between;
+  align-items: center; */
 }
 
 .deleteButton {
@@ -11,4 +13,7 @@
   background: none;
   cursor: pointer;
   outline: 0px;
+}
+
+.wordOptionTextBox {
 }

@@ -8,9 +8,12 @@ const WordOptionsList = () => {
   const { state: userDefaultsState } = useContext(UserDefaultsContext)
   let list: JSX.Element[] = []
   if (userDefaultsState.words) {
+    let counter = 0 //for words that are the same, we need a unique way to identify them.
     list = userDefaultsState.words.map(word => {
-      // console.log("word", word)
-      return <WordOptionRow word={word} key={word.mainWord} />
+      counter++
+      return (
+        <WordOptionRow word={word} key={word.mainWord + counter.toString()} />
+      )
     })
   }
 

@@ -19,7 +19,7 @@ const WordOptionRow = (props: { word: Word; key: string }) => {
         ❌
       </button>
       <input
-        className="textBox"
+        className="textBox wordOptionTextBox"
         onBlur={event => {}}
         defaultValue={props.word.mainWord} //doesn't accept input if using just value
       />

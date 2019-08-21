@@ -56,7 +56,7 @@ const TextBoxContainer = (props: {
       props.numberInputOptions.isInt
     ) {
       const num = Math.round(parseInt(event.target.value))
-      console.log("num: ", num)
+      // console.log("num: ", num)
       const max = Math.max(props.numberInputOptions!.min, num)
       const min = Math.min(max, props.numberInputOptions!.max)
       payload.value = min.toString()
