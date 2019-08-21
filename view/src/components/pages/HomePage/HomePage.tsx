@@ -45,7 +45,7 @@ const HomePage = () => {
         </div>
         <div className="homePageRightSide">
           <ConsoleOutput placeholder="👋 This app finds and downloads clips from YouTube of specified words being spoken! This is the output box." />
-          <Button title="Start" style="big" onClick={event => {}} />
+          <Button title="Start" class="bigButton" onClick={event => {}} />
         </div>
       </div>
     </ConsoleOutputContextProvider>

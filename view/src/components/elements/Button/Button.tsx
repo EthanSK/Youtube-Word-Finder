@@ -3,14 +3,11 @@ import "./Button.css"
 
 const Button = (props: {
   title: string
-  style: "big" | "medium" | "small"
+  class: "bigButton" | "mediumButton" | "smallButton" | "emojiButton"
   onClick(event: React.MouseEvent<HTMLButtonElement>): void
 }) => {
   return (
-    <button
-      className={`${props.style}Button`}
-      onClick={event => props.onClick(event)}
-    >
+    <button className={props.class} onClick={event => props.onClick(event)}>
       {props.title}
     </button>
   )

@@ -1,12 +1,14 @@
 .bigButton:hover,
 .smallButton:hover,
-.mediumButton:hover {
+.mediumButton:hover,
+.emojiButton:hover {
   border-color: var(--hover-color);
 }
 
 .bigButton:active,
 .smallButton:active,
-.mediumButton:active {
+.mediumButton:active,
+.emojiButton:active {
   color: var(--clicked-text-color);
 }
 
@@ -55,6 +57,20 @@
   margin: 10px;
   padding-left: 7px;
   padding-right: 7px;
+  transition: 0.2s;
+  border-style: solid;
+}
+
+.emojiButton {
+  background-color: var(--item-background-color);
+  /* background-color: green; */
+  border: 0;
+  color: var(--text-color);
+  font-size: 15px;
+  cursor: pointer;
+  outline: 0px;
+  margin-top: -5px;
+  margin-bottom: -5px;
   transition: 0.2s;
   border-style: solid;
 }

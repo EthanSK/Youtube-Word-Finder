@@ -16,7 +16,7 @@ export interface Word {
 const WordOptionRow = (props: { word: Word; key: string }) => {
   return (
     <div className="wordOptionRow">
-      <button className="deleteButton" onClick={event => {}}>
+      <button className="emojiButton deleteButton" onClick={event => {}}>
         ❌
       </button>
       <input
@@ -25,10 +25,10 @@ const WordOptionRow = (props: { word: Word; key: string }) => {
         defaultValue={props.word.mainWord} //doesn't accept input if using just value
       />
       <button
-        className={`smallButton findManuallyButton`}
+        className={`emojiButton findManuallyButton`}
         onClick={event => {}}
       >
-        {"Find manually"}
+        {"🔎"}
       </button>
     </div>
   )

@@ -17,7 +17,6 @@ export interface Word {
 export async function handleNewWordsTextFile() {
   const words = await parseNewWordsTextFile()
   saveUserDefault("words", words)
-  console.log("word: ", words)
 }
 
 async function parseNewWordsTextFile() {
@@ -27,13 +26,18 @@ async function parseNewWordsTextFile() {
       else {
         // console.log("words; ", data)
         const words = data.split(/\s+/)
-        const wordsPkg = words.map(word => {
-          const pkg: Word = {
-            mainWord: filterWord(word),
-            originalUnfilteredWord: word
-          }
-          return pkg
-        })
+        const wordsPkg = words
+          .map(word => {
+            const pkg: Word = {
+              mainWord: filterWord(word),
+              originalUnfilteredWord: word
+            }
+            return pkg
+          })
+          .filter(wordPkg => {
+            return wordPkg.mainWord !== "" //remove empty ones
+          })
+
         resolve(wordsPkg)
       }
     })

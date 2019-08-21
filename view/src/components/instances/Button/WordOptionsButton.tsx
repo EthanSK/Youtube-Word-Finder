@@ -6,7 +6,7 @@ const WordOptionsButton = () => {
   return (
     <Button
       title="Open Word Options"
-      style="medium"
+      class="mediumButton"
       onClick={event => {
         ipcSend("open-word-options", {})
       }}

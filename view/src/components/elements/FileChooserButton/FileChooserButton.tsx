@@ -1,7 +1,6 @@
 import React, { useContext } from "react"
 import "./FileChooserButton.css"
-import folderIcon from "../../../assets/images/folderIcon.png"
-import fileIcon from "../../../assets/images/fileIcon.png"
+
 import { ConsoleOutputComponentsPayload } from "../../../reducers/ConsoleOutputReducer"
 import { ConsoleOutputContext } from "../../../contexts/ConsoleOutputContext"
 
@@ -18,7 +17,6 @@ const FileChooserButton = (props: {
 }) => {
   const { dispatch: consoleOutputDispatch } = useContext(ConsoleOutputContext)
 
-  const image = props.fileChooserType === "file" ? fileIcon : folderIcon
   //doing all this here because every single file and folder chooser will be the same
   async function handleClick() {
     const files = await remote.dialog.showOpenDialog(props.options)
@@ -39,12 +37,16 @@ const FileChooserButton = (props: {
   }
 
   return (
-    <button className="fileChooserButton" onClick={handleClick}>
-      <img
+    <button className="emojiButton fileChooserButton" onClick={handleClick}>
+      {/* <img
         src={image}
         className="folderIcon fileIcon"
         alt={props.fileChooserType + " icon"}
-      />
+      /> */}
+      {(function() {
+        if (props.fileChooserType === "file") return "📄"
+        if (props.fileChooserType === "folder") return "📂"
+      })()}
     </button>
   )
 }

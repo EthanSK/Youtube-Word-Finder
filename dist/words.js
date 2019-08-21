@@ -9,7 +9,6 @@ const userDefaults_1 = require("./userDefaults");
 async function handleNewWordsTextFile() {
     const words = await parseNewWordsTextFile();
     userDefaults_1.saveUserDefault("words", words);
-    console.log("word: ", words);
 }
 exports.handleNewWordsTextFile = handleNewWordsTextFile;
 async function parseNewWordsTextFile() {
@@ -20,12 +19,16 @@ async function parseNewWordsTextFile() {
             else {
                 // console.log("words; ", data)
                 const words = data.split(/\s+/);
-                const wordsPkg = words.map(word => {
+                const wordsPkg = words
+                    .map(word => {
                     const pkg = {
                         mainWord: filterWord(word),
                         originalUnfilteredWord: word
                     };
                     return pkg;
+                })
+                    .filter(wordPkg => {
+                    return wordPkg.mainWord !== ""; //remove empty ones
                 });
                 resolve(wordsPkg);
             }
