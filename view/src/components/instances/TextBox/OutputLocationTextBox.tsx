@@ -14,7 +14,7 @@ const OutputLocationTextBox = (props: { key: string }) => {
       key="OutputLocationTextBox"
       textBoxId="outputLocation"
       labelText="Output location"
-      placeholder="Folder to put output files"
+      placeholder="Folder to put output files. Click folder icon."
       onFinishEditing={function(event) {
         const newText = event.target.value
         userDefaultsDispatch({

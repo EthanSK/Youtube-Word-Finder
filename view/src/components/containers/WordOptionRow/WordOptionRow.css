@@ -3,23 +3,8 @@
   margin: 10px;
   margin-left: -35px;
   background-color: transparent;
-  /* justify-content: space-between;
-  align-items: center; */
 }
-
-/* .deleteButton {
-  background-color: transparent;
-  border: none;
-  background: none;
-  cursor: pointer;
-  outline: 0px;
-  flex: 0.1;
-} */
 
 .wordOptionTextBox {
   flex: 1;
 }
-
-/* .findManuallyButton {
-  margin: 0;
-} */

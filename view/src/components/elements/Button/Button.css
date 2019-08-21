@@ -63,7 +63,6 @@
 
 .emojiButton {
   background-color: var(--item-background-color);
-  /* background-color: green; */
   border: 0;
   color: var(--text-color);
   font-size: 15px;

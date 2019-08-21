@@ -12,7 +12,7 @@ const VideosTextFileTextBox = (props: { key: string }) => {
       textBoxId="textFileVideoSource"
       labelText="Videos text file"
       fileChooser={<VideosTextFileButton />}
-      placeholder="Text file containing the videos"
+      placeholder="Text file containing the videos. Click file icon."
       initialText={userDefaultsState.videoTextFile}
       isHidden={userDefaultsState.videoSource !== "Text file"}
       consoleOutputOptions={{ useDefaultIfUndefined: true }}

@@ -38,11 +38,6 @@ const FileChooserButton = (props: {
 
   return (
     <button className="emojiButton fileChooserButton" onClick={handleClick}>
-      {/* <img
-        src={image}
-        className="folderIcon fileIcon"
-        alt={props.fileChooserType + " icon"}
-      /> */}
       {(function() {
         if (props.fileChooserType === "file") return "📄"
         if (props.fileChooserType === "folder") return "📂"

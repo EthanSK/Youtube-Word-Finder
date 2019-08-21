@@ -12,7 +12,7 @@ const WordsTextFileTextBox = (props: { key: string }) => {
       textBoxId="wordsToFind"
       labelText="Words text file"
       fileChooser={<WordsToFindTextFileButton />}
-      placeholder="Text file containing the words to find"
+      placeholder="Text file containing the words to find. Click file icon."
       initialText={userDefaultsState.wordsToFindTextFile}
       consoleOutputOptions={{ useDefaultIfUndefined: true }}
       //no onfinishediting here because it can't be edited, it is done in the file choose
