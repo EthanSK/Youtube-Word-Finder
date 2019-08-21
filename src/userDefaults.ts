@@ -1,6 +1,7 @@
 import { ipcMain } from "electron"
 import { handleNewWordsTextFile } from "./words"
 import { save, load } from "./store"
+import { Word } from "./words"
 
 const userDefaultsKey = "userDefaults"
 
@@ -39,6 +40,9 @@ function setUserDefaultsInitialValuesIfNeeded() {
   setIfNeeded("maxNumberOfVideos", 15)
   setIfNeeded("numberOfWordReps", 5)
   setIfNeeded("videoSource", "Channel")
+
+  const emptyWord: Word = { mainWord: "", originalUnfilteredWord: "" } //so the user can add their own words without using the file
+  setIfNeeded("words", [emptyWord])
 }
 
 export function saveUserDefault(key: UserDefaultName, value: any) {

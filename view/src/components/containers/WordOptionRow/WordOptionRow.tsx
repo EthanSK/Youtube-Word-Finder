@@ -1,6 +1,7 @@
-import React from "react"
+import React, { useContext } from "react"
 import "./WordOptionRow.css"
 import Button from "../../elements/Button/Button"
+import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext"
 
 export interface Word {
   mainWord: string
@@ -13,23 +14,62 @@ export interface Word {
   }
 }
 
-const WordOptionRow = (props: { word: Word; key: string }) => {
+const WordOptionRow = (props: {
+  word: Word
+  key: string
+  arrIndex: number
+}) => {
+  const {
+    state: userDefaultState,
+    dispatch: userDefaultsDispatch
+  } = useContext(UserDefaultsContext)
+
+  function handleAddRowClick() {
+    let newWords = [...userDefaultState.words!]
+    newWords.splice(props.arrIndex + 1, 0, {
+      mainWord: "",
+      originalUnfilteredWord: ""
+    })
+    console.log("newWords", newWords)
+    userDefaultsDispatch({ type: "set", payload: { words: newWords } })
+  }
+
+  function handleTextBoxFinishEditing(
+    event: React.ChangeEvent<HTMLInputElement>
+  ) {
+    //make sure we send ipc req to main to get it to filter the word, and then ONCE we receive a response, we update the state of the text box to the new text.
+  }
+
+  function handleDeleteButtonPressed() {
+    //make sure to only delete if there is more than one word left
+  }
+
+  function handleFindManuallyPressed() {}
+
   return (
     <div className="wordOptionRow">
-      <button className="emojiButton deleteButton" onClick={event => {}}>
-        ❌
-      </button>
+      <Button
+        title="+"
+        class="emojiButton"
+        extraClasses="addRowButton"
+        onClick={handleAddRowClick}
+      />
+      <Button
+        title="❌"
+        class="emojiButton"
+        onClick={handleDeleteButtonPressed}
+      />
       <input
         className="textBox wordOptionTextBox"
-        onBlur={event => {}}
+        onBlur={event => handleTextBoxFinishEditing(event)}
         defaultValue={props.word.mainWord} //doesn't accept input if using just value
       />
-      <button
-        className={`emojiButton findManuallyButton`}
-        onClick={event => {}}
-      >
-        {"🔎"}
-      </button>
+
+      <Button
+        title="🔎"
+        class="emojiButton"
+        onClick={handleFindManuallyPressed}
+      />
     </div>
   )
 }

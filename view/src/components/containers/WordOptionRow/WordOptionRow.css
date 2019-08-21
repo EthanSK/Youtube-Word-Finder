@@ -8,3 +8,9 @@
 .wordOptionTextBox {
   flex: 1;
 }
+
+.addRowButton {
+  position: relative;
+
+  bottom: -15px;
+}

@@ -25,6 +25,8 @@ function setUserDefaultsInitialValuesIfNeeded() {
     setIfNeeded("maxNumberOfVideos", 15);
     setIfNeeded("numberOfWordReps", 5);
     setIfNeeded("videoSource", "Channel");
+    const emptyWord = { mainWord: "", originalUnfilteredWord: "" }; //so the user can add their own words without using the file
+    setIfNeeded("words", [emptyWord]);
 }
 function saveUserDefault(key, value) {
     store_1.save(`${userDefaultsKey}.${key}`, value);

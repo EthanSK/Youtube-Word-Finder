@@ -14,21 +14,6 @@ type UserDefaultsContextType = {
 // I think the solution to this not updating thing is to not set any initial values here, rather set them in the user defaults, so when it comes time for a textbox to render, the initial value won't have already been set, and it can populate it correctly.
 const initState: UserDefaultsState = {}
 
-// {
-//   hasUserDefaultsLoaded: false,
-//   videoSource: "Playlist",
-//   channelId: "",
-//   playlistId: "",
-//   videoTextFile: "",
-//   outputLocation: "",
-//   wordsToFindTextFile: "",
-//   outputFolderName: "",
-//   paddingToAdd: null,
-//   maxNumberOfVideos: null,
-//   numberOfWordReps: null,
-//   words: []
-// }
-
 export const UserDefaultsContext = createContext<UserDefaultsContextType>(
   {} as UserDefaultsContextType
 )

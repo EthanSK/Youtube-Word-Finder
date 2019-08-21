@@ -6,15 +6,19 @@ import "./WordOptionsPage.css"
 
 const WordOptionsList = () => {
   const { state: userDefaultsState } = useContext(UserDefaultsContext)
-  let list: JSX.Element[] = []
+  let list = []
   if (userDefaultsState.words) {
-    let counter = 0 //for words that are the same, we need a unique way to identify them.
-    list = userDefaultsState.words.map(word => {
-      counter++
-      return (
-        <WordOptionRow word={word} key={word.mainWord + counter.toString()} />
+    //for words that are the same, we need a unique way to identify them, so we add the index to the key
+    for (let i = 0; i < userDefaultsState.words.length; i++) {
+      const word = userDefaultsState.words[i]
+      list.push(
+        <WordOptionRow
+          word={word}
+          key={word.mainWord + i.toString()}
+          arrIndex={i}
+        />
       )
-    })
+    }
   }
 
   return <ol className="wordOptionList">{list}</ol>

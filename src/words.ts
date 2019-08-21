@@ -26,7 +26,7 @@ async function parseNewWordsTextFile() {
       else {
         // console.log("words; ", data)
         const words = data.split(/\s+/)
-        const wordsPkg = words
+        let wordsPkg = words
           .map(word => {
             const pkg: Word = {
               mainWord: filterWord(word),
@@ -38,6 +38,8 @@ async function parseNewWordsTextFile() {
             return wordPkg.mainWord !== "" //remove empty ones
           })
 
+        wordsPkg.unshift({ mainWord: "", originalUnfilteredWord: "" }) //so the user can add their own words without using the file
+
         resolve(wordsPkg)
       }
     })
@@ -45,5 +47,5 @@ async function parseNewWordsTextFile() {
 }
 
 export function filterWord(word: string): string {
-  return word.replace(/[^0-9a-z]/gi, "") //allow letters and numbers, since yt subs use number numbers and word number interchangeably
+  return word.replace(/[^0-9a-z]/gi, "").toLowerCase() //allow letters and numbers, since yt subs use number numbers and word number interchangeably
 }
