@@ -1,43 +1,49 @@
-import React, { useContext } from "react";
-import "./WordOptionRow.css";
-import Button from "../../elements/Button/Button";
-import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext";
-import { ipcSend } from "../../../ipc";
+import React, { useContext, useEffect } from "react"
+import "./WordOptionRow.css"
+import Button from "../../elements/Button/Button"
+import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext"
+import { ipcSend } from "../../../ipc"
 
-const { ipcRenderer } = window.require("electron");
+const { ipcRenderer } = window.require("electron")
 
+//when updating word or alternative word, make sure to update in the main process in words.ts
 export interface Word {
-  mainWord: string;
-  originalUnfilteredWord: string;
-  isDeleted?: boolean;
+  mainWord: string
+  originalUnfilteredWord: string
   alternativeWords?: {
-    word: string;
-    isBeingUsed: boolean;
-    isFromSuggestion: boolean;
-  };
+    [word: string]: AlternativeWord
+  }
+}
+
+export interface AlternativeWord {
+  word: string
+  isBeingUsed: boolean
+  isFromSuggestion: boolean
+  doesMatchCurrentWord: boolean // because if we edit the word, we still want to keep the ones being used, and we need a way to keep track of whether we need to fetch new similar words
+  score?: number //from the api, in case we wanna use it for further sortirng
 }
 
 const WordOptionRow = (props: {
-  word: Word;
-  key: string;
-  arrIndex: number;
+  word: Word
+  key: string
+  arrIndex: number
 }) => {
   const {
     state: userDefaultsState,
     dispatch: userDefaultsDispatch
-  } = useContext(UserDefaultsContext);
+  } = useContext(UserDefaultsContext)
 
   //this currently won't work if we add a new row or change one. it really ought to be a function to evals the key from userstate
-  let key = props.arrIndex.toString(); //to identify the row.
+  let key = props.arrIndex.toString() //to identify the row.
 
   function handleAddRowClick() {
-    let newWords = [...userDefaultsState.words!];
+    let newWords = [...userDefaultsState.words!]
     newWords.splice(props.arrIndex + 1, 0, {
       mainWord: "",
       originalUnfilteredWord: ""
-    });
+    })
     // console.log("newWords", newWords)
-    userDefaultsDispatch({ type: "set", payload: { words: newWords } });
+    userDefaultsDispatch({ type: "set", payload: { words: newWords } })
   }
 
   function handleTextBoxFinishEditing(
@@ -45,37 +51,38 @@ const WordOptionRow = (props: {
       | React.ChangeEvent<HTMLInputElement>
       | React.KeyboardEvent<HTMLInputElement>
   ) {
-    console.log("text changed");
+    console.log("text changed")
     //make sure we send ipc req to main to get it to filter the word, and then ONCE we receive a response, we update the state of the text box to the new text.
     const filterWordObj = {
       word: event.currentTarget.value,
       key //so we can identify the correct box if multiple are listening
-    };
-    ipcSend("filter-word", filterWordObj);
+    }
+    ipcSend("filter-word", filterWordObj)
 
-    const channel = "word-filtered";
+    const channel = "word-filtered"
     var handleWordFiltered = function(
       event: Electron.IpcRendererEvent,
       data: { word: string; key: string }
     ) {
-      if (data.key !== key) return; //it's not for us!
-      console.log("word filtered", data);
-      let newWords = [...userDefaultsState.words!];
-      newWords[props.arrIndex].mainWord = data.word;
-      newWords[props.arrIndex].originalUnfilteredWord = filterWordObj.word;
+      if (data.key !== key) return //it's not for us!
+      console.log("word filtered", data)
+      let newWords = [...userDefaultsState.words!]
+      newWords[props.arrIndex].mainWord = data.word
+      newWords[props.arrIndex].originalUnfilteredWord = filterWordObj.word
 
-      userDefaultsDispatch({ type: "set", payload: { words: newWords } });
-    };
-    ipcRenderer.once(channel, handleWordFiltered); //one time thing
+      userDefaultsDispatch({ type: "set", payload: { words: newWords } })
+    }
+    ipcRenderer.once(channel, handleWordFiltered) //one time thing
   }
 
   function handleDeleteButtonPressed() {
-    let newWords = [...userDefaultsState.words!];
+    let newWords = [...userDefaultsState.words!]
     if (newWords.length <= 1) {
-      return;
+      return
     } //only delete if there is more than one word left
-    newWords.splice(props.arrIndex, 1);
-    userDefaultsDispatch({ type: "set", payload: { words: newWords } });
+
+    newWords.splice(props.arrIndex, 1)
+    userDefaultsDispatch({ type: "set", payload: { words: newWords } })
   }
 
   function handleFindManuallyPressed() {}
@@ -88,6 +95,7 @@ const WordOptionRow = (props: {
         extraClasses="addRowButton"
         onClick={handleAddRowClick}
       />
+
       <Button
         title="❌"
         class="emojiButton"
@@ -100,7 +108,7 @@ const WordOptionRow = (props: {
         placeholder="Enter a word to find"
         onKeyPress={event => {
           if (event.key === "Enter") {
-            event.currentTarget.blur();
+            event.currentTarget.blur()
           }
         }}
       />
@@ -110,8 +118,34 @@ const WordOptionRow = (props: {
         class="emojiButton"
         onClick={handleFindManuallyPressed}
       />
+      <div className="scrollArea">
+        <WordAlternativesList altWords={props.word.alternativeWords} />
+      </div>
     </div>
-  );
-};
+  )
+}
 
-export default WordOptionRow;
+const WordAlternativesList = (props: {
+  altWords?: { [word: string]: AlternativeWord }
+}) => {
+  const {
+    state: userDefaultsState,
+    dispatch: userDefaultsDispatch
+  } = useContext(UserDefaultsContext)
+  let list = []
+  if (props.altWords) {
+    for (const altWordKey in props.altWords) {
+      const altWord = props.altWords[altWordKey]
+      list.push(
+        <input
+          className="textBox suggestedWordAlternativeTextBox"
+          defaultValue={altWord.word} //doesn't accept input if using just value
+        />
+      )
+    }
+  }
+
+  return <ol>{list}</ol>
+}
+
+export default WordOptionRow

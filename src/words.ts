@@ -6,12 +6,13 @@ import { ipcMain } from "electron"
 export interface Word {
   mainWord: string
   originalUnfilteredWord: string
-  isDeleted?: boolean
   alternativeWords?: {
     word: string
     isBeingUsed: boolean
     isFromSuggestion: boolean
-  }
+    doesMatchCurrentWord: boolean
+    score?: number
+  }[]
 }
 
 //called in store userdefaults ipc listener
@@ -38,8 +39,6 @@ async function parseNewWordsTextFile() {
           .filter(wordPkg => {
             return wordPkg.mainWord !== "" //remove empty ones
           })
-
-        wordsPkg.unshift({ mainWord: "", originalUnfilteredWord: "" }) //so the user can add their own words without using the file
 
         resolve(wordsPkg)
       }

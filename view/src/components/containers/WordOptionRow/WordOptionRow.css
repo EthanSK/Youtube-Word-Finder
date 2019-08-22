@@ -1,7 +1,7 @@
 .wordOptionRow {
   display: flex;
   margin: 10px;
-  margin-left: -35px;
+  /* margin-left: -35px; */
   background-color: transparent;
 }
 
@@ -11,6 +11,13 @@
 
 .addRowButton {
   position: relative;
+  bottom: -14px;
+}
 
-  bottom: -15px;
+.scrollArea {
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.scrollArea::-webkit-scrollbar {
+  display: none;
 }

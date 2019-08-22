@@ -1,3 +1,10 @@
 .wordOptionList {
   background-color: transparent;
+  list-style: none;
+  padding-left: 0;
+}
+
+.addRowTop {
+  bottom: -20px;
+  padding-left: 1.13em;
 }

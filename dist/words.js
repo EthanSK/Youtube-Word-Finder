@@ -31,7 +31,6 @@ async function parseNewWordsTextFile() {
                     .filter(wordPkg => {
                     return wordPkg.mainWord !== ""; //remove empty ones
                 });
-                wordsPkg.unshift({ mainWord: "", originalUnfilteredWord: "" }); //so the user can add their own words without using the file
                 resolve(wordsPkg);
             }
         });
