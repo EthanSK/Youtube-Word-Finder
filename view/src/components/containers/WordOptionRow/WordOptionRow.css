@@ -7,11 +7,12 @@
 
 .wordOptionTextBox {
   flex: 1;
+  height: 30px;
 }
 
 .addRowButton {
   position: relative;
-  bottom: -14px;
+  bottom: -20px;
 }
 
 .altWordList {

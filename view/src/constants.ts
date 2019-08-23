@@ -23,7 +23,7 @@ const constants = {
   maxConsoleOutputMessagesToDisplay: 500,
   fileChooserDefaultOptions,
   folderChooserDefaultOptions,
-  maxNumAltWordsToDisplay: 30
+  maxNumAltWordsToDisplay: 50
 }
 
 export default constants

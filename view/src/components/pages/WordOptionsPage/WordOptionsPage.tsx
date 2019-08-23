@@ -13,6 +13,8 @@ interface APISimilarWord {
   numSyllables: string
 }
 
+let isLoadingAltWords = true
+
 const WordOptionsList = () => {
   const {
     state: userDefaultsState,
@@ -98,6 +100,7 @@ async function getSimilarWords(words: Word[], dispatch: Function) {
   }
 
   let newWords = [...words]
+  isLoadingAltWords = true
   await Promise.all(
     newWords.map(async word => {
       if (!hasAltWordFromSuggestion(word) && word.mainWord) {
@@ -130,6 +133,7 @@ async function getSimilarWords(words: Word[], dispatch: Function) {
     })
   )
   // console.log("new words: ", newWords)
+  isLoadingAltWords = false
   dispatch({ type: "set", payload: { words: newWords } })
 }
 
@@ -157,7 +161,9 @@ const WordOptionsPage = () => {
         extraClasses="addRowButton addRowTop"
         onClick={handleAddRowClick}
       />
-      <label className="smallColumnHeadingLabel">Alternative words</label>
+      <label className="smallColumnHeadingLabel">
+        Alternative words{isLoadingAltWords ? " - Loading..." : ""}
+      </label>
 
       <WordOptionsList />
     </div>
