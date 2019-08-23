@@ -37,7 +37,7 @@
   white-space: nowrap;
 }
 .scrollArea::-webkit-scrollbar {
-  height: 5px;
+  height: 7px;
   background-color: transparent;
 }
 .scrollArea::-webkit-scrollbar-thumb {

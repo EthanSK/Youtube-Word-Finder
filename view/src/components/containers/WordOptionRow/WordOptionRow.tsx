@@ -74,7 +74,29 @@ const WordOptionRow = (props: {
 
   function handleFindManuallyPressed() {}
 
-  function handleAltWordTextBox(event: React.ChangeEvent<HTMLInputElement>) {}
+  function handleAltWordTextBox(event: React.ChangeEvent<HTMLInputElement>) {
+    let newWords = [...userDefaultsState.words!]
+
+    if (!props.word.alternativeWords) {
+      newWords[props.arrIndex].alternativeWords = {} //need it to exist before checking if the api word has been gotten before below
+    }
+    const filteredWord = filterWord(event.currentTarget.value)
+    if (
+      // !props.word.alternativeWords![filteredWord] && //don't do this because if similar word is already in suggested, it won't show
+      filteredWord !== props.word.mainWord &&
+      filteredWord !== ""
+    ) {
+      newWords[props.arrIndex].alternativeWords![filteredWord] = {
+        word: filteredWord,
+        score: Date.now(), //so it always appears first
+        isBeingUsed: true,
+        doesMatchCurrentWord: true,
+        isFromSuggestion: false
+      }
+    }
+    event.currentTarget.value = ""
+    userDefaultsDispatch({ type: "set", payload: { words: newWords } })
+  }
 
   return (
     <div className="wordOptionRowContainer">
