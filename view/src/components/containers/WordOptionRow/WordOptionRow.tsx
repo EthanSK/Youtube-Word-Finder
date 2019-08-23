@@ -3,6 +3,7 @@ import "./WordOptionRow.css"
 import Button from "../../elements/Button/Button"
 import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext"
 import { ipcSend } from "../../../ipc"
+import constants from "../../../constants"
 
 const { ipcRenderer } = window.require("electron")
 
@@ -134,14 +135,27 @@ const WordAlternativesList = (props: {
   } = useContext(UserDefaultsContext)
   let list = []
   if (props.altWords) {
-    for (const altWordKey in props.altWords) {
+    let countAdded = 0
+    let keys = Object.keys(props.altWords)
+    keys.sort((a, b) => {
+      let scoreA = props.altWords![a].score
+      if (!scoreA) scoreA = 0
+      let scoreB = props.altWords![b].score
+      if (!scoreB) scoreB = 0
+      return scoreB - scoreA
+    })
+    for (const altWordKey of keys) {
+      if (countAdded > constants.maxNumAltWordsToDisplay) break
       const altWord = props.altWords[altWordKey]
+      if (altWord.isBeingUsed) continue
       list.push(
         <input
+          style={{ width: `${(altWord.word.length + 1) * 7}px` }}
           className="textBox suggestedWordAlternativeTextBox"
           defaultValue={altWord.word} //doesn't accept input if using just value
         />
       )
+      countAdded++
     }
   }
 

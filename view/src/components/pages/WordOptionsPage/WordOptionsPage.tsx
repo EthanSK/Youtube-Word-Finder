@@ -111,7 +111,10 @@ async function getSimilarWords(words: Word[], dispatch: Function) {
         }
         const data = result.data as APISimilarWord[]
         data.forEach(apiWord => {
-          if (!word.alternativeWords![apiWord.word]) {
+          if (
+            !word.alternativeWords![apiWord.word] &&
+            apiWord.word !== word.mainWord
+          ) {
             word.alternativeWords![apiWord.word] = {
               word: apiWord.word,
               score: apiWord.score,

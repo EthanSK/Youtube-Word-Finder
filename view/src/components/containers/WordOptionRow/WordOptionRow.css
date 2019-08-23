@@ -19,5 +19,13 @@
   white-space: nowrap;
 }
 .scrollArea::-webkit-scrollbar {
-  display: none;
+  height: 5px;
+  background-color: transparent;
+}
+.scrollArea::-webkit-scrollbar-thumb {
+  background-color: var(--tint-color);
+  border-radius: 4px;
+}
+
+.suggestedWordAlternativeTextBox {
 }
