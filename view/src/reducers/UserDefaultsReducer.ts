@@ -1,6 +1,7 @@
 import { ipcSend } from "../ipc"
 import { VideoSource } from "../components/instances/Dropdown/VideoSourceDropdown"
 import { Word } from "../components/containers/WordOptionRow/WordOptionRow"
+import { DownloadOrder } from "../components/instances/Dropdown/DownloadOrderDropdown"
 
 export type UserDefaultsState = {
   hasUserDefaultsLoaded?: boolean
@@ -15,6 +16,7 @@ export type UserDefaultsState = {
   maxNumberOfVideos?: number
   numberOfWordReps?: number
   words?: Word[]
+  downloadOrder?: DownloadOrder
 }
 
 export interface UserDefaultsAction {

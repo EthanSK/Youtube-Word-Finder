@@ -17,6 +17,7 @@ type UserDefaultName =
   | "maxNumberOfVideos"
   | "numberOfWordReps"
   | "words"
+  | "downloadOrder"
 
 ipcMain.on("save-user-default", (event, data) => {
   for (const key in data) {
@@ -40,6 +41,7 @@ function setUserDefaultsInitialValuesIfNeeded() {
   setIfNeeded("maxNumberOfVideos", 15)
   setIfNeeded("numberOfWordReps", 5)
   setIfNeeded("videoSource", "Channel")
+  setIfNeeded("downloadOrder", "allMainThenAllAlt")
 
   const emptyWord: Word = { mainWord: "", originalUnfilteredWord: "" } //so the user can add their own words without using the file
   setIfNeeded("words", [emptyWord])

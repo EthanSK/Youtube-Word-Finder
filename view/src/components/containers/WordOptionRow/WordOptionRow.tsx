@@ -88,7 +88,7 @@ const WordOptionRow = (props: {
     ) {
       newWords[props.arrIndex].alternativeWords![filteredWord] = {
         word: filteredWord,
-        score: Date.now(), //so it always appears first
+        score: -Date.now(), //so it always appears first
         isBeingUsed: true,
         doesMatchCurrentWord: true,
         isFromSuggestion: false
@@ -169,10 +169,11 @@ const WordOptionRow = (props: {
           onClick={handleClearAllClick}
           class="smallButton"
           isHidden={
-            props.word.alternativeWords &&
-            Object.keys(props.word.alternativeWords).filter(
-              key => props.word.alternativeWords![key].isBeingUsed
-            ).length === 0
+            (props.word.alternativeWords &&
+              Object.keys(props.word.alternativeWords).filter(
+                key => props.word.alternativeWords![key].isBeingUsed
+              ).length === 0) ||
+            !props.word.alternativeWords
           }
           extraClasses="clearAlternativesButton"
         />

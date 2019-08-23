@@ -118,7 +118,7 @@ async function getSimilarWords(words: Word[], dispatch: Function) {
           const filteredWord = filterWord(apiWord.word)
           if (
             !word.alternativeWords![filteredWord] &&
-            apiWord.word !== word.mainWord
+            filteredWord !== word.mainWord
           ) {
             word.alternativeWords![filteredWord] = {
               word: filteredWord,
@@ -200,7 +200,7 @@ const WordOptionsPage = () => {
         Alternative words{isLoadingAltWords ? " - Loading..." : ""}
       </label> */}
       <Button
-        title="Add top alternative to all"
+        title="Add next alternative to all"
         class="mediumButton"
         onClick={handleAddTopAlternativeClick}
       />

@@ -18,6 +18,7 @@ import MaxNumberOfVidsTextBox from "../../instances/TextBox/MaxNumberOfVidsTextB
 import NumberOfWordRepetitionsTextBox from "../../instances/TextBox/NumberOfWordRepetitionsTextBox"
 import WordOptionsButton from "../../instances/Button/WordOptionsButton"
 import Header from "../../elements/Header/Header"
+import DownloadOrderDropdown from "../../instances/Dropdown/DownloadOrderDropdown"
 
 const HomePage = () => {
   return (
@@ -40,6 +41,7 @@ const HomePage = () => {
             <MaxNumberOfVidsTextBox key="MaxNumberOfVidsTextBoxInstance" />
             <NumberOfWordRepetitionsTextBox key="NumberOfWordRepetitionsTextBoxInstance" />
           </SplitRow>
+          <DownloadOrderDropdown key="DownloadOrderDropdownInstance" />
           <OutputLocationTextBox key="OutputLocationTextBoxInstance" />
           <OutputFolderNameTextBox key="OutputFolderNameTextBoxInstance" />
         </div>
