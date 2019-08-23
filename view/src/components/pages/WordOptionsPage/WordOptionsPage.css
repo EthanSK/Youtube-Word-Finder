@@ -8,3 +8,15 @@
   bottom: -20px;
   padding-left: 1.13em;
 }
+
+.smallColumnHeadingLabel {
+  font: youtube-font;
+  color: white;
+  left: 275px;
+  top: 25px;
+  font-size: 10px;
+  position: absolute;
+}
+
+#wordOptionsPageId {
+}

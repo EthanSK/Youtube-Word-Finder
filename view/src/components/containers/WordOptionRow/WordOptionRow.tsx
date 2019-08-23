@@ -150,7 +150,7 @@ const WordAlternativesList = (props: {
       if (altWord.isBeingUsed) continue
       list.push(
         <Button
-          title={altWord.word}
+          title={altWord.word + " +"}
           class="smallButton"
           extraClasses="suggestedWordAlternativeButton"
           onClick={event => {}}

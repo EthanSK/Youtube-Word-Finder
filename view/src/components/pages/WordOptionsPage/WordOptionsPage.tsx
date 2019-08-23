@@ -150,13 +150,14 @@ const WordOptionsPage = () => {
   }
 
   return (
-    <div>
+    <div id="wordOptionsPageId">
       <Button
         title="+"
         class="emojiButton"
         extraClasses="addRowButton addRowTop"
         onClick={handleAddRowClick}
       />
+      <label className="smallColumnHeadingLabel">Alternative words</label>
 
       <WordOptionsList />
     </div>
