@@ -155,11 +155,39 @@ const WordOptionsPage = () => {
     userDefaultsDispatch({ type: "set", payload: { words: newWords } })
   }
 
+  function handleAddTopAlternativeClick() {
+    let newWords = [...userDefaultsState.words!]
+
+    newWords.forEach(word => {
+      if (word.alternativeWords) {
+        let keys = Object.keys(word.alternativeWords)
+        keys = keys
+          .sort((a, b) => {
+            let scoreA = word.alternativeWords![a].score
+            if (!scoreA) scoreA = 0
+            let scoreB = word.alternativeWords![b].score
+            if (!scoreB) scoreB = 0
+            return scoreB - scoreA
+          })
+          .filter(key => word.alternativeWords![key].isBeingUsed === false)
+        if (word.alternativeWords[keys[0]]) {
+          word.alternativeWords[keys[0]].isBeingUsed = true
+        }
+      }
+    })
+    userDefaultsDispatch({ type: "set", payload: { words: newWords } })
+  }
+
   return (
     <div id="wordOptionsPageId">
       {/* <label className="smallColumnHeadingLabel">
         Alternative words{isLoadingAltWords ? " - Loading..." : ""}
       </label> */}
+      <Button
+        title="Add top alternative to all"
+        class="mediumButton"
+        onClick={handleAddTopAlternativeClick}
+      />
       <div className="separatorContainer">
         <Button
           title="+"
