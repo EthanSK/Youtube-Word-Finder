@@ -98,6 +98,20 @@ const WordOptionRow = (props: {
     userDefaultsDispatch({ type: "set", payload: { words: newWords } })
   }
 
+  function handleClearAllClick() {
+    let newWords = [...userDefaultsState.words!]
+
+    if (props.word.alternativeWords) {
+      let keys = Object.keys(props.word.alternativeWords)
+      for (const altWordKey of keys) {
+        if (props.word.alternativeWords[altWordKey]) {
+          props.word.alternativeWords[altWordKey].isBeingUsed = false
+        }
+      }
+    }
+
+    userDefaultsDispatch({ type: "set", payload: { words: newWords } })
+  }
   return (
     <div className="wordOptionRowContainer">
       <div className="wordOptionRow">
@@ -149,6 +163,18 @@ const WordOptionRow = (props: {
           altWords={props.word.alternativeWords}
           isForBeingUsed={true}
           arrIndex={props.arrIndex}
+        />
+        <Button
+          title="Clear alternatives"
+          onClick={handleClearAllClick}
+          class="smallButton"
+          isHidden={
+            props.word.alternativeWords &&
+            Object.keys(props.word.alternativeWords).filter(
+              key => props.word.alternativeWords![key].isBeingUsed
+            ).length === 0
+          }
+          extraClasses="clearAlternativesButton"
         />
       </div>
       <div className="separatorContainer">

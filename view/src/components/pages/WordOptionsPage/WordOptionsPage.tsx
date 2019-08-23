@@ -178,6 +178,22 @@ const WordOptionsPage = () => {
     userDefaultsDispatch({ type: "set", payload: { words: newWords } })
   }
 
+  function handleRemovAllAlternativesClick() {
+    let newWords = [...userDefaultsState.words!]
+
+    newWords.forEach(word => {
+      if (word.alternativeWords) {
+        let keys = Object.keys(word.alternativeWords)
+        for (const altWordKey of keys) {
+          if (word.alternativeWords[altWordKey]) {
+            word.alternativeWords[altWordKey].isBeingUsed = false
+          }
+        }
+      }
+    })
+    userDefaultsDispatch({ type: "set", payload: { words: newWords } })
+  }
+
   return (
     <div id="wordOptionsPageId">
       {/* <label className="smallColumnHeadingLabel">
@@ -187,6 +203,11 @@ const WordOptionsPage = () => {
         title="Add top alternative to all"
         class="mediumButton"
         onClick={handleAddTopAlternativeClick}
+      />
+      <Button
+        title="Remove all alternatives"
+        class="mediumButton"
+        onClick={handleRemovAllAlternativesClick}
       />
       <div className="separatorContainer">
         <Button

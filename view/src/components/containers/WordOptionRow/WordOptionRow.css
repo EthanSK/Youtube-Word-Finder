@@ -52,10 +52,15 @@
   border-color: white;
 }
 
-.usedWordAlternativeButton {
+.usedWordAlternativeButton,
+.clearAlternativesButton {
   border-color: white;
   margin: 2px;
   font-size: 10px;
+}
+
+.clearAlternativesButton {
+  border-color: red;
 }
 
 #altWordsBeingUsed {
