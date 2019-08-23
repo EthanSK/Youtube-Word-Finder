@@ -129,7 +129,7 @@ async function getSimilarWords(words: Word[], dispatch: Function) {
       }
     })
   )
-  console.log("new words: ", newWords)
+  // console.log("new words: ", newWords)
   dispatch({ type: "set", payload: { words: newWords } })
 }
 

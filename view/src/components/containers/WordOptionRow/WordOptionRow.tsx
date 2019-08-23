@@ -149,17 +149,18 @@ const WordAlternativesList = (props: {
       const altWord = props.altWords[altWordKey]
       if (altWord.isBeingUsed) continue
       list.push(
-        <input
-          style={{ width: `${(altWord.word.length + 1) * 7}px` }}
-          className="textBox suggestedWordAlternativeTextBox"
-          defaultValue={altWord.word} //doesn't accept input if using just value
+        <Button
+          title={altWord.word}
+          class="smallButton"
+          extraClasses="suggestedWordAlternativeButton"
+          onClick={event => {}}
         />
       )
       countAdded++
     }
   }
 
-  return <ol>{list}</ol>
+  return <ol className="altWordList">{list}</ol>
 }
 
 export default WordOptionRow
