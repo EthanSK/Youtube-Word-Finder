@@ -12,7 +12,7 @@ function createWindow() {
     exports.wordOptionsWindow = new electron_1.BrowserWindow({
         backgroundColor: "#282828",
         //remember to add icon here for linux coz appaz u need it. wow it didn't work in postilkesbot test
-        width: 600,
+        width: 700,
         height: 700,
         minWidth: 200,
         minHeight: 200,

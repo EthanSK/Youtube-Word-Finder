@@ -50,10 +50,11 @@ export function filterWord(word: string): string {
   return word.replace(/[^0-9a-z]/gi, "").toLowerCase() //allow letters and numbers, since yt subs use number numbers and word number interchangeably
 }
 
-ipcMain.on("filter-word", (event, data: { word: string; key: string }) => {
-  const filterWordObj = {
-    word: filterWord(data.word),
-    key: data.key //so we can identify the correct box if multiple are listening
-  }
-  event.sender.send("word-filtered", filterWordObj)
-})
+//cba, just copying the filterword function to the react app
+// ipcMain.on("filter-word", (event, data: { word: string; key: string }) => {
+//   const filterWordObj = {
+//     word: filterWord(data.word),
+//     key: data.key //so we can identify the correct box if multiple are listening
+//   }
+//   event.sender.send("word-filtered", filterWordObj)
+// })

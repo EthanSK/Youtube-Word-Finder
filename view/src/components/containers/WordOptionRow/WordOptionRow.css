@@ -5,14 +5,26 @@
   background-color: transparent;
 }
 
+.wordOptionRowContainer {
+  display: flex;
+  flex-direction: column;
+}
+
 .wordOptionTextBox {
   flex: 1;
   height: 30px;
 }
 
+.altWordTextBox {
+  height: 15px;
+  width: 70px;
+  margin: 5px;
+}
+
 .addRowButton {
   position: relative;
-  bottom: -20px;
+  bottom: -17px;
+  margin-left: 12.5px;
 }
 
 .altWordList {
@@ -35,4 +47,30 @@
 
 .suggestedWordAlternativeButton {
   margin: 2px;
+}
+.suggestedWordAlternativeButton:hover {
+  border-color: white;
+}
+
+.usedWordAlternativeButton {
+  border-color: white;
+  margin: 2px;
+  font-size: 10px;
+}
+
+#altWordsBeingUsed {
+  overflow-x: auto;
+  margin-left: 45px;
+}
+
+.lineSeparator {
+  width: 80%;
+  height: 1px;
+  background-color: white;
+  border: none;
+  border-radius: 100px;
+}
+
+.separatorContainer {
+  /* margin-top: -21px; */
 }

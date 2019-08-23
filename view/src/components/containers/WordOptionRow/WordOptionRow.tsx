@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react"
+import React, { useContext, useEffect, useCallback } from "react"
 import "./WordOptionRow.css"
 import Button from "../../elements/Button/Button"
 import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext"
@@ -24,6 +24,10 @@ export interface AlternativeWord {
   score?: number //from the api, in case we wanna use it for further sortirng
 }
 
+export function filterWord(word: string): string {
+  return word.replace(/[^0-9a-z]/gi, "").toLowerCase() //allow letters and numbers, since yt subs use number numbers and word number interchangeably
+}
+
 const WordOptionRow = (props: {
   word: Word
   key: string
@@ -34,8 +38,10 @@ const WordOptionRow = (props: {
     dispatch: userDefaultsDispatch
   } = useContext(UserDefaultsContext)
 
+  // console.log(props.word.originalUnfilteredWord, props.word.mainWord)
+
   //this currently won't work if we add a new row or change one. it really ought to be a function to evals the key from userstate
-  let key = props.arrIndex.toString() //to identify the row.
+  // let key = props.arrIndex.toString() //to identify the row.
 
   function handleAddRowClick() {
     let newWords = [...userDefaultsState.words!]
@@ -48,32 +54,12 @@ const WordOptionRow = (props: {
   }
 
   function handleTextBoxFinishEditing(
-    event:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.KeyboardEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>
   ) {
-    console.log("text changed")
-    //make sure we send ipc req to main to get it to filter the word, and then ONCE we receive a response, we update the state of the text box to the new text.
-    const filterWordObj = {
-      word: event.currentTarget.value,
-      key //so we can identify the correct box if multiple are listening
-    }
-    ipcSend("filter-word", filterWordObj)
-
-    const channel = "word-filtered"
-    var handleWordFiltered = function(
-      event: Electron.IpcRendererEvent,
-      data: { word: string; key: string }
-    ) {
-      if (data.key !== key) return //it's not for us!
-      console.log("word filtered", data)
-      let newWords = [...userDefaultsState.words!]
-      newWords[props.arrIndex].mainWord = data.word
-      newWords[props.arrIndex].originalUnfilteredWord = filterWordObj.word
-
-      userDefaultsDispatch({ type: "set", payload: { words: newWords } })
-    }
-    ipcRenderer.once(channel, handleWordFiltered) //one time thing
+    let newWords = [...userDefaultsState.words!]
+    newWords[props.arrIndex].mainWord = filterWord(event.currentTarget.value)
+    newWords[props.arrIndex].originalUnfilteredWord = event.currentTarget.value
+    userDefaultsDispatch({ type: "set", payload: { words: newWords } })
   }
 
   function handleDeleteButtonPressed() {
@@ -88,39 +74,69 @@ const WordOptionRow = (props: {
 
   function handleFindManuallyPressed() {}
 
+  function handleAltWordTextBox(event: React.ChangeEvent<HTMLInputElement>) {}
+
   return (
-    <div className="wordOptionRow">
-      <Button
-        title="+"
-        class="emojiButton"
-        extraClasses="addRowButton"
-        onClick={handleAddRowClick}
-      />
+    <div className="wordOptionRowContainer">
+      <div className="wordOptionRow">
+        <Button
+          title="❌"
+          class="emojiButton"
+          onClick={handleDeleteButtonPressed}
+        />
+        <input
+          className="textBox wordOptionTextBox"
+          onBlur={event => handleTextBoxFinishEditing(event)}
+          defaultValue={(function() {
+            return props.word.mainWord
+          })()} //doesn't accept input if using just value
+          placeholder="Enter a word to find"
+          onKeyPress={event => {
+            if (event.key === "Enter") {
+              event.currentTarget.blur()
+            }
+          }}
+        />
 
-      <Button
-        title="❌"
-        class="emojiButton"
-        onClick={handleDeleteButtonPressed}
-      />
-      <input
-        className="textBox wordOptionTextBox"
-        onBlur={event => handleTextBoxFinishEditing(event)}
-        defaultValue={props.word.mainWord} //doesn't accept input if using just value
-        placeholder="Enter a word to find"
-        onKeyPress={event => {
-          if (event.key === "Enter") {
-            event.currentTarget.blur()
-          }
-        }}
-      />
-
-      <Button
-        title="🔎"
-        class="emojiButton"
-        onClick={handleFindManuallyPressed}
-      />
-      <div className="scrollArea">
-        <WordAlternativesList altWords={props.word.alternativeWords} />
+        <Button
+          title="🔎"
+          class="emojiButton"
+          onClick={handleFindManuallyPressed}
+        />
+        <input
+          key={props.word.originalUnfilteredWord}
+          className="textBox altWordTextBox"
+          onBlur={event => handleAltWordTextBox(event)}
+          placeholder="Alternative word"
+          onKeyPress={event => {
+            if (event.key === "Enter") {
+              event.currentTarget.blur()
+            }
+          }}
+        />
+        <div className="scrollArea">
+          <WordAlternativesList
+            altWords={props.word.alternativeWords}
+            isForBeingUsed={false}
+            arrIndex={props.arrIndex}
+          />
+        </div>
+      </div>
+      <div id="altWordsBeingUsed">
+        <WordAlternativesList
+          altWords={props.word.alternativeWords}
+          isForBeingUsed={true}
+          arrIndex={props.arrIndex}
+        />
+      </div>
+      <div className="separatorContainer">
+        <Button
+          title="+"
+          class="emojiButton"
+          extraClasses="addRowButton"
+          onClick={handleAddRowClick}
+        />
+        <hr className="lineSeparator" />
       </div>
     </div>
   )
@@ -128,6 +144,8 @@ const WordOptionRow = (props: {
 
 const WordAlternativesList = (props: {
   altWords?: { [word: string]: AlternativeWord }
+  isForBeingUsed: boolean
+  arrIndex: number
 }) => {
   const {
     state: userDefaultsState,
@@ -145,15 +163,32 @@ const WordAlternativesList = (props: {
       return scoreB - scoreA
     })
     for (const altWordKey of keys) {
-      if (countAdded > constants.maxNumAltWordsToDisplay) break
+      if (
+        !props.isForBeingUsed &&
+        countAdded > constants.maxNumAltWordsToDisplay
+      )
+        break
       const altWord = props.altWords[altWordKey]
-      if (altWord.isBeingUsed) continue
+      if (!props.isForBeingUsed && altWord.isBeingUsed) continue
+      if (props.isForBeingUsed && !altWord.isBeingUsed) continue
+
       list.push(
         <Button
-          title={altWord.word + " +"}
+          key={altWordKey}
+          title={altWord.word + (props.isForBeingUsed ? " ×" : " +")}
           class="smallButton"
-          extraClasses="suggestedWordAlternativeButton"
-          onClick={event => {}}
+          extraClasses={
+            props.isForBeingUsed
+              ? "usedWordAlternativeButton"
+              : "suggestedWordAlternativeButton"
+          }
+          onClick={event => {
+            let newWords = [...userDefaultsState.words!]
+            newWords[props.arrIndex].alternativeWords![
+              altWord.word
+            ].isBeingUsed = !props.isForBeingUsed
+            userDefaultsDispatch({ type: "set", payload: { words: newWords } })
+          }}
         />
       )
       countAdded++

@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import WordOptionRow, {
-  Word
+  Word,
+  filterWord
 } from "../../containers/WordOptionRow/WordOptionRow"
 import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext"
 import "./WordOptionsPage.css"
@@ -35,7 +36,7 @@ const WordOptionsList = () => {
       list.push(
         <WordOptionRow
           word={word}
-          key={word.mainWord + i.toString()}
+          key={word.originalUnfilteredWord + i.toString()}
           arrIndex={i}
         />
       )
@@ -114,12 +115,13 @@ async function getSimilarWords(words: Word[], dispatch: Function) {
         }
         const data = result.data as APISimilarWord[]
         data.forEach(apiWord => {
+          const filteredWord = filterWord(apiWord.word)
           if (
-            !word.alternativeWords![apiWord.word] &&
+            !word.alternativeWords![filteredWord] &&
             apiWord.word !== word.mainWord
           ) {
-            word.alternativeWords![apiWord.word] = {
-              word: apiWord.word,
+            word.alternativeWords![filteredWord] = {
+              word: filteredWord,
               score: apiWord.score,
               isBeingUsed: false,
               doesMatchCurrentWord: true,
@@ -155,15 +157,18 @@ const WordOptionsPage = () => {
 
   return (
     <div id="wordOptionsPageId">
-      <Button
-        title="+"
-        class="emojiButton"
-        extraClasses="addRowButton addRowTop"
-        onClick={handleAddRowClick}
-      />
-      <label className="smallColumnHeadingLabel">
+      {/* <label className="smallColumnHeadingLabel">
         Alternative words{isLoadingAltWords ? " - Loading..." : ""}
-      </label>
+      </label> */}
+      <div className="separatorContainer">
+        <Button
+          title="+"
+          class="emojiButton"
+          extraClasses="addRowButton addRowTop"
+          onClick={handleAddRowClick}
+        />
+        <hr className="lineSeparator" />
+      </div>
 
       <WordOptionsList />
     </div>

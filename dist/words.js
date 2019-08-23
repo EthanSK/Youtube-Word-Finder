@@ -5,7 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = __importDefault(require("fs"));
 const userDefaults_1 = require("./userDefaults");
-const electron_1 = require("electron");
 //called in store userdefaults ipc listener
 async function handleNewWordsTextFile() {
     const words = await parseNewWordsTextFile();
@@ -40,10 +39,11 @@ function filterWord(word) {
     return word.replace(/[^0-9a-z]/gi, "").toLowerCase(); //allow letters and numbers, since yt subs use number numbers and word number interchangeably
 }
 exports.filterWord = filterWord;
-electron_1.ipcMain.on("filter-word", (event, data) => {
-    const filterWordObj = {
-        word: filterWord(data.word),
-        key: data.key //so we can identify the correct box if multiple are listening
-    };
-    event.sender.send("word-filtered", filterWordObj);
-});
+//cba, just copying the filterword function to the react app
+// ipcMain.on("filter-word", (event, data: { word: string; key: string }) => {
+//   const filterWordObj = {
+//     word: filterWord(data.word),
+//     key: data.key //so we can identify the correct box if multiple are listening
+//   }
+//   event.sender.send("word-filtered", filterWordObj)
+// })
