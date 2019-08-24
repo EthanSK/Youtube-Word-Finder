@@ -1,6 +1,5 @@
 import React, { useContext } from "react"
 import "./Dropdown.css"
-import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext"
 import { ConsoleOutputContext } from "../../../contexts/ConsoleOutputContext"
 import { ConsoleOutputComponentsPayload } from "../../../reducers/ConsoleOutputReducer"
 
@@ -22,10 +21,6 @@ const DropdownContainer = (props: {
   key: string //not used here, just to make sure we add a key when adding this element
   onChange(event: React.ChangeEvent<HTMLSelectElement>): void //
 }) => {
-  const {
-    state: userDefaultsState,
-    dispatch: userDefaultsDispatch
-  } = useContext(UserDefaultsContext)
   const { dispatch: consoleOutputDispatch } = useContext(ConsoleOutputContext)
 
   function consoleOutput(event: React.ChangeEvent<HTMLSelectElement>) {

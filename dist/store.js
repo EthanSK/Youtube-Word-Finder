@@ -9,7 +9,7 @@ function save(key, value) {
     // console.log("store ", key, value)
     store.set(key, value);
     // store.clear()
-} //
+}
 exports.save = save;
 function load(key) {
     const loadVal = store.get(key);

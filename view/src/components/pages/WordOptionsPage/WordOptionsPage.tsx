@@ -54,7 +54,7 @@ const WordOptionsList = () => {
       setPreviousWordsState(createWordsClone())
       getSimilarWords(userDefaultsState.words!, userDefaultsDispatch) //don't await, it should just happen as a side effect
     }
-  })
+  }) //ignore the warning react gives about the infinite chain of updates. trying to fix it with their suggesion causes it to stop working. as long as previousWordsState is not used in render, we're fine.
 
   return <ol className="wordOptionList">{list}</ol>
 }

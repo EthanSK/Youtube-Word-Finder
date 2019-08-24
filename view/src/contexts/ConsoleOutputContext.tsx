@@ -1,8 +1,7 @@
 import React, { createContext, useReducer } from "react"
 import consoleOutputReducer, {
   ConsoleOutputState,
-  ConsoleOutputAction,
-  ConsoleOutputMessageType
+  ConsoleOutputAction
 } from "../reducers/ConsoleOutputReducer"
 
 type ConsoleOutputContextType = {

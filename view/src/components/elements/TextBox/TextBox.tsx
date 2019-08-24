@@ -2,7 +2,6 @@ import React, { ReactNode, useContext, useEffect, useRef } from "react"
 import "./TextBox.css"
 import { ConsoleOutputComponentsPayload } from "../../../reducers/ConsoleOutputReducer"
 import { ConsoleOutputContext } from "../../../contexts/ConsoleOutputContext"
-import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext"
 
 //add new strings to union as needed
 export type TextBoxId =
@@ -37,7 +36,6 @@ const TextBoxContainer = (props: {
   onFinishEditing?(event: React.ChangeEvent<HTMLInputElement>): void //optional because if its a file chooser, we don't let user edit the text box anyway
   key: string //not used here, just to make sure we add a key when adding this element
 }) => {
-  const { state: userDefaultsState } = useContext(UserDefaultsContext)
   const { dispatch: consoleOutputDispatch } = useContext(ConsoleOutputContext)
 
   const style = props.isHidden ? { display: "none" } : {}

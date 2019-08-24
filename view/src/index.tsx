@@ -26,7 +26,7 @@ const UserDefaults = () => {
       userDefaultsDispatch({ type: "restore", payload: data })
     }
     ipcRenderer.once(channel, handleUserDefaultRestore) //one time thing
-  }, []) //only run on component did mount
+  }, []) //only run on component did mount. ignore react warning.
 
   return null
 }
