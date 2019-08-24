@@ -10,6 +10,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 require("./ipc");
 require("./wordOptionsWindow");
 require("./userDefaults");
+require("./run");
 dotenv_1.default.config();
 function createWindow() {
     // Create the browser window.

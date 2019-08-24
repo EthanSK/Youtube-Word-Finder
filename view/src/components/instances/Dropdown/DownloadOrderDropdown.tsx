@@ -42,7 +42,7 @@ const DownloadOrderDropdown = (props: {
           value: "All main words with all alternatives",
           isSelected: userDefaultsState.downloadOrder === "allMainWithAllAlt",
           appendToMessage:
-            "For each main word, it will download all it can for that word, and then download all the alternative words it can for than main word, before moving onto the next word"
+            "For each main word, it will download all it can for that word, and then download all the alternative words it can for that main word, before moving onto the next word"
         },
         {
           value: "Next main word one at a time then all alternatives",

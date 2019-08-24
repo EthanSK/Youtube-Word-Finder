@@ -16,3 +16,5 @@ for some fucked reason, I need to keep @ffmpeg-installer folder top level idk an
 - if importing ipc, do it like this https://github.com/electron/electron/issues/9920#issuecomment-511162952
 
 IF YOU REFERENCE A FILE FROM THE VIEW FOLDER, IT WILL TRY AND TSC IT AND PUT IT IN THE DIST
+
+an npm module with @ in name is called a scoped package

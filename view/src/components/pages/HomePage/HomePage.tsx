@@ -1,10 +1,7 @@
 import React from "react"
 import "./HomePage.css"
 import ConsoleOutput from "../../elements/ConsoleOutput/ConsoleOutput"
-import Button from "../../elements/Button/Button"
-import TextBoxContainer from "../../elements/TextBox/TextBox"
 import SplitRow from "../../containers/SplitRow/SplitRow"
-import UserDefaultsContextProvider from "../../../contexts/UserDefaultsContext"
 import VideoSourceDropdown from "../../instances/Dropdown/VideoSourceDropdown"
 import VideosChannelIdTextBox from "../../instances/TextBox/VideosChannelIdTextBox"
 import VideosTextFileTextBox from "../../instances/TextBox/VideosTextFileTextBox"
@@ -19,6 +16,7 @@ import NumberOfWordRepetitionsTextBox from "../../instances/TextBox/NumberOfWord
 import WordOptionsButton from "../../instances/Button/WordOptionsButton"
 import Header from "../../elements/Header/Header"
 import DownloadOrderDropdown from "../../instances/Dropdown/DownloadOrderDropdown"
+import StartButton from "../../instances/Button/StartButton"
 
 const HomePage = () => {
   return (
@@ -47,7 +45,7 @@ const HomePage = () => {
         </div>
         <div className="homePageRightSide">
           <ConsoleOutput placeholder="👋 This app finds and downloads clips from YouTube of specified words being spoken! This is the output box." />
-          <Button title="Start" class="bigButton" onClick={event => {}} />
+          <StartButton />
         </div>
       </div>
     </ConsoleOutputContextProvider>

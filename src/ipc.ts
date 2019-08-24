@@ -5,6 +5,7 @@ import { mainWindow } from "./main"
 export type IPCMainSendChannel =
   | "write-to-console-output"
   | "restore-user-defaults"
+  | "stopped-running"
 
 //this sends to all renderer processes, as it is not a reply to an event
 export function ipcSend(channel: IPCMainSendChannel, data: any) {

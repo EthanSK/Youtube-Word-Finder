@@ -1,9 +1,13 @@
 const constants = {
   app: {
-    name: "Youtuber Word Finder Bot"
+    name: "Youtuber Word Finder"
   },
   wordOptions: {
     name: "Word Options"
+  },
+  folderNames: {
+    temp: "temp",
+    subtitles: "subtitles"
   }
 }
 

@@ -53,3 +53,32 @@ export function saveUserDefault(key: UserDefaultName, value: any) {
 export function loadUserDefault(key: UserDefaultName) {
   return load(`${userDefaultsKey}.${key}`)
 }
+
+export let userDefaultsOnStart: { [key in UserDefaultName]: any } //this should be the source of truth to use settings througout the run
+export function setUserDefaultsOnStart() {
+  userDefaultsOnStart = load(`${userDefaultsKey}`)
+  createOutputNameIfNeeded()
+}
+
+function createOutputNameIfNeeded() {
+  if (!userDefaultsOnStart.outputFolderName) {
+    if (
+      userDefaultsOnStart.videoSource === "Channel" &&
+      userDefaultsOnStart.channelId
+    )
+      userDefaultsOnStart.outputFolderName = userDefaultsOnStart.channelId
+    if (
+      userDefaultsOnStart.videoSource === "Playlist" &&
+      userDefaultsOnStart.playlistId
+    )
+      userDefaultsOnStart.outputFolderName = userDefaultsOnStart.playlistId
+    if (
+      userDefaultsOnStart.videoSource === "Text File" &&
+      userDefaultsOnStart.videoTextFile
+    )
+      userDefaultsOnStart.outputFolderName = userDefaultsOnStart.videoTextFile
+  }
+  if (!userDefaultsOnStart.outputFolderName) {
+    userDefaultsOnStart.outputFolderName = Date.now().toString()
+  }
+}

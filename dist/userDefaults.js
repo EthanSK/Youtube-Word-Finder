@@ -37,3 +37,24 @@ function loadUserDefault(key) {
     return store_1.load(`${userDefaultsKey}.${key}`);
 }
 exports.loadUserDefault = loadUserDefault;
+function setUserDefaultsOnStart() {
+    exports.userDefaultsOnStart = store_1.load(`${userDefaultsKey}`);
+    createOutputNameIfNeeded();
+}
+exports.setUserDefaultsOnStart = setUserDefaultsOnStart;
+function createOutputNameIfNeeded() {
+    if (!exports.userDefaultsOnStart.outputFolderName) {
+        if (exports.userDefaultsOnStart.videoSource === "Channel" &&
+            exports.userDefaultsOnStart.channelId)
+            exports.userDefaultsOnStart.outputFolderName = exports.userDefaultsOnStart.channelId;
+        if (exports.userDefaultsOnStart.videoSource === "Playlist" &&
+            exports.userDefaultsOnStart.playlistId)
+            exports.userDefaultsOnStart.outputFolderName = exports.userDefaultsOnStart.playlistId;
+        if (exports.userDefaultsOnStart.videoSource === "Text File" &&
+            exports.userDefaultsOnStart.videoTextFile)
+            exports.userDefaultsOnStart.outputFolderName = exports.userDefaultsOnStart.videoTextFile;
+    }
+    if (!exports.userDefaultsOnStart.outputFolderName) {
+        exports.userDefaultsOnStart.outputFolderName = Date.now().toString();
+    }
+}
