@@ -6,12 +6,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const electron_store_1 = __importDefault(require("electron-store"));
 const store = new electron_store_1.default();
 function save(key, value) {
-    // console.log("store val ", value)
+    // console.log("store ", key, value)
     store.set(key, value);
     // store.clear()
-}
+} //
 exports.save = save;
 function load(key) {
-    return store.get(key);
+    const loadVal = store.get(key);
+    // console.log("load val: ", loadVal)
+    return loadVal;
 }
 exports.load = load;

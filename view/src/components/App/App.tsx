@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react"
+import React from "react"
 import "./App.css"
 import HomePage from "../pages/HomePage/HomePage"
 

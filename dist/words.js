@@ -8,7 +8,7 @@ const userDefaults_1 = require("./userDefaults");
 //called in store userdefaults ipc listener
 async function handleNewWordsTextFile() {
     const words = await parseNewWordsTextFile();
-    userDefaults_1.saveUserDefault("words", words);
+    userDefaults_1.saveUserDefault({ words });
 }
 exports.handleNewWordsTextFile = handleNewWordsTextFile;
 async function parseNewWordsTextFile() {
@@ -39,11 +39,3 @@ function filterWord(word) {
     return word.replace(/[^0-9a-z]/gi, "").toLowerCase(); //allow letters and numbers, since yt subs use number numbers and word number interchangeably
 }
 exports.filterWord = filterWord;
-//cba, just copying the filterword function to the react app
-// ipcMain.on("filter-word", (event, data: { word: string; key: string }) => {
-//   const filterWordObj = {
-//     word: filterWord(data.word),
-//     key: data.key //so we can identify the correct box if multiple are listening
-//   }
-//   event.sender.send("word-filtered", filterWordObj)
-// })

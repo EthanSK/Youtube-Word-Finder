@@ -1,7 +1,6 @@
 import React, { createContext, useReducer } from "react"
 import { VideoSource } from "../components/instances/Dropdown/VideoSourceDropdown"
 import userDefaultsReducer, {
-  UserDefaultsState,
   UserDefaultsAction
 } from "../reducers/UserDefaultsReducer"
 

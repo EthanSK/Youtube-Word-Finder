@@ -1,28 +1,8 @@
-import React, { useContext, useEffect, useCallback } from "react"
+import React, { useContext } from "react"
 import "./WordOptionRow.css"
 import Button from "../../elements/Button/Button"
 import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext"
-import { ipcSend } from "../../../ipc"
 import constants from "../../../constants"
-
-const { ipcRenderer } = window.require("electron")
-
-//when updating word or alternative word, make sure to update in the main process in words.ts
-export interface Word {
-  mainWord: string
-  originalUnfilteredWord: string
-  alternativeWords?: {
-    [word: string]: AlternativeWord
-  }
-}
-
-export interface AlternativeWord {
-  word: string
-  isBeingUsed: boolean
-  isFromSuggestion: boolean
-  doesMatchCurrentWord: boolean // because if we edit the word, we still want to keep the ones being used, and we need a way to keep track of whether we need to fetch new similar words
-  score?: number //from the api, in case we wanna use it for further sortirng
-}
 
 export function filterWord(word: string): string {
   return word.replace(/[^0-9a-z]/gi, "").toLowerCase() //allow letters and numbers, since yt subs use number numbers and word number interchangeably
@@ -56,10 +36,20 @@ const WordOptionRow = (props: {
   function handleTextBoxFinishEditing(
     event: React.ChangeEvent<HTMLInputElement>
   ) {
-    let newWords = [...userDefaultsState.words!]
-    newWords[props.arrIndex].mainWord = filterWord(event.currentTarget.value)
-    newWords[props.arrIndex].originalUnfilteredWord = event.currentTarget.value
-    userDefaultsDispatch({ type: "set", payload: { words: newWords } })
+    //for reference - this is the old way, that i cba to change for the other functions.
+    // let newWords = [...userDefaultsState.words!]
+    // newWords[props.arrIndex].mainWord = filterWord(event.currentTarget.value)
+    // newWords[props.arrIndex].originalUnfilteredWord = event.currentTarget.value
+    // userDefaultsDispatch({ type: "set", payload: { words: newWords } })
+
+    const newWord: Word = {
+      mainWord: filterWord(event.currentTarget.value),
+      originalUnfilteredWord: event.currentTarget.value
+    }
+    userDefaultsDispatch({
+      type: "setWord",
+      wordPkg: { arrIndex: props.arrIndex, word: newWord }
+    })
   }
 
   function handleDeleteButtonPressed() {

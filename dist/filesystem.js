@@ -20,6 +20,8 @@ function getDirName(dir) {
             return path_1.default.join(getDirName("mainDir"), constants_1.default.folderNames.temp);
         case "subtitlesDir":
             return path_1.default.join(getDirName("tempDir"), constants_1.default.folderNames.subtitles);
+        case "metadataDir":
+            return path_1.default.join(getDirName("tempDir"), constants_1.default.folderNames.metadata);
     }
 }
 exports.getDirName = getDirName;
@@ -28,5 +30,6 @@ function createWorkspaceFilesystem() {
     createDirIfNeeded(getDirName("mainDir"));
     createDirIfNeeded(getDirName("tempDir"));
     createDirIfNeeded(getDirName("subtitlesDir"));
+    createDirIfNeeded(getDirName("metadataDir"));
 }
 exports.createWorkspaceFilesystem = createWorkspaceFilesystem;

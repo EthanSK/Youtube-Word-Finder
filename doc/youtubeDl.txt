@@ -8,3 +8,11 @@ Getting youtube video info from channel:
 youtube-dl https://www.youtube.com/channel/UC-lHJZR3Gqxm24_Vd_AJ5Yw --write-info-json --skip-download --ignore-errors --playlist-end 3
 
  --playlist-end is what makes it go much faster
+
+
+ ^^This, but with subtitles (sub urls found in metadata file):
+
+ youtube-dl https://www.youtube.com/channel/UC-lHJZR3Gqxm24_Vd_AJ5Yw  --write-info-json --skip-download --ignore-errors --playlist-end 1 --write-sub --write-auto-sub
+
+(Don't do this tho - it's better to use youtube-dl to download the subs as opposed to downloading them from the url manually)
+

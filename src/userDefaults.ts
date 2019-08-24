@@ -1,29 +1,14 @@
 import { ipcMain } from "electron"
 import { handleNewWordsTextFile } from "./words"
 import { save, load } from "./store"
-import { Word } from "./words"
 
-const userDefaultsKey = "userDefaults"
+export const userDefaultsKey = "userDefaults"
 
-type UserDefaultName =
-  | "videoSource"
-  | "channelId"
-  | "playlistId"
-  | "videoTextFile"
-  | "outputLocation"
-  | "wordsToFindTextFile"
-  | "outputFolderName"
-  | "paddingToAdd"
-  | "maxNumberOfVideos"
-  | "numberOfWordReps"
-  | "words"
-  | "downloadOrder"
+//it's better to just copy and paste the state interface that define a type union of keys, because we'll end up finding the full types useful in the main process code
 
-ipcMain.on("save-user-default", (event, data) => {
-  for (const key in data) {
-    saveUserDefault(key as UserDefaultName, data[key])
-    if (key === "wordsToFindTextFile") handleNewWordsTextFile()
-  }
+ipcMain.on("save-user-default", (event, data: UserDefaultsState) => {
+  saveUserDefault(data)
+  if (data && data.wordsToFindTextFile) handleNewWordsTextFile()
 })
 
 ipcMain.on("restore-user-defaults", (event, data) => {
@@ -32,29 +17,35 @@ ipcMain.on("restore-user-defaults", (event, data) => {
 })
 
 function setUserDefaultsInitialValuesIfNeeded() {
-  function setIfNeeded(key: UserDefaultName, value: any) {
-    if (loadUserDefault(key) === undefined) {
-      saveUserDefault(key, value)
+  function setIfNeeded(userDefaults: UserDefaultsState) {
+    for (const key in userDefaults) {
+      const keyTyped: keyof UserDefaultsState = key as keyof UserDefaultsState
+      if (loadUserDefault(keyTyped) === undefined) {
+        save(`${userDefaultsKey}.${keyTyped}`, userDefaults[keyTyped]) //cant use saveuserdefault
+      }
     }
   }
-  setIfNeeded("paddingToAdd", 0)
-  setIfNeeded("maxNumberOfVideos", 15)
-  setIfNeeded("numberOfWordReps", 5)
-  setIfNeeded("videoSource", "Channel")
-  setIfNeeded("downloadOrder", "allMainThenAllAlt")
+  setIfNeeded({ paddingToAdd: 0 })
+  setIfNeeded({ maxNumberOfVideos: 15 })
+  setIfNeeded({ numberOfWordReps: 5 })
+  setIfNeeded({ videoSource: "Channel" })
+  setIfNeeded({ downloadOrder: "allMainThenAllAlt" })
 
   const emptyWord: Word = { mainWord: "", originalUnfilteredWord: "" } //so the user can add their own words without using the file
-  setIfNeeded("words", [emptyWord])
+  setIfNeeded({ words: [emptyWord] })
 }
 
-export function saveUserDefault(key: UserDefaultName, value: any) {
-  save(`${userDefaultsKey}.${key}`, value)
+export function saveUserDefault(userDefault: UserDefaultsState) {
+  for (const key in userDefault) {
+    const keyTyped: keyof UserDefaultsState = key as keyof UserDefaultsState
+    save(`${userDefaultsKey}.${keyTyped}`, userDefault[keyTyped])
+  }
 }
-export function loadUserDefault(key: UserDefaultName) {
+export function loadUserDefault(key: keyof UserDefaultsState) {
   return load(`${userDefaultsKey}.${key}`)
 }
 
-export let userDefaultsOnStart: { [key in UserDefaultName]: any } //this should be the source of truth to use settings througout the run
+export let userDefaultsOnStart: UserDefaultsState //this should be the source of truth to use settings througout the run
 export function setUserDefaultsOnStart() {
   userDefaultsOnStart = load(`${userDefaultsKey}`)
   createOutputNameIfNeeded()
@@ -73,7 +64,7 @@ function createOutputNameIfNeeded() {
     )
       userDefaultsOnStart.outputFolderName = userDefaultsOnStart.playlistId
     if (
-      userDefaultsOnStart.videoSource === "Text File" &&
+      userDefaultsOnStart.videoSource === "Text file" &&
       userDefaultsOnStart.videoTextFile
     )
       userDefaultsOnStart.outputFolderName = userDefaultsOnStart.videoTextFile

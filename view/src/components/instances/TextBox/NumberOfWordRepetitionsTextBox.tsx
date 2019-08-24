@@ -1,4 +1,4 @@
-import React, { useContext, useState, useCallback } from "react"
+import React, { useContext } from "react"
 import TextBoxContainer from "../../elements/TextBox/TextBox"
 import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext"
 
@@ -7,8 +7,7 @@ const NumberOfWordRepetitionsTextBox = (props: { key: string }) => {
     state: userDefaultsState,
     dispatch: userDefaultsDispatch
   } = useContext(UserDefaultsContext)
-  // const [, updateState] = useState()
-  // const forceUpdate = useCallback(() => updateState({}), [])
+
   return (
     <TextBoxContainer
       key={"NumberOfVidsTextBox"}

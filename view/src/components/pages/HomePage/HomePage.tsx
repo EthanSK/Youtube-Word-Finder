@@ -21,7 +21,7 @@ import StartButton from "../../instances/Button/StartButton"
 const HomePage = () => {
   return (
     <ConsoleOutputContextProvider>
-      <Header title="YouTuber Word Finder" />
+      <Header title="YouTube Word Finder" />
       <div className="homePageContainer">
         <div className="homePageLeftSide">
           <VideoSourceDropdown key="VideoSourceDropdownInstance" />

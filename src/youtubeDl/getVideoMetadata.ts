@@ -1,7 +1,16 @@
 import youtubedl from "youtube-dl"
 import { getDirName } from "../filesystem"
+import { userDefaultsOnStart } from "../userDefaults"
 
-// --max-downloads 69
+async function getVideoMetadata() {
+  switch (userDefaultsOnStart.videoSource) {
+    case "Channel":
+      break
+
+    default:
+      break
+  }
+}
 
 async function getSubtitles() {
   var url = "https://www.youtube.com/channel/UC-lHJZR3Gqxm24_Vd_AJ5Yw"

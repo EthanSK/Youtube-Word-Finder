@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react"
 import WordOptionRow, {
-  Word,
   filterWord
 } from "../../containers/WordOptionRow/WordOptionRow"
 import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext"

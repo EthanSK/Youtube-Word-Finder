@@ -9,19 +9,25 @@ function createDirIfNeeded(path: string) {
   }
 }
 
-export type WorkspaceDir = "mainDir" | "tempDir" | "subtitlesDir"
+export type WorkspaceDir =
+  | "mainDir"
+  | "tempDir"
+  | "subtitlesDir"
+  | "metadataDir"
 
 export function getDirName(dir: WorkspaceDir): string {
   switch (dir) {
     case "mainDir":
       return path.join(
-        userDefaultsOnStart.outputLocation,
-        userDefaultsOnStart.outputFolderName
+        userDefaultsOnStart.outputLocation!,
+        userDefaultsOnStart.outputFolderName!
       )
     case "tempDir":
       return path.join(getDirName("mainDir"), constants.folderNames.temp)
     case "subtitlesDir":
       return path.join(getDirName("tempDir"), constants.folderNames.subtitles)
+    case "metadataDir":
+      return path.join(getDirName("tempDir"), constants.folderNames.metadata)
   }
 }
 
@@ -31,4 +37,5 @@ export function createWorkspaceFilesystem() {
   createDirIfNeeded(getDirName("mainDir"))
   createDirIfNeeded(getDirName("tempDir"))
   createDirIfNeeded(getDirName("subtitlesDir"))
+  createDirIfNeeded(getDirName("metadataDir"))
 }
