@@ -4,12 +4,19 @@ import { ipcSend } from "../../../ipc"
 const { ipcRenderer } = window.require("electron")
 
 const StatButton = () => {
-  const [isRunning, setIsRunning] = useState(false)
+  enum RunningState {
+    "running",
+    "stopping",
+    "notRunning"
+  }
+  const [runningState, setRunningState] = useState(RunningState.notRunning)
   function handleClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-    if (isRunning) {
+    if (runningState === RunningState.running) {
+      setRunningState(RunningState.stopping)
       ipcSend("stop-pressed")
-    } else {
-      setIsRunning(true)
+    }
+    if (runningState === RunningState.notRunning) {
+      setRunningState(RunningState.running)
       ipcSend("start-pressed")
     }
   }
@@ -20,7 +27,7 @@ const StatButton = () => {
       even: Electron.IpcRendererEvent,
       data: { error?: string }
     ) => {
-      setIsRunning(false)
+      setRunningState(RunningState.notRunning)
     }
     ipcRenderer.on(channel, handleStopEvent)
     return () => {
@@ -29,7 +36,17 @@ const StatButton = () => {
   })
   return (
     <Button
-      title={isRunning ? "Stop" : "Start"}
+      title={(function() {
+        switch (runningState) {
+          case RunningState.running:
+            return "Stop"
+
+          case RunningState.notRunning:
+            return "Start"
+          case RunningState.stopping:
+            return "Stopping..."
+        }
+      })()}
       class="bigButton"
       onClick={handleClick}
     />

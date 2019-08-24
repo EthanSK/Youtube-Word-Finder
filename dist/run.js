@@ -16,6 +16,7 @@ electron_1.ipcMain.on("start-pressed", (event, data) => {
     stoppableRun();
 });
 electron_1.ipcMain.on("stop-pressed", async (event, data) => {
+    logger_1.sendToConsoleOutput("Stopping (This may take some time)", "info");
     isRunning = false;
 });
 let isRunning = false;
@@ -30,6 +31,7 @@ async function stoppableRun() {
         if (!isRunning) {
             console.log("stopping run early");
             ipc_1.ipcSend("stopped-running", null);
+            logger_1.sendToConsoleOutput(`User stopped running early at ${new Date()}`, "startstop");
             return;
         }
         const n = iter.next(resumeValue);
@@ -44,15 +46,15 @@ function* run() {
     try {
         logger_1.sendToConsoleOutput(`Started running at ${new Date()}`, "startstop");
         setup();
-        yield utils_1.delay(1000);
+        yield utils_1.delay(5000);
         console.log("delay");
-        yield utils_1.delay(1000);
+        yield utils_1.delay(5000);
         console.log("delay");
-        yield utils_1.delay(1000);
+        yield utils_1.delay(5000);
         console.log("delay");
-        yield utils_1.delay(1000);
+        yield utils_1.delay(5000);
         console.log("delay");
-        yield utils_1.delay(1000);
+        yield utils_1.delay(5000);
         console.log("delay");
         yield getSubtitles_1.default();
         logger_1.sendToConsoleOutput(`Finished running at ${new Date()}`, "startstop");

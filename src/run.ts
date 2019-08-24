@@ -14,6 +14,7 @@ ipcMain.on("start-pressed", (event, data) => {
 })
 
 ipcMain.on("stop-pressed", async (event, data) => {
+  sendToConsoleOutput("Stopping (This may take some time)", "info")
   isRunning = false
 })
 
@@ -31,6 +32,10 @@ export default async function stoppableRun() {
     if (!isRunning) {
       console.log("stopping run early")
       ipcSend("stopped-running", null)
+      sendToConsoleOutput(
+        `User stopped running early at ${new Date()}`,
+        "startstop"
+      )
       return
     }
     const n = iter.next(resumeValue)
@@ -45,18 +50,18 @@ function* run() {
   try {
     sendToConsoleOutput(`Started running at ${new Date()}`, "startstop")
     setup()
-    yield delay(1000)
+    yield delay(5000)
     console.log("delay")
-    yield delay(1000)
-    console.log("delay")
-
-    yield delay(1000)
+    yield delay(5000)
     console.log("delay")
 
-    yield delay(1000)
+    yield delay(5000)
     console.log("delay")
 
-    yield delay(1000)
+    yield delay(5000)
+    console.log("delay")
+
+    yield delay(5000)
     console.log("delay")
 
     yield getSubtitles()
