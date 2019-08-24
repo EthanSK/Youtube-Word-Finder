@@ -1,5 +1,5 @@
 {
-  "name": "youtuberwordfinderbot",
+  "name": "youtubewordfinder",
   "version": "1.0.0",
   "description": "Finds clips of youtubers saying certain words",
   "main": "dist/main.js",
