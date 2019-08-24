@@ -25,6 +25,21 @@ async function setup() {
   createWorkspaceFilesystem()
 }
 
+function* run() {
+  try {
+    sendToConsoleOutput(`Started running at ${new Date()}`, "startstop")
+    setup()
+    yield getSubtitles()
+    sendToConsoleOutput(`Finished running at ${new Date()}`, "startstop")
+    ipcSend("stopped-running", { error: null })
+  } catch (error) {
+    sendToConsoleOutput(
+      "There was an error running the bot: " + error.message,
+      "error"
+    )
+  }
+}
+
 export default async function stoppableRun() {
   const iter = run()
   let resumeValue
@@ -43,34 +58,5 @@ export default async function stoppableRun() {
       return n.value
     }
     resumeValue = await n.value
-  }
-}
-
-function* run() {
-  try {
-    sendToConsoleOutput(`Started running at ${new Date()}`, "startstop")
-    setup()
-    yield delay(5000)
-    console.log("delay")
-    yield delay(5000)
-    console.log("delay")
-
-    yield delay(5000)
-    console.log("delay")
-
-    yield delay(5000)
-    console.log("delay")
-
-    yield delay(5000)
-    console.log("delay")
-
-    yield getSubtitles()
-    sendToConsoleOutput(`Finished running at ${new Date()}`, "startstop")
-    ipcSend("stopped-running", { error: null })
-  } catch (error) {
-    sendToConsoleOutput(
-      "There was an error running the bot: " + error.message,
-      "error"
-    )
   }
 }

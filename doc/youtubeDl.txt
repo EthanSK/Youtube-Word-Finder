@@ -1,0 +1,10 @@
+Getting video info from video url:
+
+youtube-dl https://www.youtube.com/watch?v=VGt-BZ-SxGI --write-info-json --max-downloads 3 --skip-download
+
+
+Getting youtube video info from channel:
+
+youtube-dl https://www.youtube.com/channel/UC-lHJZR3Gqxm24_Vd_AJ5Yw --write-info-json --skip-download --ignore-errors --playlist-end 3
+
+ --playlist-end is what makes it go much faster

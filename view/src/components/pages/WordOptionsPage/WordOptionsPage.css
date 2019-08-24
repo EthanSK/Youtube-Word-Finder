@@ -12,11 +12,7 @@
 .smallColumnHeadingLabel {
   font: youtube-font;
   color: white;
-  left: 275px;
-  top: 25px;
+  top: 30px;
   font-size: 10px;
   position: absolute;
-}
-
-#wordOptionsPageId {
 }

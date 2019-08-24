@@ -196,9 +196,6 @@ const WordOptionsPage = () => {
 
   return (
     <div id="wordOptionsPageId">
-      {/* <label className="smallColumnHeadingLabel">
-        Alternative words{isLoadingAltWords ? " - Loading..." : ""}
-      </label> */}
       <Button
         title="Add next alternative to all"
         class="mediumButton"
@@ -209,6 +206,9 @@ const WordOptionsPage = () => {
         class="mediumButton"
         onClick={handleRemovAllAlternativesClick}
       />
+      <label className="smallColumnHeadingLabel">
+        {isLoadingAltWords ? "Loading alternative word suggestions..." : ""}
+      </label>
       <div className="separatorContainer">
         <Button
           title="+"
