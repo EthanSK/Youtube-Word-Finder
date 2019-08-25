@@ -9,11 +9,7 @@ function createDirIfNeeded(path: string) {
   }
 }
 
-export type WorkspaceDir =
-  | "mainDir"
-  | "tempDir"
-  | "subtitlesDir"
-  | "metadataDir"
+export type WorkspaceDir = "mainDir" | "tempDir" | "metadataDir"
 
 export function getDirName(dir: WorkspaceDir): string {
   switch (dir) {
@@ -24,8 +20,6 @@ export function getDirName(dir: WorkspaceDir): string {
       )
     case "tempDir":
       return path.join(getDirName("mainDir"), constants.folderNames.temp)
-    case "subtitlesDir":
-      return path.join(getDirName("tempDir"), constants.folderNames.subtitles)
     case "metadataDir":
       return path.join(getDirName("tempDir"), constants.folderNames.metadata)
   }
@@ -36,6 +30,12 @@ export function createWorkspaceFilesystem() {
 
   createDirIfNeeded(getDirName("mainDir"))
   createDirIfNeeded(getDirName("tempDir"))
-  createDirIfNeeded(getDirName("subtitlesDir"))
   createDirIfNeeded(getDirName("metadataDir"))
+}
+
+export function createYoutubeDlFilePath(
+  dir: WorkspaceDir,
+  fileName: "id" | "title"
+): string {
+  return path.join(getDirName(dir), `"%(${fileName})s"`)
 }

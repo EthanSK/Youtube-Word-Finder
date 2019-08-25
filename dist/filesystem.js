@@ -18,8 +18,6 @@ function getDirName(dir) {
             return path_1.default.join(userDefaults_1.userDefaultsOnStart.outputLocation, userDefaults_1.userDefaultsOnStart.outputFolderName);
         case "tempDir":
             return path_1.default.join(getDirName("mainDir"), constants_1.default.folderNames.temp);
-        case "subtitlesDir":
-            return path_1.default.join(getDirName("tempDir"), constants_1.default.folderNames.subtitles);
         case "metadataDir":
             return path_1.default.join(getDirName("tempDir"), constants_1.default.folderNames.metadata);
     }
@@ -29,7 +27,10 @@ function createWorkspaceFilesystem() {
     // createDirIfNeeded(userDefaultsOnStart.outputLocation) //shourdn't need to do this, they should have selected a dir that exists already
     createDirIfNeeded(getDirName("mainDir"));
     createDirIfNeeded(getDirName("tempDir"));
-    createDirIfNeeded(getDirName("subtitlesDir"));
     createDirIfNeeded(getDirName("metadataDir"));
 }
 exports.createWorkspaceFilesystem = createWorkspaceFilesystem;
+function createYoutubeDlFilePath(dir, fileName) {
+    return path_1.default.join(getDirName(dir), `"%(${fileName})s"`);
+}
+exports.createYoutubeDlFilePath = createYoutubeDlFilePath;

@@ -5,10 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const electron_1 = require("electron");
 const logger_1 = require("./logger");
-const getSubtitles_1 = __importDefault(require("./youtubeDl/getSubtitles"));
 const ipc_1 = require("./ipc");
 const userDefaults_1 = require("./userDefaults");
 const filesystem_1 = require("./filesystem");
+const getVideoMetadata_1 = __importDefault(require("./youtubeDl/getVideoMetadata"));
 // var runPromise = Promise.resolve() // Dummy promise to avoid null check.
 electron_1.ipcMain.on("start-pressed", (event, data) => {
     isRunning = true;
@@ -27,7 +27,8 @@ function* run() {
     try {
         logger_1.sendToConsoleOutput(`Started running at ${new Date()}`, "startstop");
         setup();
-        yield getSubtitles_1.default();
+        yield getVideoMetadata_1.default();
+        // yield getSubtitles()
         logger_1.sendToConsoleOutput(`Finished running at ${new Date()}`, "startstop");
         ipc_1.ipcSend("stopped-running", { error: null });
     }

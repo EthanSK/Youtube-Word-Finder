@@ -12,7 +12,14 @@ youtube-dl https://www.youtube.com/channel/UC-lHJZR3Gqxm24_Vd_AJ5Yw --write-info
 
  ^^This, but with subtitles (sub urls found in metadata file):
 
- youtube-dl https://www.youtube.com/channel/UC-lHJZR3Gqxm24_Vd_AJ5Yw  --write-info-json --skip-download --ignore-errors --playlist-end 1 --write-sub --write-auto-sub
+ youtube-dl https://www.youtube.com/channel/UC-lHJZR3Gqxm24_Vd_AJ5Yw  --write-info-json --skip-download --ignore-errors --playlist-end 3 --write-auto-sub --write-sub 
 
-(Don't do this tho - it's better to use youtube-dl to download the subs as opposed to downloading them from the url manually)
+(Don't do this tho - it's better to use youtube-dl to download the subs as opposed to downloading them from the url manually. is it really tho? it'll be so much faster if we do it all at once. We could be getting the url, getting the subs url, and getting the video id, and checking if it's valid ALL AT ONCE!! and actually, we don't need to dowload the vtt, youtube-dl can download both at once! just not to different folders i don't think)
 
+if we want, we can use --dump-json to just print the json but not download it. but we can't do this for vtt files.
+
+vid with normal non auto subs: https://www.youtube.com/watch?v=qfJthDvcZ08
+
+ youtube-dl https://www.youtube.com/watch?v=qfJthDvcZ08  --write-info-json --skip-download  --write-auto-sub  --write-sub 
+
+ ^^having experimented with this command, I think i can conclude that the way to try and get legit subs, then fallback to auto subs is simply by using both --write-auto-sub  and --write-sub . I tested each one separatly to see the differences in auto and non auto, then compared the subs when both flags are applied, and the subs end up being the same as the non auto. it also doesn't matter on the order of the two flags. 

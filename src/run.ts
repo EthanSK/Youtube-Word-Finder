@@ -5,6 +5,7 @@ import { ipcSend } from "./ipc"
 import { setUserDefaultsOnStart } from "./userDefaults"
 import { createWorkspaceFilesystem } from "./filesystem"
 import { delay } from "./utils"
+import getVideoMetadata from "./youtubeDl/getVideoMetadata"
 
 // var runPromise = Promise.resolve() // Dummy promise to avoid null check.
 
@@ -29,7 +30,8 @@ function* run() {
   try {
     sendToConsoleOutput(`Started running at ${new Date()}`, "startstop")
     setup()
-    yield getSubtitles()
+    yield getVideoMetadata()
+    // yield getSubtitles()
     sendToConsoleOutput(`Finished running at ${new Date()}`, "startstop")
     ipcSend("stopped-running", { error: null })
   } catch (error) {
