@@ -26,12 +26,12 @@ async function downloadInfoAndSubs(playlistOrChannelUrl) {
         const flags = [
             "--write-info-json",
             "--skip-download",
-            // "--ignore-errors",
+            "--ignore-errors",
             "--playlist-end",
             userDefaults_1.userDefaultsOnStart.maxNumberOfVideos.toString(),
             "--write-sub",
             "--write-auto-sub",
-            "--sub-lang",
+            // "--sub-lang", //dont enable this without setting a sub lang
             // "en",
             "-o",
             filesystem_1.createYoutubeDlFilePath("metadataDir", "id")
