@@ -73,3 +73,17 @@
   transition: 0.2s;
   border-style: solid;
 }
+#etggamesButton {
+  background-color: transparent;
+  border: 0;
+  outline: 0px;
+  border-style: solid;
+}
+#etggamesImage {
+  width: 40px;
+  height: 40px;
+  z-index: 2;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+}

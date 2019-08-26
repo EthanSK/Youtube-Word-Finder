@@ -1,4 +1,4 @@
-import { ipcMain as ipc } from "electron"
+import { ipcMain as ipc, ipcMain, shell } from "electron"
 import { log } from "./logger"
 import { mainWindow } from "./main"
 
@@ -16,3 +16,7 @@ export function ipcSend(channel: IPCMainSendChannel, data: any) {
   // console.log("sending ipc from main: ", channel, data)
   mainWindow.webContents.send(channel, data)
 }
+
+ipcMain.on("open-url-browser", (event, data: string) => {
+  shell.openExternal(data)
+})

@@ -9,7 +9,6 @@ const ipc_1 = require("./ipc");
 const userDefaults_1 = require("./userDefaults");
 const filesystem_1 = require("./filesystem");
 const getVideoMetadata_1 = __importDefault(require("./youtubeDl/getVideoMetadata"));
-// var runPromise = Promise.resolve() // Dummy promise to avoid null check.
 electron_1.ipcMain.on("start-pressed", (event, data) => {
     isRunning = true;
     stoppableRun();

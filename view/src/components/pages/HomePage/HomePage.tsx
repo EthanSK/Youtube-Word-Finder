@@ -18,11 +18,13 @@ import Header from "../../elements/Header/Header"
 import DownloadOrderDropdown from "../../instances/Dropdown/DownloadOrderDropdown"
 import StartButton from "../../instances/Button/StartButton"
 import SubtitleLanguageTextBox from "../../instances/TextBox/SubtitleLanguageTextBox"
+import ETGgamesButton from "../../instances/Button/ETGgamesButton"
 
 const HomePage = () => {
   return (
     <ConsoleOutputContextProvider>
       <Header title="YouTube Word Finder" />
+      <ETGgamesButton></ETGgamesButton>
       <div className="homePageContainer">
         <div className="homePageLeftSide">
           <VideoSourceDropdown key="VideoSourceDropdownInstance" />

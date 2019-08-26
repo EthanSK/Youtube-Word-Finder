@@ -1,13 +1,9 @@
 import { ipcMain } from "electron"
 import { sendToConsoleOutput } from "./logger"
-import getSubtitles from "./youtubeDl/getSubtitles"
 import { ipcSend } from "./ipc"
 import { setUserDefaultsOnStart } from "./userDefaults"
 import { createWorkspaceFilesystem } from "./filesystem"
-import { delay } from "./utils"
 import getVideoMetadata from "./youtubeDl/getVideoMetadata"
-
-// var runPromise = Promise.resolve() // Dummy promise to avoid null check.
 
 ipcMain.on("start-pressed", (event, data) => {
   isRunning = true

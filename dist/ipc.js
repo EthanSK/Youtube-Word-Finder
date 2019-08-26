@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const electron_1 = require("electron");
 const main_1 = require("./main");
 //this sends to all renderer processes, as it is not a reply to an event
 function ipcSend(channel, data) {
@@ -9,3 +10,6 @@ function ipcSend(channel, data) {
     main_1.mainWindow.webContents.send(channel, data);
 }
 exports.ipcSend = ipcSend;
+electron_1.ipcMain.on("open-url-browser", (event, data) => {
+    electron_1.shell.openExternal(data);
+});
