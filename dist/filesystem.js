@@ -23,6 +23,16 @@ function getDirName(dir) {
     }
 }
 exports.getDirName = getDirName;
+function getFilesInDir(dir) {
+    return new Promise((resolve, reject) => {
+        fs_1.default.readdir(dir, (err, files) => {
+            if (err)
+                return reject(err);
+            resolve(files);
+        });
+    });
+}
+exports.getFilesInDir = getFilesInDir;
 function createWorkspaceFilesystem() {
     // createDirIfNeeded(userDefaultsOnStart.outputLocation) //shourdn't need to do this, they should have selected a dir that exists already
     createDirIfNeeded(getDirName("mainDir"));
@@ -31,7 +41,8 @@ function createWorkspaceFilesystem() {
 }
 exports.createWorkspaceFilesystem = createWorkspaceFilesystem;
 function createYoutubeDlFilePath(dir, fileName) {
-    const ret = path_1.default.join(getDirName(dir), `${Date.now().toString()}_%(${fileName})s`);
+    const ret = path_1.default.join(getDirName(dir), `%(${fileName})s` //${Date.now().toString()}_
+    );
     console.log(ret);
     return ret;
 }

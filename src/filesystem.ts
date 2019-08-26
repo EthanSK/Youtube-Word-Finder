@@ -25,6 +25,15 @@ export function getDirName(dir: WorkspaceDir): string {
   }
 }
 
+export function getFilesInDir(dir: string): Promise<string[]> {
+  return new Promise((resolve, reject) => {
+    fs.readdir(dir, (err, files) => {
+      if (err) return reject(err)
+      resolve(files)
+    })
+  })
+}
+
 export function createWorkspaceFilesystem() {
   // createDirIfNeeded(userDefaultsOnStart.outputLocation) //shourdn't need to do this, they should have selected a dir that exists already
 
@@ -39,7 +48,7 @@ export function createYoutubeDlFilePath(
 ): string {
   const ret = path.join(
     getDirName(dir),
-    `${Date.now().toString()}_%(${fileName})s`
+    `%(${fileName})s` //${Date.now().toString()}_
   )
   console.log(ret)
   return ret

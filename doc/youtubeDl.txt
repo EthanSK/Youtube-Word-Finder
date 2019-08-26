@@ -23,3 +23,8 @@ vid with normal non auto subs: https://www.youtube.com/watch?v=qfJthDvcZ08
  youtube-dl https://www.youtube.com/watch?v=qfJthDvcZ08  --write-info-json --skip-download  --write-auto-sub  --write-sub 
 
  ^^having experimented with this command, I think i can conclude that the way to try and get legit subs, then fallback to auto subs is simply by using both --write-auto-sub  and --write-sub . I tested each one separatly to see the differences in auto and non auto, then compared the subs when both flags are applied, and the subs end up being the same as the non auto. it also doesn't matter on the order of the two flags. 
+
+ To get video with best audio and video, do add:
+  -f bestvideo+bestaudio/best
+Although we can't use this since we are tryna get the URL. 
+If i'm not mistaken, it seems like the last format option is always the best with audio and video.

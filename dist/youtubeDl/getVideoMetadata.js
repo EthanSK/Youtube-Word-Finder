@@ -49,17 +49,6 @@ async function downloadInfoAndSubs(url) {
             resolve();
         });
     });
-    // youtubedl.getInfo(url, function(err, _info) {
-    //   if (err) throw err
-    //   const info = _info as any
-    //   console.log("id:", info.id)
-    //   console.log("title:", info.title)
-    //   console.log("url:", info.url)
-    //   console.log("thumbnail:", info.thumbnail)
-    //   console.log("description:", info.description)
-    //   console.log("filename:", info._filename)
-    //   console.log("format id:", info.format_id)
-    // })
 }
 async function downloadInfoAndSubsTextFile() {
     if (!userDefaults_1.userDefaultsOnStart.videoTextFile)
