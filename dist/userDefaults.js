@@ -26,6 +26,7 @@ function setUserDefaultsInitialValuesIfNeeded() {
     setIfNeeded({ paddingToAdd: 0 });
     setIfNeeded({ maxNumberOfVideos: 15 });
     setIfNeeded({ numberOfWordReps: 5 });
+    setIfNeeded({ subtitleLanguageCode: "en" });
     setIfNeeded({ videoSource: "Channel" });
     setIfNeeded({ downloadOrder: "allMainThenAllAlt" });
     const emptyWord = { mainWord: "", originalUnfilteredWord: "" }; //so the user can add their own words without using the file

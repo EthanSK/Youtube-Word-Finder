@@ -15,6 +15,7 @@ export type TextBoxId =
   | "paddingToAdd"
   | "maxNumberOfVids"
   | "numberOfWordReps"
+  | "subtitleLanguage"
 
 const TextBoxContainer = (props: {
   textBoxId: TextBoxId

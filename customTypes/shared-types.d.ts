@@ -34,6 +34,7 @@ interface UserDefaultsState {
   paddingToAdd?: number
   maxNumberOfVideos?: number
   numberOfWordReps?: number
+  subtitleLanguageCode?: string
   words?: Word[]
   downloadOrder?: DownloadOrder
 }

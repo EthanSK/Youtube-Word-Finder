@@ -17,6 +17,7 @@ import WordOptionsButton from "../../instances/Button/WordOptionsButton"
 import Header from "../../elements/Header/Header"
 import DownloadOrderDropdown from "../../instances/Dropdown/DownloadOrderDropdown"
 import StartButton from "../../instances/Button/StartButton"
+import SubtitleLanguageTextBox from "../../instances/TextBox/SubtitleLanguageTextBox"
 
 const HomePage = () => {
   return (
@@ -37,7 +38,10 @@ const HomePage = () => {
           <SplitRow>
             <PaddingToAddTextBox key="PaddingToAddTextBoxInstance" />
             <MaxNumberOfVidsTextBox key="MaxNumberOfVidsTextBoxInstance" />
+          </SplitRow>
+          <SplitRow>
             <NumberOfWordRepetitionsTextBox key="NumberOfWordRepetitionsTextBoxInstance" />
+            <SubtitleLanguageTextBox key="SubtitleLanguageTextBoxInstance"></SubtitleLanguageTextBox>
           </SplitRow>
           <DownloadOrderDropdown key="DownloadOrderDropdownInstance" />
           <OutputLocationTextBox key="OutputLocationTextBoxInstance" />

@@ -28,6 +28,7 @@ function setUserDefaultsInitialValuesIfNeeded() {
   setIfNeeded({ paddingToAdd: 0 })
   setIfNeeded({ maxNumberOfVideos: 15 })
   setIfNeeded({ numberOfWordReps: 5 })
+  setIfNeeded({ subtitleLanguageCode: "en" })
   setIfNeeded({ videoSource: "Channel" })
   setIfNeeded({ downloadOrder: "allMainThenAllAlt" })
 
