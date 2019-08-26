@@ -18,7 +18,11 @@ function setUserDefaultsInitialValuesIfNeeded() {
     function setIfNeeded(userDefaults) {
         for (const key in userDefaults) {
             const keyTyped = key;
-            if (loadUserDefault(keyTyped) === undefined) {
+            if (
+            //don't wanna just check falsy, that might be wrong
+            loadUserDefault(keyTyped) === undefined ||
+                loadUserDefault(keyTyped) === null ||
+                loadUserDefault(keyTyped) === "") {
                 store_1.save(`${exports.userDefaultsKey}.${keyTyped}`, userDefaults[keyTyped]); //cant use saveuserdefault
             }
         }

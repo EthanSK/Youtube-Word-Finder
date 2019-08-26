@@ -8,21 +8,24 @@ const filesystem_1 = require("../filesystem");
 const userDefaults_1 = require("../userDefaults");
 const constants_1 = __importDefault(require("../constants"));
 const logger_1 = require("../logger");
+const fs_1 = __importDefault(require("fs"));
 async function getVideoMetadata() {
     logger_1.sendToConsoleOutput("Getting video metadata and subtitles", "loading");
     switch (userDefaults_1.userDefaultsOnStart.videoSource) {
         case "Channel":
-            const url = constants_1.default.youtube.channelURLPrefix + userDefaults_1.userDefaultsOnStart.channelId;
-            await downloadInfoAndSubs(url);
+            await downloadInfoAndSubs(constants_1.default.youtube.channelURLPrefix + userDefaults_1.userDefaultsOnStart.channelId);
             break;
         case "Playlist":
+            await downloadInfoAndSubs(constants_1.default.youtube.playlistURLPrefix + userDefaults_1.userDefaultsOnStart.playlistId);
             break;
         case "Text file":
+            await downloadInfoAndSubsTextFile();
             break;
     }
+    logger_1.sendToConsoleOutput("Got video metadata and subtitles", "info");
 }
-async function downloadInfoAndSubs(playlistOrChannelUrl) {
-    if (!playlistOrChannelUrl)
+async function downloadInfoAndSubs(url) {
+    if (!url)
         throw new Error("Video input URL cannot be found");
     return new Promise((resolve, reject) => {
         const flags = [
@@ -33,15 +36,16 @@ async function downloadInfoAndSubs(playlistOrChannelUrl) {
             userDefaults_1.userDefaultsOnStart.maxNumberOfVideos.toString(),
             "--write-sub",
             "--write-auto-sub",
-            // "--sub-lang", //dont enable this without setting a sub lang
-            // "en",
+            "--sub-lang",
+            userDefaults_1.userDefaultsOnStart.subtitleLanguageCode,
             "-o",
             filesystem_1.createYoutubeDlFilePath("metadataDir", "id")
         ];
-        youtube_dl_1.default.exec(playlistOrChannelUrl, flags, {}, function (err, output) {
+        youtube_dl_1.default.exec(url, flags, {}, function (err, output) {
             if (err)
-                throw err;
-            console.log(output.join("\n"));
+                return reject(err);
+            // console.log(output.join("\n"))
+            resolve();
         });
     });
     // youtubedl.getInfo(url, function(err, _info) {
@@ -56,4 +60,16 @@ async function downloadInfoAndSubs(playlistOrChannelUrl) {
     //   console.log("format id:", info.format_id)
     // })
 }
+async function downloadInfoAndSubsTextFile() {
+    if (!userDefaults_1.userDefaultsOnStart.videoTextFile)
+        throw new Error("No text file containing video URLs could be found");
+    const vidURLs = fs_1.default
+        .readFileSync(userDefaults_1.userDefaultsOnStart.videoTextFile, "utf8")
+        .split(/\r\n|\r|\n/)
+        .filter(url => url); //non falsy lines only
+    for (const url of vidURLs) {
+        await downloadInfoAndSubs(url);
+    }
+}
 exports.default = getVideoMetadata;
+//

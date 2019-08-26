@@ -3,24 +3,30 @@ import { getDirName, createYoutubeDlFilePath } from "../filesystem"
 import { userDefaultsOnStart } from "../userDefaults"
 import constants from "../constants"
 import { sendToConsoleOutput } from "../logger"
+import fs from "fs"
 
 async function getVideoMetadata() {
   sendToConsoleOutput("Getting video metadata and subtitles", "loading")
   switch (userDefaultsOnStart.videoSource) {
     case "Channel":
-      const url =
+      await downloadInfoAndSubs(
         constants.youtube.channelURLPrefix + userDefaultsOnStart.channelId
-      await downloadInfoAndSubs(url)
+      )
       break
     case "Playlist":
+      await downloadInfoAndSubs(
+        constants.youtube.playlistURLPrefix + userDefaultsOnStart.playlistId
+      )
       break
     case "Text file":
+      await downloadInfoAndSubsTextFile()
       break
   }
+  sendToConsoleOutput("Got video metadata and subtitles", "info")
 }
 
-async function downloadInfoAndSubs(playlistOrChannelUrl?: string) {
-  if (!playlistOrChannelUrl) throw new Error("Video input URL cannot be found")
+async function downloadInfoAndSubs(url?: string) {
+  if (!url) throw new Error("Video input URL cannot be found")
   return new Promise((resolve, reject) => {
     const flags = [
       "--write-info-json",
@@ -30,14 +36,15 @@ async function downloadInfoAndSubs(playlistOrChannelUrl?: string) {
       userDefaultsOnStart.maxNumberOfVideos!.toString(),
       "--write-sub",
       "--write-auto-sub",
-      // "--sub-lang", //dont enable this without setting a sub lang
-      // "en",
+      "--sub-lang", //dont enable this without setting a sub lang after it
+      userDefaultsOnStart.subtitleLanguageCode!, //will always be set by default to something
       "-o",
       createYoutubeDlFilePath("metadataDir", "id")
     ]
-    youtubedl.exec(playlistOrChannelUrl, flags, {}, function(err, output) {
-      if (err) throw err
-      console.log(output.join("\n"))
+    youtubedl.exec(url, flags, {}, function(err, output) {
+      if (err) return reject(err)
+      // console.log(output.join("\n"))
+      resolve()
     })
   })
   // youtubedl.getInfo(url, function(err, _info) {
@@ -53,4 +60,17 @@ async function downloadInfoAndSubs(playlistOrChannelUrl?: string) {
   // })
 }
 
+async function downloadInfoAndSubsTextFile() {
+  if (!userDefaultsOnStart.videoTextFile)
+    throw new Error("No text file containing video URLs could be found")
+  const vidURLs = fs
+    .readFileSync(userDefaultsOnStart.videoTextFile, "utf8")
+    .split(/\r\n|\r|\n/)
+    .filter(url => url) //non falsy lines only
+  for (const url of vidURLs) {
+    await downloadInfoAndSubs(url)
+  }
+}
+
 export default getVideoMetadata
+//

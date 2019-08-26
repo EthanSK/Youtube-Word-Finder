@@ -59,6 +59,13 @@ export default async function stoppableRun() {
     if (n.done) {
       return n.value
     }
-    resumeValue = await n.value
+    try {
+      resumeValue = await n.value
+    } catch (error) {
+      sendToConsoleOutput(
+        "There was an error running the bot: " + error.message,
+        "error"
+      )
+    }
   }
 }

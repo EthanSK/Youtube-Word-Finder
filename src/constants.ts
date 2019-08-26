@@ -12,7 +12,8 @@ const constants = {
   },
   youtube: {
     channelURLPrefix: "https://www.youtube.com/channel/",
-    videoURLPrefix: "https://www.youtube.com/watch?v="
+    videoURLPrefix: "https://www.youtube.com/watch?v=",
+    playlistURLPrefix: "https://www.youtube.com/playlist?list="
   }
 }
 

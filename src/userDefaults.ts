@@ -20,7 +20,12 @@ function setUserDefaultsInitialValuesIfNeeded() {
   function setIfNeeded(userDefaults: UserDefaultsState) {
     for (const key in userDefaults) {
       const keyTyped: keyof UserDefaultsState = key as keyof UserDefaultsState
-      if (loadUserDefault(keyTyped) === undefined) {
+      if (
+        //don't wanna just check falsy, that might be wrong
+        loadUserDefault(keyTyped) === undefined ||
+        loadUserDefault(keyTyped) === null ||
+        loadUserDefault(keyTyped) === ""
+      ) {
         save(`${userDefaultsKey}.${keyTyped}`, userDefaults[keyTyped]) //cant use saveuserdefault
       }
     }
