@@ -7,6 +7,7 @@ const electron_1 = require("electron");
 const constants_1 = __importDefault(require("./constants"));
 const main_1 = require("./main");
 const path_1 = __importDefault(require("path"));
+const logger_1 = require("./logger");
 function createWindow() {
     // Create the browser window.
     exports.wordOptionsWindow = new electron_1.BrowserWindow({
@@ -22,6 +23,7 @@ function createWindow() {
         title: constants_1.default.wordOptions.name,
         parent: main_1.mainWindow
     });
+    logger_1.sendToConsoleOutput("Started changing word options", "settings");
     // Open the DevTools.
     //   win.webContents.openDevTools()
     if (process.env.NODE_ENV === "development") {
@@ -40,6 +42,7 @@ function createWindow() {
         // Dereference the window object, usually you would store windows
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
+        logger_1.sendToConsoleOutput("Finished changing word options", "settings");
         exports.wordOptionsWindow = null;
     });
 }

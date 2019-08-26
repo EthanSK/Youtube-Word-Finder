@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain as ipc } from "electron"
 import constants from "./constants"
 import { mainWindow } from "./main"
 import path from "path"
+import { sendToConsoleOutput } from "./logger"
 
 export let wordOptionsWindow: BrowserWindow | null
 
@@ -20,6 +21,7 @@ function createWindow() {
     title: constants.wordOptions.name,
     parent: mainWindow!
   })
+  sendToConsoleOutput("Started changing word options", "settings")
 
   // Open the DevTools.
   //   win.webContents.openDevTools()
@@ -40,6 +42,7 @@ function createWindow() {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
+    sendToConsoleOutput("Finished changing word options", "settings")
     wordOptionsWindow = null
   })
 }

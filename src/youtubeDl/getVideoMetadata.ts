@@ -2,8 +2,10 @@ import youtubedl from "youtube-dl"
 import { getDirName, createYoutubeDlFilePath } from "../filesystem"
 import { userDefaultsOnStart } from "../userDefaults"
 import constants from "../constants"
+import { sendToConsoleOutput } from "../logger"
 
 async function getVideoMetadata() {
+  sendToConsoleOutput("Getting video metadata and subtitles", "loading")
   switch (userDefaultsOnStart.videoSource) {
     case "Channel":
       const url =

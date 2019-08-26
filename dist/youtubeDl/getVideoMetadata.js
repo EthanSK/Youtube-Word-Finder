@@ -7,7 +7,9 @@ const youtube_dl_1 = __importDefault(require("youtube-dl"));
 const filesystem_1 = require("../filesystem");
 const userDefaults_1 = require("../userDefaults");
 const constants_1 = __importDefault(require("../constants"));
+const logger_1 = require("../logger");
 async function getVideoMetadata() {
+    logger_1.sendToConsoleOutput("Getting video metadata and subtitles", "loading");
     switch (userDefaults_1.userDefaultsOnStart.videoSource) {
         case "Channel":
             const url = constants_1.default.youtube.channelURLPrefix + userDefaults_1.userDefaultsOnStart.channelId;
