@@ -37,7 +37,10 @@ export function createYoutubeDlFilePath(
   dir: WorkspaceDir,
   fileName: "id" | "title"
 ): string {
-  const ret = path.join(getDirName(dir), `%(${fileName})s`)
+  const ret = path.join(
+    getDirName(dir),
+    `${Date.now().toString()}_%(${fileName})s`
+  )
   console.log(ret)
   return ret
 }

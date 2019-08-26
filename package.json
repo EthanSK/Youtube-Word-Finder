@@ -38,6 +38,7 @@
     "dotenv": "^8.1.0",
     "electron-log": "^3.0.7",
     "electron-store": "^4.0.0",
+    "node-webvtt": "^1.6.1",
     "react-router-dom": "^5.0.1",
     "youtube-dl": "^2.0.1"
   },

@@ -18,3 +18,5 @@ for some fucked reason, I need to keep @ffmpeg-installer folder top level idk an
 IF YOU REFERENCE A FILE FROM THE VIEW FOLDER, IT WILL TRY AND TSC IT AND PUT IT IN THE DIST
 
 an npm module with @ in name is called a scoped package
+
+to share types, add the exact file of the shared types file in tsconfig   "files": ["customTypes/shared-types.d.ts"]

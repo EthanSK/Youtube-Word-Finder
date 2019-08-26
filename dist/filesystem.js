@@ -31,7 +31,7 @@ function createWorkspaceFilesystem() {
 }
 exports.createWorkspaceFilesystem = createWorkspaceFilesystem;
 function createYoutubeDlFilePath(dir, fileName) {
-    const ret = path_1.default.join(getDirName(dir), `%(${fileName})s`);
+    const ret = path_1.default.join(getDirName(dir), `${Date.now().toString()}_%(${fileName})s`);
     console.log(ret);
     return ret;
 }

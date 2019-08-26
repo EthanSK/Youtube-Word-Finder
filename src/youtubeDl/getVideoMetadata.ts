@@ -5,7 +5,7 @@ import constants from "../constants"
 import { sendToConsoleOutput } from "../logger"
 import fs from "fs"
 
-async function getVideoMetadata() {
+export default async function getVideoMetadata() {
   sendToConsoleOutput("Getting video metadata and subtitles", "loading")
   switch (userDefaultsOnStart.videoSource) {
     case "Channel":
@@ -66,11 +66,8 @@ async function downloadInfoAndSubsTextFile() {
   const vidURLs = fs
     .readFileSync(userDefaultsOnStart.videoTextFile, "utf8")
     .split(/\r\n|\r|\n/)
-    .filter(url => url) //non falsy lines only
+    .filter(url => url) //non falsy urls only
   for (const url of vidURLs) {
     await downloadInfoAndSubs(url)
   }
 }
-
-export default getVideoMetadata
-//

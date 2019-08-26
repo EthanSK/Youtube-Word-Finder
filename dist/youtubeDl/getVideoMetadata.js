@@ -24,6 +24,7 @@ async function getVideoMetadata() {
     }
     logger_1.sendToConsoleOutput("Got video metadata and subtitles", "info");
 }
+exports.default = getVideoMetadata;
 async function downloadInfoAndSubs(url) {
     if (!url)
         throw new Error("Video input URL cannot be found");
@@ -66,10 +67,8 @@ async function downloadInfoAndSubsTextFile() {
     const vidURLs = fs_1.default
         .readFileSync(userDefaults_1.userDefaultsOnStart.videoTextFile, "utf8")
         .split(/\r\n|\r|\n/)
-        .filter(url => url); //non falsy lines only
+        .filter(url => url); //non falsy urls only
     for (const url of vidURLs) {
         await downloadInfoAndSubs(url);
     }
 }
-exports.default = getVideoMetadata;
-//
