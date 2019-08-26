@@ -22,7 +22,7 @@ const MaxNumberOfVidsTextBox = (props: { key: string }) => {
       consoleOutputOptions={{
         useDefaultIfUndefined: true,
         payload: {
-          appendToMessage:
+          instructionToFollow:
             "This is the maximum number of videos to search through. Don't set it too high or the bot will take a long time to run"
         }
       }}

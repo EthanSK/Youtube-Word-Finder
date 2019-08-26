@@ -35,25 +35,25 @@ const DownloadOrderDropdown = (props: {
         {
           value: "All main words first then all alternatives",
           isSelected: userDefaultsState.downloadOrder === "allMainThenAllAlt",
-          appendToMessage:
+          instructionConsoleOutput:
             "For each main word, it will download all it can for that word, then after all the main words are downloaded it will download all the alternative words it can"
         },
         {
           value: "All main words with all alternatives",
           isSelected: userDefaultsState.downloadOrder === "allMainWithAllAlt",
-          appendToMessage:
+          instructionConsoleOutput:
             "For each main word, it will download all it can for that word, and then download all the alternative words it can for that main word, before moving onto the next word"
         },
         {
           value: "Next main word one at a time then all alternatives",
           isSelected: userDefaultsState.downloadOrder === "nextMainThenAllAlt",
-          appendToMessage:
+          instructionConsoleOutput:
             "For each main word, it will download one occurrence of that word before moving to the next word, then it will repeat the process until it has downloaded all it can for the main words. Then after that, it will download all the alternative words for each word"
         },
         {
           value: "Next main word one at a time then next alternative",
           isSelected: userDefaultsState.downloadOrder === "nextMainThenNextAlt",
-          appendToMessage:
+          instructionConsoleOutput:
             "For each main word, it will download one occurrence of that word before moving to the next word, then it will repeat the process until it has downloaded all it can for the main words. Then after that, for each main word, it will download one occurrence of the alternative words for that main word before moving to next main word's alternative word, and it will repeat until all the alternatives are downloaded"
         }
       ]}

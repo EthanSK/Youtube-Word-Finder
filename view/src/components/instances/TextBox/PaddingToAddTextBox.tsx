@@ -19,11 +19,11 @@ const PaddingToAddTextBox = (props: { key: string }) => {
           ? userDefaultsState.paddingToAdd.toString()
           : undefined
       }
-      numberInputOptions={{ step: 0.2, min: 0, max: 10 }}
+      numberInputOptions={{ step: 0.1, min: 0, max: 10 }}
       consoleOutputOptions={{
         useDefaultIfUndefined: true,
         payload: {
-          appendToMessage:
+          instructionToFollow:
             "This is the extra time in seconds to add to the start and end of downloaded clips"
         }
       }}

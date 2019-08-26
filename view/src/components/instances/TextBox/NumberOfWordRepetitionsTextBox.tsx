@@ -23,7 +23,7 @@ const NumberOfWordRepetitionsTextBox = (props: { key: string }) => {
       consoleOutputOptions={{
         useDefaultIfUndefined: true,
         payload: {
-          appendToMessage:
+          instructionToFollow:
             "This is the number of times to get the same word. Don't set it too high or the bot will take a long time to run"
         }
       }}

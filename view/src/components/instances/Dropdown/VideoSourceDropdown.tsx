@@ -31,17 +31,18 @@ const VideoSourceDropdown = (props: {
         {
           value: "Channel",
           isSelected: userDefaultsState.videoSource === "Channel",
-          appendToMessage: "Ensure you provided a channel ID"
+          instructionConsoleOutput: "Ensure you provided a channel ID"
         },
         {
           value: "Playlist",
           isSelected: userDefaultsState.videoSource === "Playlist",
-          appendToMessage: "Ensure you provided a playlist ID that is public"
+          instructionConsoleOutput:
+            "Ensure you provided a playlist ID that is public"
         },
         {
           value: "Text file",
           isSelected: userDefaultsState.videoSource === "Text file",
-          appendToMessage:
+          instructionConsoleOutput:
             "Ensure you provided a text file with each video URL on a new line"
         }
       ]}

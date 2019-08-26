@@ -16,7 +16,7 @@ export type ConsoleOutputMessageType =
   | "startstop"
 
 export interface ConsoleOutputPayload extends ConsoleOutputActionPayload {
-  timestamp: Date
+  timestamp: number //Date obj cannot be stored as json i don't think
 }
 
 export type ConsoleOutputState = ConsoleOutputPayload[]
@@ -32,6 +32,7 @@ export interface ConsoleOutputAction {
 export interface ConsoleOutputComponentsPayload {
   shouldOutput?: boolean
   appendToMessage?: string
+  instructionToFollow?: string //sends another console output with instruction type
   name?: string
   value?: string
   //name and value have to be set if defaultOutputReplacement is not set
@@ -46,26 +47,40 @@ const consoleOutputReducer = (
   action: ConsoleOutputAction
 ): ConsoleOutputState => {
   switch (action.type) {
-    case "addNewMessage":
+    case "addNewMessage": //this isn't really used anywhere.
       const newPayload: ConsoleOutputPayload = {
         ...(action.payload as ConsoleOutputActionPayload),
-        timestamp: new Date()
+        timestamp: Date.now()
       }
+
       ipcSend("log-console-output", newPayload)
       return [...state, newPayload] //cut down it only when showing in console. don't wanna lose data.
-    case "componentChanged":
-      const generatedPayload = generateUserDefaultsActionPayload(
-        action.payload as ConsoleOutputComponentsPayload
-      )
+    case "componentChanged": //things triggered by components. ie user default changes
+      const payload = action.payload as ConsoleOutputComponentsPayload
+      let newState = [...state]
+      const generatedPayload = generateUserDefaultsActionPayload(payload)
+
       if (generatedPayload) {
         const newPayload: ConsoleOutputPayload = {
           ...generatedPayload!,
-          timestamp: new Date()
+          timestamp: Date.now()
         }
         ipcSend("log-console-output", newPayload)
-        return [...state, newPayload]
+        // return [...state, newPayload]
+        newState.push(newPayload)
       }
-      return state
+
+      if (payload.instructionToFollow) {
+        const secondPayload: ConsoleOutputPayload = {
+          message: payload.instructionToFollow,
+          messageType: "instruction",
+          timestamp: Date.now()
+        }
+        ipcSend("log-console-output", secondPayload)
+
+        newState.push(secondPayload)
+      }
+      return newState
     default:
       return state
   }
@@ -79,9 +94,7 @@ function generateUserDefaultsActionPayload(
     !consoleOutputOptions.value
   )
     return //only if defined and set to false, else default behaviour is to output
-  let message = `Changed ${consoleOutputOptions.name} to ${
-    consoleOutputOptions.value
-  }`
+  let message = `Changed ${consoleOutputOptions.name} to ${consoleOutputOptions.value}`
   if (consoleOutputOptions.appendToMessage) {
     message += `. ${consoleOutputOptions.appendToMessage}`
   }
