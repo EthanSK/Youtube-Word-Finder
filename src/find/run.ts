@@ -1,11 +1,10 @@
 import { ipcMain } from "electron"
 import { sendToConsoleOutput } from "../logger"
 import { ipcSend } from "../ipc"
-import { setUserDefaultsOnStart } from "../userDefaults"
+import { setUserDefaultsOnStart, userDefaultsOnStart } from "../userDefaults"
 import { createWorkspaceFilesystem, cleanupDirs } from "../filesystem"
 import getVideoMetadata from "./getVideoMetadata"
 import processVideoMetadata from "./processVideoMetadata"
-import { VideoMetadata } from "./processVideoMetadata"
 
 ipcMain.on("start-pressed", (event, data) => {
   isRunning = true
@@ -22,6 +21,28 @@ let isRunning = false
 async function setup() {
   setUserDefaultsOnStart()
   createWorkspaceFilesystem()
+  userDefaultsCheck()
+}
+
+function userDefaultsCheck() {
+  if (!userDefaultsOnStart.videoTextFile) {
+    throw new Error("No text file containing video URLs could be found")
+  }
+  if (!userDefaultsOnStart.outputLocation) {
+    throw new Error("No output location was given")
+  }
+  if (
+    !userDefaultsOnStart.words ||
+    userDefaultsOnStart.words.filter(word => {
+      return word.mainWord !== ""
+    }).length === 0
+  ) {
+    throw new Error(
+      "No words could be found. You must provide words in a text file or in the word options"
+    )
+  }
+
+  //the rest either don't matter or are set by default. even words text file is not needed, as long as we provided words manually
 }
 
 async function cleanup() {
@@ -30,7 +51,7 @@ async function cleanup() {
 
 function* run() {
   sendToConsoleOutput(`Started running at ${new Date()}`, "startstop")
-  setup()
+  yield setup() //yield so we catch erros
   yield getVideoMetadata()
   const videoMetadata = yield processVideoMetadata()
   console.log("video metadata: ", videoMetadata)
@@ -42,27 +63,28 @@ function* run() {
 export default async function stoppableRun() {
   const iter = run()
   let resumeValue
-  for (;;) {
-    if (!isRunning) {
-      ipcSend("stopped-running", null)
-      sendToConsoleOutput(
-        `User stopped running early at ${new Date()}`,
-        "startstop"
-      )
-      return
-    }
-    const n = iter.next(resumeValue)
-    if (n.done) {
-      return n.value
-    }
-    try {
+  try {
+    for (;;) {
+      if (!isRunning) {
+        ipcSend("stopped-running", null)
+        sendToConsoleOutput(
+          `User stopped running early at ${new Date()}`,
+          "startstop"
+        )
+        return
+      }
+      const n = iter.next(resumeValue)
+      if (n.done) {
+        return n.value
+      }
       resumeValue = await n.value
-    } catch (error) {
-      await cleanup()
-      sendToConsoleOutput(
-        "There was an error running the bot: " + error.message,
-        "error"
-      )
     }
+  } catch (error) {
+    await cleanup()
+    ipcSend("stopped-running", { error: null })
+    sendToConsoleOutput(
+      "There was an error running the bot: " + error.message,
+      "error"
+    )
   }
 }

@@ -51,8 +51,6 @@ async function downloadInfoAndSubs(url) {
     });
 }
 async function downloadInfoAndSubsTextFile() {
-    if (!userDefaults_1.userDefaultsOnStart.videoTextFile)
-        throw new Error("No text file containing video URLs could be found");
     const vidURLs = fs_1.default
         .readFileSync(userDefaults_1.userDefaultsOnStart.videoTextFile, "utf8")
         .split(/\r\n|\r|\n/)

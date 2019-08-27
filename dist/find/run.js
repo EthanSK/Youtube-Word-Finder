@@ -22,13 +22,29 @@ let isRunning = false;
 async function setup() {
     userDefaults_1.setUserDefaultsOnStart();
     filesystem_1.createWorkspaceFilesystem();
+    userDefaultsCheck();
+}
+function userDefaultsCheck() {
+    if (!userDefaults_1.userDefaultsOnStart.videoTextFile) {
+        throw new Error("No text file containing video URLs could be found");
+    }
+    if (!userDefaults_1.userDefaultsOnStart.outputLocation) {
+        throw new Error("No output location was given");
+    }
+    if (!userDefaults_1.userDefaultsOnStart.words ||
+        userDefaults_1.userDefaultsOnStart.words.filter(word => {
+            return word.mainWord !== "";
+        }).length === 0) {
+        throw new Error("No words could be found. You must provide words in a text file or in the word options");
+    }
+    //the rest either don't matter or are set by default. even words text file is not needed, as long as we provided words manually
 }
 async function cleanup() {
     // cleanupDirs() // not during testing
 }
 function* run() {
     logger_1.sendToConsoleOutput(`Started running at ${new Date()}`, "startstop");
-    setup();
+    yield setup(); //yield so we catch erros
     yield getVideoMetadata_1.default();
     const videoMetadata = yield processVideoMetadata_1.default();
     console.log("video metadata: ", videoMetadata);
@@ -39,23 +55,24 @@ function* run() {
 async function stoppableRun() {
     const iter = run();
     let resumeValue;
-    for (;;) {
-        if (!isRunning) {
-            ipc_1.ipcSend("stopped-running", null);
-            logger_1.sendToConsoleOutput(`User stopped running early at ${new Date()}`, "startstop");
-            return;
-        }
-        const n = iter.next(resumeValue);
-        if (n.done) {
-            return n.value;
-        }
-        try {
+    try {
+        for (;;) {
+            if (!isRunning) {
+                ipc_1.ipcSend("stopped-running", null);
+                logger_1.sendToConsoleOutput(`User stopped running early at ${new Date()}`, "startstop");
+                return;
+            }
+            const n = iter.next(resumeValue);
+            if (n.done) {
+                return n.value;
+            }
             resumeValue = await n.value;
         }
-        catch (error) {
-            await cleanup();
-            logger_1.sendToConsoleOutput("There was an error running the bot: " + error.message, "error");
-        }
+    }
+    catch (error) {
+        await cleanup();
+        ipc_1.ipcSend("stopped-running", { error: null });
+        logger_1.sendToConsoleOutput("There was an error running the bot: " + error.message, "error");
     }
 }
 exports.default = stoppableRun;

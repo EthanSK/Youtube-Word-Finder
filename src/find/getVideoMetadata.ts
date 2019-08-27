@@ -50,10 +50,8 @@ async function downloadInfoAndSubs(url?: string) {
 }
 
 async function downloadInfoAndSubsTextFile() {
-  if (!userDefaultsOnStart.videoTextFile)
-    throw new Error("No text file containing video URLs could be found")
   const vidURLs = fs
-    .readFileSync(userDefaultsOnStart.videoTextFile, "utf8")
+    .readFileSync(userDefaultsOnStart.videoTextFile!, "utf8")
     .split(/\r\n|\r|\n/)
     .filter(url => url) //non falsy urls only
   for (const url of vidURLs) {
