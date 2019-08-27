@@ -1,9 +1,11 @@
 import { ipcMain } from "electron"
-import { sendToConsoleOutput } from "./logger"
-import { ipcSend } from "./ipc"
-import { setUserDefaultsOnStart } from "./userDefaults"
-import { createWorkspaceFilesystem } from "./filesystem"
-import getVideoMetadata from "./youtubeDl/getVideoMetadata"
+import { sendToConsoleOutput } from "../logger"
+import { ipcSend } from "../ipc"
+import { setUserDefaultsOnStart } from "../userDefaults"
+import { createWorkspaceFilesystem, cleanupDirs } from "../filesystem"
+import getVideoMetadata from "./getVideoMetadata"
+import processVideoMetadata from "./processVideoMetadata"
+import { VideoMetadata } from "./processVideoMetadata"
 
 ipcMain.on("start-pressed", (event, data) => {
   isRunning = true
@@ -22,20 +24,19 @@ async function setup() {
   createWorkspaceFilesystem()
 }
 
+async function cleanup() {
+  // cleanupDirs() // not during testing
+}
+
 function* run() {
-  try {
-    sendToConsoleOutput(`Started running at ${new Date()}`, "startstop")
-    setup()
-    yield getVideoMetadata()
-    // yield getSubtitles()
-    sendToConsoleOutput(`Finished running at ${new Date()}`, "startstop")
-    ipcSend("stopped-running", { error: null })
-  } catch (error) {
-    sendToConsoleOutput(
-      "There was an error running the bot: " + error.message,
-      "error"
-    )
-  }
+  sendToConsoleOutput(`Started running at ${new Date()}`, "startstop")
+  setup()
+  yield getVideoMetadata()
+  const videoMetadata = yield processVideoMetadata()
+  console.log("video metadata: ", videoMetadata)
+  yield cleanup()
+  sendToConsoleOutput(`Finished running at ${new Date()}`, "startstop")
+  ipcSend("stopped-running", { error: null })
 }
 
 export default async function stoppableRun() {
@@ -43,7 +44,6 @@ export default async function stoppableRun() {
   let resumeValue
   for (;;) {
     if (!isRunning) {
-      console.log("stopping run early")
       ipcSend("stopped-running", null)
       sendToConsoleOutput(
         `User stopped running early at ${new Date()}`,
@@ -58,6 +58,7 @@ export default async function stoppableRun() {
     try {
       resumeValue = await n.value
     } catch (error) {
+      await cleanup()
       sendToConsoleOutput(
         "There was an error running the bot: " + error.message,
         "error"

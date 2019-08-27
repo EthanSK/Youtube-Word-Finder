@@ -7,6 +7,7 @@ const fs_1 = __importDefault(require("fs"));
 const userDefaults_1 = require("./userDefaults");
 const path_1 = __importDefault(require("path"));
 const constants_1 = __importDefault(require("./constants"));
+const del_1 = __importDefault(require("del"));
 function createDirIfNeeded(path) {
     if (!fs_1.default.existsSync(path)) {
         fs_1.default.mkdirSync(path);
@@ -23,12 +24,15 @@ function getDirName(dir) {
     }
 }
 exports.getDirName = getDirName;
+/**
+ * returns absolute path of files
+ */
 function getFilesInDir(dir) {
     return new Promise((resolve, reject) => {
         fs_1.default.readdir(dir, (err, files) => {
             if (err)
                 return reject(err);
-            resolve(files);
+            resolve(files.map(file => path_1.default.join(dir, file))); //return absolute file
         });
     });
 }
@@ -47,3 +51,7 @@ function createYoutubeDlFilePath(dir, fileName) {
     return ret;
 }
 exports.createYoutubeDlFilePath = createYoutubeDlFilePath;
+async function cleanupDirs() {
+    del_1.default([getDirName("tempDir")]);
+}
+exports.cleanupDirs = cleanupDirs;

@@ -19,12 +19,12 @@ const NumberOfWordRepetitionsTextBox = (props: { key: string }) => {
           ? userDefaultsState.numberOfWordReps.toString()
           : undefined
       }
-      numberInputOptions={{ step: 1, min: 1, max: 30, isInt: true }}
+      numberInputOptions={{ step: 1, min: 1, max: 1000, isInt: true }}
       consoleOutputOptions={{
         useDefaultIfUndefined: true,
         payload: {
           instructionToFollow:
-            "This is the number of times to get the same word. Don't set it too high or the bot will take a long time to run"
+            "This is the number of times to get the same word. Don't set it too high or the bot will take a long time to run. 5 is sensible"
         }
       }}
       onFinishEditing={function(event) {

@@ -2,6 +2,7 @@ import fs from "fs"
 import { userDefaultsOnStart } from "./userDefaults"
 import path from "path"
 import constants from "./constants"
+import del from "del"
 
 function createDirIfNeeded(path: string) {
   if (!fs.existsSync(path)) {
@@ -25,11 +26,14 @@ export function getDirName(dir: WorkspaceDir): string {
   }
 }
 
+/**
+ * returns absolute path of files
+ */
 export function getFilesInDir(dir: string): Promise<string[]> {
   return new Promise((resolve, reject) => {
     fs.readdir(dir, (err, files) => {
       if (err) return reject(err)
-      resolve(files)
+      resolve(files.map(file => path.join(dir, file))) //return absolute file
     })
   })
 }
@@ -52,4 +56,8 @@ export function createYoutubeDlFilePath(
   )
   console.log(ret)
   return ret
+}
+
+export async function cleanupDirs() {
+  del([getDirName("tempDir")])
 }

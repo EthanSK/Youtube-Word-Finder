@@ -49,12 +49,10 @@ const TextBoxContainer = (props: {
       if (payload.name === undefined) payload.name = props.labelText
     }
     payload.value = event.target.value //must always update with new value otherwise it will stay stuck at old val
-    if (
-      props.numberInputOptions &&
-      payload.value &&
-      props.numberInputOptions.isInt
-    ) {
-      const num = Math.round(parseInt(event.target.value))
+    if (props.numberInputOptions && payload.value) {
+      const num = props.numberInputOptions.isInt
+        ? Math.round(parseInt(event.target.value))
+        : parseFloat(event.target.value)
       // console.log("num: ", num)
       const max = Math.max(props.numberInputOptions!.min, num)
       const min = Math.min(max, props.numberInputOptions!.max)

@@ -19,12 +19,12 @@ const PaddingToAddTextBox = (props: { key: string }) => {
           ? userDefaultsState.paddingToAdd.toString()
           : undefined
       }
-      numberInputOptions={{ step: 0.1, min: 0, max: 10 }}
+      numberInputOptions={{ step: 0.1, min: 0, max: 1000 }}
       consoleOutputOptions={{
         useDefaultIfUndefined: true,
         payload: {
           instructionToFollow:
-            "This is the extra time in seconds to add to the start and end of downloaded clips"
+            "This is the extra time in seconds to add to the start and end of downloaded clips. Don't set it too high or the bot will take a long time to run. 3 seconds is sensible"
         }
       }}
       onFinishEditing={function(event) {

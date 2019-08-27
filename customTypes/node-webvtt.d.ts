@@ -2,21 +2,21 @@
 
 export function compile(input: any): any
 
-export interface Parsed {
-  valid: boolean
-  meta?: any
-  cues: [
-    {
-      identifier: string
-      start: number
-      end: number
-      text: string
-      styles: string
-    }
-  ]
+export interface SubtitleCue {
+  identifier: string
+  start: number
+  end: number
+  text: string
+  styles: string
 }
 
-export function parse(input: any, options: any): Parsed
+export interface ParsedSubtitles {
+  valid: boolean
+  meta?: any
+  cues: SubtitleCue[]
+}
+
+export function parse(input: any, options: any): ParsedSubtitles
 
 export function segment(input: any, segmentLength: any): any
 

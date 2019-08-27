@@ -5,7 +5,7 @@ import dotenv from "dotenv"
 import "./ipc"
 import "./wordOptionsWindow"
 import "./userDefaults"
-import "./run"
+import "./find/run"
 
 dotenv.config()
 

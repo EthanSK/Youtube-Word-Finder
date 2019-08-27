@@ -33,8 +33,8 @@ async function downloadInfoAndSubs(url?: string) {
       "--skip-download",
       "--ignore-errors", //i don't think this throws a normal error - it crashes the program, so ignore errors. It also throws errors if the sub doesn't exist but only auto sub, so this is needed
       "--playlist-end",
-      userDefaultsOnStart.maxNumberOfVideos!.toString(),
-      "--write-sub",
+      userDefaultsOnStart.maxNumberOfVideos!.toString(), //won't apply if using txt file
+      // "--write-sub ", //only using auto because it has individual word timings
       "--write-auto-sub",
       "--sub-lang", //dont enable this without setting a sub lang after it
       userDefaultsOnStart.subtitleLanguageCode!, //will always be set by default to something

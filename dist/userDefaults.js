@@ -27,7 +27,7 @@ function setUserDefaultsInitialValuesIfNeeded() {
             }
         }
     }
-    setIfNeeded({ paddingToAdd: 0 });
+    setIfNeeded({ paddingToAdd: 0.5 });
     setIfNeeded({ maxNumberOfVideos: 15 });
     setIfNeeded({ numberOfWordReps: 5 });
     setIfNeeded({ subtitleLanguageCode: "en" });

@@ -4,12 +4,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const electron_1 = require("electron");
-const logger_1 = require("./logger");
-const ipc_1 = require("./ipc");
-const userDefaults_1 = require("./userDefaults");
-const filesystem_1 = require("./filesystem");
-const getVideoMetadata_1 = __importDefault(require("./youtubeDl/getVideoMetadata"));
-const processVideoMetadata_1 = __importDefault(require("./youtubeDl/processVideoMetadata"));
+const logger_1 = require("../logger");
+const ipc_1 = require("../ipc");
+const userDefaults_1 = require("../userDefaults");
+const filesystem_1 = require("../filesystem");
+const getVideoMetadata_1 = __importDefault(require("./getVideoMetadata"));
+const processVideoMetadata_1 = __importDefault(require("./processVideoMetadata"));
 electron_1.ipcMain.on("start-pressed", (event, data) => {
     isRunning = true;
     stoppableRun();

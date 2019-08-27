@@ -11,19 +11,20 @@ const MaxNumberOfVidsTextBox = (props: { key: string }) => {
     <TextBoxContainer
       key="NumberOfVidsTextBox"
       textBoxId="maxNumberOfVids"
-      labelText="Max vids"
-      placeholder="Max number of videos to search"
+      labelText="No. vids"
+      placeholder="Number of videos to search"
       initialText={
         userDefaultsState.maxNumberOfVideos !== undefined
           ? userDefaultsState.maxNumberOfVideos.toString()
           : undefined
       }
-      numberInputOptions={{ step: 1, min: 1, max: 100, isInt: true }}
+      isHidden={userDefaultsState.videoSource === "Text file"}
+      numberInputOptions={{ step: 1, min: 1, max: 1000, isInt: true }}
       consoleOutputOptions={{
         useDefaultIfUndefined: true,
         payload: {
           instructionToFollow:
-            "This is the maximum number of videos to search through. Don't set it too high or the bot will take a long time to run"
+            "This is the number of videos to search through. Don't set it too high or the bot will take a long time to run. 15 is sensible"
         }
       }}
       onFinishEditing={function(event) {
