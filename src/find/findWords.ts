@@ -23,6 +23,7 @@ let wordFoundCounts: {
 //remember, if all words have reached their max rep counts, just end the search. do NOT end the search if searchWordsInSubs returns an empty array, because that could be due to other reasons
 
 export default function* findWords() {
+  let result: ClipToDownload[] = []
   for (let i = 0; i < userDefaultsOnStart.maxNumberOfVideos!; i++) {
     const id = yield getVideoMetadata(i)
     if (!id) {
@@ -33,19 +34,23 @@ export default function* findWords() {
     const clipsToDownload = searchWordsInSubs(videoMetadata)
     sendToConsoleOutput(
       `Found ${Math.round(
-        calculatePercentageFound("main")
+        calculatePercentageFound("main")!
       )}% of the main words (with repetitions) so far`,
       "info"
     )
-    sendToConsoleOutput(
-      `Found ${Math.round(
-        calculatePercentageFound("alternative")
-      )}% of the alternative words (with repetitions) so far`,
-      "info"
-    )
-    console.log("clipsToDownload", clipsToDownload.length)
-    console.log("word counts", wordFoundCounts.map(el => el.wordCount))
+    const altWordPercentFound = calculatePercentageFound("alternative")
+    if (altWordPercentFound)
+      sendToConsoleOutput(
+        `Found ${Math.round(
+          altWordPercentFound
+        )}% of the alternative words (with repetitions) so far`,
+        "info"
+      )
+    result.push(...clipsToDownload)
+    // console.log("clipsToDownload", clipsToDownload.length)
+    // console.log("word counts", wordFoundCounts.map(el => el.wordCount))
   }
+  return result
 }
 
 function searchWordsInSubs(videoMetadata: VideoMetadata): ClipToDownload[] {
@@ -150,7 +155,9 @@ function searchWordText(
   return result
 }
 
-function calculatePercentageFound(words: "main" | "alternative"): number {
+function calculatePercentageFound(
+  words: "main" | "alternative"
+): number | undefined {
   if (words === "main") {
     const targetCount =
       userDefaultsOnStart.words!.length * userDefaultsOnStart.numberOfWordReps!
@@ -171,6 +178,6 @@ function calculatePercentageFound(words: "main" | "alternative"): number {
     wordFoundCounts.forEach(el => {
       foundCount += Object.keys(el.alternativeWordCount).length
     })
-    return (foundCount / targetCount) * 100
+    if (targetCount !== 0) return (foundCount / targetCount) * 100
   }
 }

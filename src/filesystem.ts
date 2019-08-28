@@ -4,13 +4,13 @@ import path from "path"
 import constants from "./constants"
 import del from "del"
 
-function createDirIfNeeded(path: string) {
+export function createDirIfNeeded(path: string) {
   if (!fs.existsSync(path)) {
     fs.mkdirSync(path)
   }
 }
 
-export type WorkspaceDir = "mainDir" | "tempDir" | "metadataDir"
+export type WorkspaceDir = "mainDir" | "tempDir" | "metadataDir" | "wordsDir"
 
 export function getDirName(dir: WorkspaceDir): string {
   switch (dir) {
@@ -23,6 +23,8 @@ export function getDirName(dir: WorkspaceDir): string {
       return path.join(getDirName("mainDir"), constants.folderNames.temp)
     case "metadataDir":
       return path.join(getDirName("tempDir"), constants.folderNames.metadata)
+    case "wordsDir":
+      return path.join(getDirName("mainDir"), constants.folderNames.words)
   }
 }
 

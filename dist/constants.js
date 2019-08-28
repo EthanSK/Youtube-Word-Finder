@@ -10,7 +10,8 @@ const constants = {
     folderNames: {
         temp: "temp",
         // subtitles: "subtitles", //can't figure out a way to specify different -o location when getting subs and info at same time, so just put it all in metadata
-        metadata: "metadata"
+        metadata: "metadata",
+        words: "words"
     },
     youtube: {
         channelURLPrefix: "https://www.youtube.com/channel/",

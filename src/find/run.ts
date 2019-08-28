@@ -7,6 +7,8 @@ import processVideoMetadata from "./processVideoMetadata"
 import findWords from "./findWords"
 import getVideoMetadata from "./getVideoMetadata"
 import { VideoMetadata } from "./processVideoMetadata"
+import { ClipToDownload } from "./findWords"
+import { downloadWords } from "./downloadWords"
 
 ipcMain.on("start-pressed", (event, data) => {
   isRunning = true
@@ -60,7 +62,9 @@ async function cleanup() {
 function* run() {
   sendToConsoleOutput(`Started running at ${new Date()}`, "startstop")
   yield setup() //yield so we catch erros
-  yield* findWords()
+  const clips: ClipToDownload[] = yield* findWords()
+  console.log("clips", clips.length)
+  yield* downloadWords(clips)
   // const videoURLs: VideoListItem[] = yield getNextVideosBatch() //this should actually only be called when we don't have any more videos
   // const id: string = yield downloadVideoMetadata(videoURLs[0].url)
   // const videoMetadata: VideoMetadata = yield processVideoMetadata(id)

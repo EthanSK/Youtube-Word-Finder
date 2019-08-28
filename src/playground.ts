@@ -1,5 +1,5 @@
 import { spawn } from "child_process"
-import { path as ffmpegPath } from "ffmpeg"
+import { path as ffmpegPath } from "@ffmpeg-installer/ffmpeg"
 import youtubedl from "youtube-dl"
 import path from "path"
 

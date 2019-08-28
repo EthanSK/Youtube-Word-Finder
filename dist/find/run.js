@@ -9,6 +9,7 @@ const ipc_1 = require("../ipc");
 const userDefaults_1 = require("../userDefaults");
 const filesystem_1 = require("../filesystem");
 const findWords_1 = __importDefault(require("./findWords"));
+const downloadWords_1 = require("./downloadWords");
 electron_1.ipcMain.on("start-pressed", (event, data) => {
     isRunning = true;
     stoppableRun();
@@ -50,7 +51,9 @@ async function cleanup() {
 function* run() {
     logger_1.sendToConsoleOutput(`Started running at ${new Date()}`, "startstop");
     yield setup(); //yield so we catch erros
-    yield* findWords_1.default();
+    const clips = yield* findWords_1.default();
+    console.log("clips", clips.length);
+    yield* downloadWords_1.downloadWords(clips);
     // const videoURLs: VideoListItem[] = yield getNextVideosBatch() //this should actually only be called when we don't have any more videos
     // const id: string = yield downloadVideoMetadata(videoURLs[0].url)
     // const videoMetadata: VideoMetadata = yield processVideoMetadata(id)

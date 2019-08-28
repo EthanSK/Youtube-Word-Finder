@@ -13,6 +13,7 @@ function createDirIfNeeded(path) {
         fs_1.default.mkdirSync(path);
     }
 }
+exports.createDirIfNeeded = createDirIfNeeded;
 function getDirName(dir) {
     switch (dir) {
         case "mainDir":
@@ -21,6 +22,8 @@ function getDirName(dir) {
             return path_1.default.join(getDirName("mainDir"), constants_1.default.folderNames.temp);
         case "metadataDir":
             return path_1.default.join(getDirName("tempDir"), constants_1.default.folderNames.metadata);
+        case "wordsDir":
+            return path_1.default.join(getDirName("mainDir"), constants_1.default.folderNames.words);
     }
 }
 exports.getDirName = getDirName;

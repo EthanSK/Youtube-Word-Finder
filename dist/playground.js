@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const child_process_1 = require("child_process");
-const ffmpeg_1 = require("ffmpeg");
+const ffmpeg_1 = require("@ffmpeg-installer/ffmpeg");
 const youtube_dl_1 = __importDefault(require("youtube-dl"));
 // const proc = spawn(ffmpegPath, [
 //   "-i",

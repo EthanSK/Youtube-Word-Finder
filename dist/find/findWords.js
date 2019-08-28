@@ -11,6 +11,7 @@ const logger_1 = require("../logger");
 let wordFoundCounts = [];
 //remember, if all words have reached their max rep counts, just end the search. do NOT end the search if searchWordsInSubs returns an empty array, because that could be due to other reasons
 function* findWords() {
+    let result = [];
     for (let i = 0; i < userDefaults_1.userDefaultsOnStart.maxNumberOfVideos; i++) {
         const id = yield getVideoMetadata_1.default(i);
         if (!id) {
@@ -20,10 +21,14 @@ function* findWords() {
         const videoMetadata = processVideoMetadata_1.default(id);
         const clipsToDownload = searchWordsInSubs(videoMetadata);
         logger_1.sendToConsoleOutput(`Found ${Math.round(calculatePercentageFound("main"))}% of the main words (with repetitions) so far`, "info");
-        logger_1.sendToConsoleOutput(`Found ${Math.round(calculatePercentageFound("alternative"))}% of the alternative words (with repetitions) so far`, "info");
-        console.log("clipsToDownload", clipsToDownload.length);
-        console.log("word counts", wordFoundCounts.map(el => el.wordCount));
+        const altWordPercentFound = calculatePercentageFound("alternative");
+        if (altWordPercentFound)
+            logger_1.sendToConsoleOutput(`Found ${Math.round(altWordPercentFound)}% of the alternative words (with repetitions) so far`, "info");
+        result.push(...clipsToDownload);
+        // console.log("clipsToDownload", clipsToDownload.length)
+        // console.log("word counts", wordFoundCounts.map(el => el.wordCount))
     }
+    return result;
 }
 exports.default = findWords;
 function searchWordsInSubs(videoMetadata) {
@@ -124,6 +129,7 @@ function calculatePercentageFound(words) {
         wordFoundCounts.forEach(el => {
             foundCount += Object.keys(el.alternativeWordCount).length;
         });
-        return (foundCount / targetCount) * 100;
+        if (targetCount !== 0)
+            return (foundCount / targetCount) * 100;
     }
 }
