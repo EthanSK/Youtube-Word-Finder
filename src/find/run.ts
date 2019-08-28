@@ -60,7 +60,7 @@ async function cleanup() {
 function* run() {
   sendToConsoleOutput(`Started running at ${new Date()}`, "startstop")
   yield setup() //yield so we catch erros
-  yield findWords()
+  yield* findWords()
   // const videoURLs: VideoListItem[] = yield getNextVideosBatch() //this should actually only be called when we don't have any more videos
   // const id: string = yield downloadVideoMetadata(videoURLs[0].url)
   // const videoMetadata: VideoMetadata = yield processVideoMetadata(id)

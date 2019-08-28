@@ -13,7 +13,7 @@ const path_1 = __importDefault(require("path"));
 const userDefaults_1 = require("../userDefaults");
 const infoFileExt = ".info.json";
 const subtitleFileExt = ".vtt"; //can't be sure if it will be .en.vtt if lang code is different
-async function processVideoMetadata(id) {
+function processVideoMetadata(id) {
     logger_1.sendToConsoleOutput(`Processing video metadata and subtitles for video with ID ${id}`, "loading");
     const infoFile = path_1.default.join(filesystem_1.getDirName("metadataDir"), `${id}.info.json`);
     const subsFile = path_1.default.join(filesystem_1.getDirName("metadataDir"), `${id}.${userDefaults_1.userDefaultsOnStart.subtitleLanguageCode}.vtt`);

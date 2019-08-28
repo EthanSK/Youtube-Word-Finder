@@ -27,9 +27,7 @@ export interface VideoMetadata {
 const infoFileExt = ".info.json"
 const subtitleFileExt = ".vtt" //can't be sure if it will be .en.vtt if lang code is different
 
-export default async function processVideoMetadata(
-  id: string
-): Promise<VideoMetadata> {
+export default function processVideoMetadata(id: string): VideoMetadata {
   sendToConsoleOutput(
     `Processing video metadata and subtitles for video with ID ${id}`,
     "loading"
