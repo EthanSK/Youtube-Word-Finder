@@ -29,7 +29,10 @@ async function setup() {
 }
 
 function userDefaultsCheck() {
-  if (!userDefaultsOnStart.videoTextFile) {
+  if (
+    userDefaultsOnStart.videoSource === "Text file" &&
+    !userDefaultsOnStart.videoTextFile
+  ) {
     throw new Error("No text file containing video URLs could be found")
   }
   if (!userDefaultsOnStart.outputLocation) {
