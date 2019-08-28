@@ -61,6 +61,7 @@ function searchWordsInSubs(videoMetadata: VideoMetadata): ClipToDownload[] {
     if (!wordFoundCounts[i])
       wordFoundCounts[i] = { wordCount: 0, alternativeWordCount: {} }
     const word = userDefaultsOnStart.words![i]
+    if (word.mainWord === "") continue //it aint here boss
 
     const clips = searchWordText(
       videoMetadata,

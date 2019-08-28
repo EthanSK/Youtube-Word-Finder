@@ -9,6 +9,7 @@ const path_1 = __importDefault(require("path"));
 const dotenv_1 = __importDefault(require("dotenv"));
 require("./ipc");
 require("./wordOptionsWindow");
+require("./wordFinderWindow");
 require("./userDefaults");
 require("./find/run");
 dotenv_1.default.config();

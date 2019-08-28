@@ -4,6 +4,7 @@ import path from "path"
 import dotenv from "dotenv"
 import "./ipc"
 import "./wordOptionsWindow"
+import "./wordFinderWindow"
 import "./userDefaults"
 import "./find/run"
 

@@ -5,6 +5,9 @@ const constants = {
   wordOptions: {
     name: "Word Options"
   },
+  wordFinder: {
+    name: "Word Finder"
+  },
   folderNames: {
     temp: "temp",
     // subtitles: "subtitles", //can't figure out a way to specify different -o location when getting subs and info at same time, so just put it all in metadata

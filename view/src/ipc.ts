@@ -9,6 +9,7 @@ export type IPCRendererSendChannel =
   | "start-pressed"
   | "stop-pressed"
   | "open-url-browser"
+  | "open-word-finder"
 
 export function ipcSend(channel: IPCRendererSendChannel, data?: any) {
   // console.log("sending ipc from renderer: ", channel, data)

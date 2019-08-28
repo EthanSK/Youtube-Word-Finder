@@ -3,6 +3,7 @@ import "./WordOptionRow.css"
 import Button from "../../elements/Button/Button"
 import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext"
 import constants from "../../../constants"
+import { ipcSend } from "../../../ipc"
 
 export function filterWord(word: string): string {
   return word.replace(/[^0-9a-z]/gi, "").toLowerCase() //allow letters and numbers, since yt subs use number numbers and word number interchangeably
@@ -70,7 +71,12 @@ const WordOptionRow = (props: {
     userDefaultsDispatch({ type: "set", payload: { words: newWords } })
   }
 
-  function handleFindManuallyPressed() {}
+  function handleFindManuallyPressed() {
+    ipcSend("open-word-finder", {
+      word: props.word,
+      arrIndex: props.arrIndex
+    })
+  }
 
   function handleAltWordTextBox(event: React.ChangeEvent<HTMLInputElement>) {
     let newWords = [...userDefaultsState.words!]

@@ -38,6 +38,8 @@ function searchWordsInSubs(videoMetadata) {
         if (!wordFoundCounts[i])
             wordFoundCounts[i] = { wordCount: 0, alternativeWordCount: {} };
         const word = userDefaults_1.userDefaultsOnStart.words[i];
+        if (word.mainWord === "")
+            continue; //it aint here boss
         const clips = searchWordText(videoMetadata, word.mainWord, false, i, word.originalUnfilteredWord);
         //also need to limit size here as may have returned mor ethan no word reps in one call
         result.push(...clips);
