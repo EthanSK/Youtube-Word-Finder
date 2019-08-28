@@ -65,6 +65,6 @@ function createOutputNameIfNeeded() {
             exports.userDefaultsOnStart.outputFolderName = exports.userDefaultsOnStart.videoTextFile;
     }
     if (!exports.userDefaultsOnStart.outputFolderName) {
-        exports.userDefaultsOnStart.outputFolderName = Date.now().toString();
+        exports.userDefaultsOnStart.outputFolderName += "_" + Date.now().toString(); //so it's unique every time
     }
 }
