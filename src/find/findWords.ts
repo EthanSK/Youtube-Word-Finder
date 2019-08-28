@@ -2,6 +2,7 @@ import { userDefaultsOnStart } from "../userDefaults"
 import processVideoMetadata, { VideoMetadata } from "./processVideoMetadata"
 import { filterWord } from "../words"
 import getVideoMetadata from "./getVideoMetadata"
+import { sendToConsoleOutput } from "../logger"
 
 export interface ClipToDownload {
   id: string
@@ -24,10 +25,26 @@ let wordFoundCounts: {
 export default function* findWords() {
   for (let i = 0; i < userDefaultsOnStart.maxNumberOfVideos!; i++) {
     const id = yield getVideoMetadata(i)
+    if (!id) {
+      sendToConsoleOutput("No more videos in playlist or channel", "info")
+      break
+    } //no more vids in playlist
     const videoMetadata = processVideoMetadata(id)
     const clipsToDownload = searchWordsInSubs(videoMetadata)
+    sendToConsoleOutput(
+      `Found ${Math.round(
+        calculatePercentageFound("main")
+      )}% of the main words (with repetitions) so far`,
+      "info"
+    )
+    sendToConsoleOutput(
+      `Found ${Math.round(
+        calculatePercentageFound("alternative")
+      )}% of the alternative words (with repetitions) so far`,
+      "info"
+    )
     console.log("clipsToDownload", clipsToDownload.length)
-    console.log("word counts", wordFoundCounts)
+    console.log("word counts", wordFoundCounts.map(el => el.wordCount))
   }
 }
 
@@ -121,4 +138,29 @@ function searchWordText(
     }
   }
   return result
+}
+
+function calculatePercentageFound(words: "main" | "alternative"): number {
+  if (words === "main") {
+    const targetCount =
+      userDefaultsOnStart.words!.length * userDefaultsOnStart.numberOfWordReps!
+    let foundCount = 0
+    wordFoundCounts.forEach(el => {
+      foundCount += el.wordCount
+    })
+    return (foundCount / targetCount) * 100
+  } else {
+    let targetCount = 0
+    userDefaultsOnStart.words!.forEach(el => {
+      if (el.alternativeWords)
+        targetCount +=
+          Object.keys(el.alternativeWords).length *
+          userDefaultsOnStart.numberOfWordReps!
+    })
+    let foundCount = 0
+    wordFoundCounts.forEach(el => {
+      foundCount += Object.keys(el.alternativeWordCount).length
+    })
+    return (foundCount / targetCount) * 100
+  }
 }

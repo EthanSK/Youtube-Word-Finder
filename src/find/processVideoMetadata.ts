@@ -28,10 +28,10 @@ const infoFileExt = ".info.json"
 const subtitleFileExt = ".vtt" //can't be sure if it will be .en.vtt if lang code is different
 
 export default function processVideoMetadata(id: string): VideoMetadata {
-  sendToConsoleOutput(
-    `Processing video metadata and subtitles for video with ID ${id}`,
-    "loading"
-  )
+  // sendToConsoleOutput(
+  //   `Processing video metadata and subtitles for video with ID ${id}`,
+  //   "loading"
+  // ) //user doesn't need to know this lol
 
   const infoFile = path.join(getDirName("metadataDir"), `${id}.info.json`)
   const subsFile = path.join(

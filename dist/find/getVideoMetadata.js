@@ -30,7 +30,7 @@ async function getVideoMetadata(videoIndex) {
             id = await downloadInfoAndSubs(url);
             break;
     }
-    logger_1.sendToConsoleOutput("Got video metadata and subtitles", "info");
+    // sendToConsoleOutput("Got video metadata and subtitles", "info") //unecessary
     return id;
 }
 exports.default = getVideoMetadata;
@@ -62,8 +62,14 @@ async function downloadInfoAndSubs(url, playlistIndex) {
             if (err)
                 return reject(err);
             // console.log("outputtt: ", JSON.parse(output[0]).id)
-            // fs.writeFileSync(path.join(getDirName("metadataDir"), "lol"), output) //no way to get subs straight to memory :/
-            resolve(JSON.parse(output[0]).id);
+            // fs.writeFileSync(path.join(getDirName("metadataDir"), "lol.json"), output) //no way to get subs straight to memory :/
+            if (!output.join("\n")) {
+                //no more vids in playlist
+                resolve();
+            }
+            else {
+                resolve(JSON.parse(output.join("\n")).id);
+            }
         });
     });
 }

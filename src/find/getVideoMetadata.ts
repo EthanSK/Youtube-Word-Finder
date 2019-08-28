@@ -4,15 +4,16 @@ import { userDefaultsOnStart } from "../userDefaults"
 import { sendToConsoleOutput } from "../logger"
 import fs from "fs"
 import constants from "../constants"
+import path from "path"
 
 export default async function getVideoMetadata(
   videoIndex: number
-): Promise<string> {
+): Promise<string | undefined> {
   sendToConsoleOutput(
     `Getting video metadata and subtitles at index ${videoIndex}`,
     "loading"
   )
-  let id: string
+  let id: string | undefined
   switch (userDefaultsOnStart.videoSource) {
     case "Channel":
       id = await downloadInfoAndSubs(
@@ -37,7 +38,7 @@ export default async function getVideoMetadata(
       id = await downloadInfoAndSubs(url)
       break
   }
-  sendToConsoleOutput("Got video metadata and subtitles", "info")
+  // sendToConsoleOutput("Got video metadata and subtitles", "info") //unecessary
   return id!
 }
 
@@ -45,7 +46,7 @@ export default async function getVideoMetadata(
 async function downloadInfoAndSubs(
   url: string,
   playlistIndex?: number
-): Promise<string> {
+): Promise<string | undefined> {
   if (!url) throw new Error("Video input URL cannot be found")
   if (userDefaultsOnStart.videoSource !== "Text file" && !playlistIndex)
     throw new Error("Playlist index is not set for channel or playlist url")
@@ -79,8 +80,13 @@ async function downloadInfoAndSubs(
     youtubedl.exec(url, flags, {}, function(err, output) {
       if (err) return reject(err)
       // console.log("outputtt: ", JSON.parse(output[0]).id)
-      // fs.writeFileSync(path.join(getDirName("metadataDir"), "lol"), output) //no way to get subs straight to memory :/
-      resolve(JSON.parse(output[0]).id)
+      // fs.writeFileSync(path.join(getDirName("metadataDir"), "lol.json"), output) //no way to get subs straight to memory :/
+      if (!output.join("\n")) {
+        //no more vids in playlist
+        resolve()
+      } else {
+        resolve(JSON.parse(output.join("\n")).id)
+      }
     })
   })
 }

@@ -5,7 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const node_webvtt_1 = __importDefault(require("node-webvtt"));
 const filesystem_1 = require("../filesystem");
-const logger_1 = require("../logger");
 const fs_1 = __importDefault(require("fs"));
 const moment_1 = __importDefault(require("moment"));
 const utils_1 = require("../utils");
@@ -14,7 +13,10 @@ const userDefaults_1 = require("../userDefaults");
 const infoFileExt = ".info.json";
 const subtitleFileExt = ".vtt"; //can't be sure if it will be .en.vtt if lang code is different
 function processVideoMetadata(id) {
-    logger_1.sendToConsoleOutput(`Processing video metadata and subtitles for video with ID ${id}`, "loading");
+    // sendToConsoleOutput(
+    //   `Processing video metadata and subtitles for video with ID ${id}`,
+    //   "loading"
+    // ) //user doesn't need to know this lol
     const infoFile = path_1.default.join(filesystem_1.getDirName("metadataDir"), `${id}.info.json`);
     const subsFile = path_1.default.join(filesystem_1.getDirName("metadataDir"), `${id}.${userDefaults_1.userDefaultsOnStart.subtitleLanguageCode}.vtt`);
     const subs = transformSubtitles(subsFile);
