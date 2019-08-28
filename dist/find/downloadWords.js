@@ -18,12 +18,8 @@ function* downloadWords(clips) {
     const sortedClips = clips.sort((a, b) => {
         return a.wordIndex - b.wordIndex;
     });
-    const nonAltClips = sortedClips.filter(clip => !clip.isAlternative);
-    for (const clip of nonAltClips) {
-        yield downloadClip(clip);
-    }
-    const altWordClips = sortedClips.filter(clip => clip.isAlternative);
-    for (const clip of altWordClips) {
+    //i acc think its better to download main word with alternative, because when editing, you'll want everything that exists for that word, and therefore you can edit while the bot is downloading!
+    for (const clip of sortedClips) {
         yield downloadClip(clip);
     }
     logger_1.sendToConsoleOutput("Finished downloading clips", "info");
@@ -38,7 +34,7 @@ async function downloadClip(clip) {
         startTime = Math.max(startTime - userDefaults_1.userDefaultsOnStart.paddingToAdd, 0);
         endTime = endTime + userDefaults_1.userDefaultsOnStart.paddingToAdd; //if -to is longer than vid, it just stops at end which is fine
     }
-    //to 2dp
+    //to 2dpp
     startTime = Math.round(startTime * 100) / 100;
     endTime = Math.round(endTime * 100) / 100;
     let clipDir = path_1.default.join(filesystem_1.getDirName("wordsDir"), folderName);
