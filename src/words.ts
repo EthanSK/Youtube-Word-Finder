@@ -1,6 +1,5 @@
 import fs from "fs"
 import { loadUserDefault, saveUserDefault } from "./userDefaults"
-import { ipcMain } from "electron"
 
 //called in store userdefaults ipc listener
 export async function handleNewWordsTextFile() {

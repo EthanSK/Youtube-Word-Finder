@@ -9,35 +9,21 @@ const logger_1 = require("../logger");
 const fs_1 = __importDefault(require("fs"));
 const moment_1 = __importDefault(require("moment"));
 const utils_1 = require("../utils");
+const path_1 = __importDefault(require("path"));
+const userDefaults_1 = require("../userDefaults");
 const infoFileExt = ".info.json";
 const subtitleFileExt = ".vtt"; //can't be sure if it will be .en.vtt if lang code is different
-async function processVideoMetadata() {
-    logger_1.sendToConsoleOutput("Processing video metadata and subtitles", "loading");
-    const files = await filesystem_1.getFilesInDir(filesystem_1.getDirName("metadataDir"));
-    const infoFiles = files.filter(file => file.slice(-infoFileExt.length) === infoFileExt);
-    //loop through each json vtt file par, and if one is missing, or cannot be read, instead of throwing an error and stopping it from working, just console output an error and continue
-    let result = [];
-    for (const infoFile of infoFiles) {
-        const fileNameNoExt = infoFile.slice(0, -infoFileExt.length);
-        const correspondingSubsFile = files.filter(file => file.slice(0, fileNameNoExt.length) === fileNameNoExt && //if the extensionless name matches
-            file.slice(-subtitleFileExt.length) === subtitleFileExt //if the extension also matches
-        )[0];
-        try {
-            const subs = transformSubtitles(correspondingSubsFile);
-            const jsonInfo = JSON.parse(fs_1.default.readFileSync(infoFile).toString());
-            result.push({
-                subtitles: subs,
-                id: jsonInfo.id,
-                url: jsonInfo.formats[jsonInfo.formats.length - 1].url //last format always seems to be for the best with video and audio
-            });
-        }
-        catch (error) {
-            //don't stop execution
-            logger_1.sendToConsoleOutput(`Error processing video metadata or subtitles for file ${infoFile}: ${error.message}. This is not fatal and execution will attempt to continue with the other videos if any`, "error");
-        }
-    }
-    logger_1.sendToConsoleOutput("Processed video metadata and subtitles", "info");
-    return result;
+async function processVideoMetadata(id) {
+    logger_1.sendToConsoleOutput(`Processing video metadata and subtitles for video with ID ${id}`, "loading");
+    const infoFile = path_1.default.join(filesystem_1.getDirName("metadataDir"), `${id}.info.json`);
+    const subsFile = path_1.default.join(filesystem_1.getDirName("metadataDir"), `${id}.${userDefaults_1.userDefaultsOnStart.subtitleLanguageCode}.vtt`);
+    const subs = transformSubtitles(subsFile);
+    const jsonInfo = JSON.parse(fs_1.default.readFileSync(infoFile).toString());
+    return {
+        subtitles: subs,
+        id: jsonInfo.id,
+        url: jsonInfo.formats[jsonInfo.formats.length - 1].url //last format always seems to be for the best with video and audio
+    };
 }
 exports.default = processVideoMetadata;
 function doesTextIncludeTimingTag(text) {

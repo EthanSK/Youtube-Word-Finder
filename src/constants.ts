@@ -14,6 +14,10 @@ const constants = {
     channelURLPrefix: "https://www.youtube.com/channel/",
     videoURLPrefix: "https://www.youtube.com/watch?v=",
     playlistURLPrefix: "https://www.youtube.com/playlist?list="
+  },
+
+  settings: {
+    numVidsInBatch: 300
   }
 }
 

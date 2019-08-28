@@ -45,7 +45,7 @@ const HomePage = () => {
             <NumberOfWordRepetitionsTextBox key="NumberOfWordRepetitionsTextBoxInstance" />
             <SubtitleLanguageTextBox key="SubtitleLanguageTextBoxInstance"></SubtitleLanguageTextBox>
           </SplitRow>
-          <DownloadOrderDropdown key="DownloadOrderDropdownInstance" />
+          {/* <DownloadOrderDropdown key="DownloadOrderDropdownInstance" /> */}
           <OutputLocationTextBox key="OutputLocationTextBoxInstance" />
           <OutputFolderNameTextBox key="OutputFolderNameTextBoxInstance" />
         </div>

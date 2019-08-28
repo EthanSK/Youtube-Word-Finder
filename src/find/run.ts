@@ -3,8 +3,10 @@ import { sendToConsoleOutput } from "../logger"
 import { ipcSend } from "../ipc"
 import { setUserDefaultsOnStart, userDefaultsOnStart } from "../userDefaults"
 import { createWorkspaceFilesystem, cleanupDirs } from "../filesystem"
-import getVideoMetadata from "./getVideoMetadata"
 import processVideoMetadata from "./processVideoMetadata"
+import findWords from "./findWords"
+import getVideoMetadata from "./getVideoMetadata"
+import { VideoMetadata } from "./processVideoMetadata"
 
 ipcMain.on("start-pressed", (event, data) => {
   isRunning = true
@@ -31,6 +33,12 @@ function userDefaultsCheck() {
   if (!userDefaultsOnStart.outputLocation) {
     throw new Error("No output location was given")
   }
+  if (!userDefaultsOnStart.maxNumberOfVideos) {
+    throw new Error("Maximum number of videos not set")
+  }
+  if (!userDefaultsOnStart.numberOfWordReps) {
+    throw new Error("Number of word repetitions not set")
+  }
   if (
     !userDefaultsOnStart.words ||
     userDefaultsOnStart.words.filter(word => {
@@ -52,10 +60,13 @@ async function cleanup() {
 function* run() {
   sendToConsoleOutput(`Started running at ${new Date()}`, "startstop")
   yield setup() //yield so we catch erros
-  yield getVideoMetadata()
-  const videoMetadata = yield processVideoMetadata()
-  console.log("video metadata: ", videoMetadata)
-  yield cleanup()
+  yield findWords()
+  // const videoURLs: VideoListItem[] = yield getNextVideosBatch() //this should actually only be called when we don't have any more videos
+  // const id: string = yield downloadVideoMetadata(videoURLs[0].url)
+  // const videoMetadata: VideoMetadata = yield processVideoMetadata(id)
+  // console.log("video metadata: ", videoMetadata.subtitles.phrases[0])
+  // yield* findWords(videoMetadata)
+  // yield cleanup()
   sendToConsoleOutput(`Finished running at ${new Date()}`, "startstop")
   ipcSend("stopped-running", { error: null })
 }

@@ -28,3 +28,8 @@ vid with normal non auto subs: https://www.youtube.com/watch?v=qfJthDvcZ08
   -f bestvideo+bestaudio/best
 Although we can't use this since we are tryna get the URL. 
 If i'm not mistaken, it seems like the last format option is always the best with audio and video.
+
+to get all videos in a playlist (and channel), use --flat-playlist
+It takes a long time for channels like pewdiepie who have 4000 videos (only like 20 seconds tho)
+
+However, we can add --playlist-end NUMBER to limit how many videos it uses. perfect! we can get the videos in batches of like 100 or 200. 300 takes like 5 seconds

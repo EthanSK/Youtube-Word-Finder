@@ -8,8 +8,7 @@ const logger_1 = require("../logger");
 const ipc_1 = require("../ipc");
 const userDefaults_1 = require("../userDefaults");
 const filesystem_1 = require("../filesystem");
-const getVideoMetadata_1 = __importDefault(require("./getVideoMetadata"));
-const processVideoMetadata_1 = __importDefault(require("./processVideoMetadata"));
+const findWords_1 = __importDefault(require("./findWords"));
 electron_1.ipcMain.on("start-pressed", (event, data) => {
     isRunning = true;
     stoppableRun();
@@ -31,6 +30,12 @@ function userDefaultsCheck() {
     if (!userDefaults_1.userDefaultsOnStart.outputLocation) {
         throw new Error("No output location was given");
     }
+    if (!userDefaults_1.userDefaultsOnStart.maxNumberOfVideos) {
+        throw new Error("Maximum number of videos not set");
+    }
+    if (!userDefaults_1.userDefaultsOnStart.numberOfWordReps) {
+        throw new Error("Number of word repetitions not set");
+    }
     if (!userDefaults_1.userDefaultsOnStart.words ||
         userDefaults_1.userDefaultsOnStart.words.filter(word => {
             return word.mainWord !== "";
@@ -45,10 +50,13 @@ async function cleanup() {
 function* run() {
     logger_1.sendToConsoleOutput(`Started running at ${new Date()}`, "startstop");
     yield setup(); //yield so we catch erros
-    yield getVideoMetadata_1.default();
-    const videoMetadata = yield processVideoMetadata_1.default();
-    console.log("video metadata: ", videoMetadata);
-    yield cleanup();
+    yield findWords_1.default();
+    // const videoURLs: VideoListItem[] = yield getNextVideosBatch() //this should actually only be called when we don't have any more videos
+    // const id: string = yield downloadVideoMetadata(videoURLs[0].url)
+    // const videoMetadata: VideoMetadata = yield processVideoMetadata(id)
+    // console.log("video metadata: ", videoMetadata.subtitles.phrases[0])
+    // yield* findWords(videoMetadata)
+    // yield cleanup()
     logger_1.sendToConsoleOutput(`Finished running at ${new Date()}`, "startstop");
     ipc_1.ipcSend("stopped-running", { error: null });
 }

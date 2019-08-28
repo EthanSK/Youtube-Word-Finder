@@ -1,17 +1,19 @@
-import webvtt, { ParsedSubtitles, SubtitleCue } from "node-webvtt"
+import webvtt, { SubtitleCue } from "node-webvtt"
 import { getFilesInDir, getDirName } from "../filesystem"
 import { sendToConsoleOutput } from "../logger"
 import fs from "fs"
 import moment from "moment"
 import { removeFirstOccurrence } from "../utils"
+import path from "path"
+import { userDefaultsOnStart } from "../userDefaults"
 
-interface Phrase {
+export interface Phrase {
   start: number
   end: number
   text: string
 }
 
-interface TransformedSubtitles {
+export interface TransformedSubtitles {
   isIndividualWords: boolean
   phrases: Phrase[] //we can use the phrases array for both individual words and long phrases, but we must check isIndividualWords to search through differently for efficiency.
 }
@@ -25,42 +27,28 @@ export interface VideoMetadata {
 const infoFileExt = ".info.json"
 const subtitleFileExt = ".vtt" //can't be sure if it will be .en.vtt if lang code is different
 
-export default async function processVideoMetadata(): Promise<VideoMetadata[]> {
-  sendToConsoleOutput("Processing video metadata and subtitles", "loading")
-
-  const files = await getFilesInDir(getDirName("metadataDir"))
-  const infoFiles = files.filter(
-    file => file.slice(-infoFileExt.length) === infoFileExt
+export default async function processVideoMetadata(
+  id: string
+): Promise<VideoMetadata> {
+  sendToConsoleOutput(
+    `Processing video metadata and subtitles for video with ID ${id}`,
+    "loading"
   )
 
-  //loop through each json vtt file par, and if one is missing, or cannot be read, instead of throwing an error and stopping it from working, just console output an error and continue
-  let result: VideoMetadata[] = []
-  for (const infoFile of infoFiles) {
-    const fileNameNoExt = infoFile.slice(0, -infoFileExt.length)
-    const correspondingSubsFile = files.filter(
-      file =>
-        file.slice(0, fileNameNoExt.length) === fileNameNoExt && //if the extensionless name matches
-        file.slice(-subtitleFileExt.length) === subtitleFileExt //if the extension also matches
-    )[0]
-    try {
-      const subs = transformSubtitles(correspondingSubsFile)
-      const jsonInfo = JSON.parse(fs.readFileSync(infoFile).toString())
-      result.push({
-        subtitles: subs,
-        id: jsonInfo.id,
-        url: jsonInfo.formats[jsonInfo.formats.length - 1].url //last format always seems to be for the best with video and audio
-      })
-    } catch (error) {
-      //don't stop execution
-      sendToConsoleOutput(
-        `Error processing video metadata or subtitles for file ${infoFile}: ${error.message}. This is not fatal and execution will attempt to continue with the other videos if any`,
-        "error"
-      )
-    }
-  }
-  sendToConsoleOutput("Processed video metadata and subtitles", "info")
+  const infoFile = path.join(getDirName("metadataDir"), `${id}.info.json`)
+  const subsFile = path.join(
+    getDirName("metadataDir"),
+    `${id}.${userDefaultsOnStart.subtitleLanguageCode}.vtt`
+  )
 
-  return result
+  const subs = transformSubtitles(subsFile)
+  const jsonInfo = JSON.parse(fs.readFileSync(infoFile).toString())
+
+  return {
+    subtitles: subs,
+    id: jsonInfo.id,
+    url: jsonInfo.formats[jsonInfo.formats.length - 1].url //last format always seems to be for the best with video and audio
+  }
 }
 
 function doesTextIncludeTimingTag(text: string): boolean {

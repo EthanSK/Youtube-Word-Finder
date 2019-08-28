@@ -11,8 +11,8 @@ const MaxNumberOfVidsTextBox = (props: { key: string }) => {
     <TextBoxContainer
       key="NumberOfVidsTextBox"
       textBoxId="maxNumberOfVids"
-      labelText="No. vids"
-      placeholder="Number of videos to search"
+      labelText="Max. vids"
+      placeholder="Max number of videos to search"
       initialText={
         userDefaultsState.maxNumberOfVideos !== undefined
           ? userDefaultsState.maxNumberOfVideos.toString()
@@ -24,7 +24,7 @@ const MaxNumberOfVidsTextBox = (props: { key: string }) => {
         useDefaultIfUndefined: true,
         payload: {
           instructionToFollow:
-            "This is the number of videos to search through. Don't set it too high or the bot will take a long time to run. 15 is sensible"
+            "This is the maximum number of videos to search through. The higher it is, the longer the bot will run"
         }
       }}
       onFinishEditing={function(event) {
