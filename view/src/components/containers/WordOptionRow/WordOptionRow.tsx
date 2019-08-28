@@ -8,6 +8,12 @@ export function filterWord(word: string): string {
   return word.replace(/[^0-9a-z]/gi, "").toLowerCase() //allow letters and numbers, since yt subs use number numbers and word number interchangeably
 }
 
+export function shouldApplyWordFilter(
+  subtitleLanguageCode: string | undefined
+): boolean {
+  return subtitleLanguageCode === "en" //for non english languages, we can't possibly know what weird characters exist in the language, so just don't bother.
+}
+
 const WordOptionRow = (props: {
   word: Word
   key: string
@@ -43,7 +49,9 @@ const WordOptionRow = (props: {
     // userDefaultsDispatch({ type: "set", payload: { words: newWords } })
 
     const newWord: Word = {
-      mainWord: filterWord(event.currentTarget.value),
+      mainWord: shouldApplyWordFilter(userDefaultsState.subtitleLanguageCode)
+        ? filterWord(event.currentTarget.value)
+        : event.currentTarget.value,
       originalUnfilteredWord: event.currentTarget.value
     }
     userDefaultsDispatch({
@@ -70,7 +78,11 @@ const WordOptionRow = (props: {
     if (!props.word.alternativeWords) {
       newWords[props.arrIndex].alternativeWords = {} //need it to exist before checking if the api word has been gotten before below
     }
-    const filteredWord = filterWord(event.currentTarget.value)
+    const filteredWord = shouldApplyWordFilter(
+      userDefaultsState.subtitleLanguageCode
+    )
+      ? filterWord(event.currentTarget.value)
+      : event.currentTarget.value
     if (
       // !props.word.alternativeWords![filteredWord] && //don't do this because if similar word is already in suggested, it won't show
       filteredWord !== props.word.mainWord &&

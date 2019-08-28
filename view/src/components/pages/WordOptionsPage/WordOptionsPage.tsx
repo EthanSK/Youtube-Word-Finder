@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import WordOptionRow, {
-  filterWord
+  filterWord,
+  shouldApplyWordFilter
 } from "../../containers/WordOptionRow/WordOptionRow"
 import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext"
 import "./WordOptionsPage.css"
@@ -52,7 +53,11 @@ const WordOptionsList = () => {
       hasWordsChanged(previousWordsState, userDefaultsState.words)
     ) {
       setPreviousWordsState(createWordsClone())
-      getSimilarWords(userDefaultsState.words!, userDefaultsDispatch) //don't await, it should just happen as a side effect
+      getSimilarWords(
+        userDefaultsState.words!,
+        userDefaultsDispatch,
+        userDefaultsState.subtitleLanguageCode
+      ) //don't await, it should just happen as a side effect
     }
   }) //ignore the warning react gives about the infinite chain of updates. trying to fix it with their suggesion causes it to stop working. as long as previousWordsState is not used in render, we're fine.
 
@@ -85,7 +90,11 @@ function filterNonUsedAltWords(word: Word) {
   }
 }
 
-async function getSimilarWords(words: Word[], dispatch: Function) {
+async function getSimilarWords(
+  words: Word[],
+  dispatch: Function,
+  subtitleLanguageCode?: string
+) {
   function hasAltWordFromSuggestion(word: Word): boolean {
     if (word.alternativeWords) {
       for (const key in word.alternativeWords) {
@@ -114,7 +123,9 @@ async function getSimilarWords(words: Word[], dispatch: Function) {
         }
         const data = result.data as APISimilarWord[]
         data.forEach(apiWord => {
-          const filteredWord = filterWord(apiWord.word)
+          const filteredWord = shouldApplyWordFilter(subtitleLanguageCode)
+            ? filterWord(apiWord.word)
+            : apiWord.word
           if (
             !word.alternativeWords![filteredWord] &&
             filteredWord !== word.mainWord

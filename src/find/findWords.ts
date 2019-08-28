@@ -1,6 +1,6 @@
 import { userDefaultsOnStart } from "../userDefaults"
 import processVideoMetadata, { VideoMetadata } from "./processVideoMetadata"
-import { filterWord } from "../words"
+import { filterWord, shouldApplyWordFilter } from "../words"
 import getVideoMetadata from "./getVideoMetadata"
 import { sendToConsoleOutput } from "../logger"
 
@@ -101,12 +101,22 @@ function searchWordText(
       wordIndex
     }
     if (videoMetadata.subtitles.isIndividualWords) {
-      if (text === filterWord(phrase.text)) {
+      if (
+        text ===
+        (shouldApplyWordFilter(userDefaultsOnStart.subtitleLanguageCode!)
+          ? filterWord(phrase.text)
+          : phrase.text)
+      ) {
         pushIfNeeded(clip)
       }
     } else {
       for (const subPhrase of phrase.text.split(/\s+/)) {
-        if (text === filterWord(subPhrase)) {
+        if (
+          text ===
+          (shouldApplyWordFilter(userDefaultsOnStart.subtitleLanguageCode!)
+            ? filterWord(subPhrase)
+            : subPhrase)
+        ) {
           pushIfNeeded(clip)
         }
       }

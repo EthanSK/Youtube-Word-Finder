@@ -62,13 +62,19 @@ function searchWordText(videoMetadata, text, isAlternative, wordIndex, originalU
             wordIndex
         };
         if (videoMetadata.subtitles.isIndividualWords) {
-            if (text === words_1.filterWord(phrase.text)) {
+            if (text ===
+                (words_1.shouldApplyWordFilter(userDefaults_1.userDefaultsOnStart.subtitleLanguageCode)
+                    ? words_1.filterWord(phrase.text)
+                    : phrase.text)) {
                 pushIfNeeded(clip);
             }
         }
         else {
             for (const subPhrase of phrase.text.split(/\s+/)) {
-                if (text === words_1.filterWord(subPhrase)) {
+                if (text ===
+                    (words_1.shouldApplyWordFilter(userDefaults_1.userDefaultsOnStart.subtitleLanguageCode)
+                        ? words_1.filterWord(subPhrase)
+                        : subPhrase)) {
                     pushIfNeeded(clip);
                 }
             }

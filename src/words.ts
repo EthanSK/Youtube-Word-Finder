@@ -17,7 +17,11 @@ async function parseNewWordsTextFile() {
         let wordsPkg = words
           .map(word => {
             const pkg: Word = {
-              mainWord: filterWord(word),
+              mainWord: shouldApplyWordFilter(
+                loadUserDefault("subtitleLanguageCode")
+              )
+                ? filterWord(word)
+                : word,
               originalUnfilteredWord: word
             }
             return pkg
@@ -34,4 +38,10 @@ async function parseNewWordsTextFile() {
 
 export function filterWord(word: string): string {
   return word.replace(/[^0-9a-z]/gi, "").toLowerCase() //allow letters and numbers, since yt subs use number numbers and word number interchangeably
+}
+
+export function shouldApplyWordFilter(
+  subtitleLanguageCode: string | undefined
+): boolean {
+  return subtitleLanguageCode === "en" //for non english languages, we can't possibly know what weird characters exist in the language, so just don't bother.
 }

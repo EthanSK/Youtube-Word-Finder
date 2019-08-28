@@ -22,7 +22,9 @@ async function parseNewWordsTextFile() {
                 let wordsPkg = words
                     .map(word => {
                     const pkg = {
-                        mainWord: filterWord(word),
+                        mainWord: shouldApplyWordFilter(userDefaults_1.loadUserDefault("subtitleLanguageCode"))
+                            ? filterWord(word)
+                            : word,
                         originalUnfilteredWord: word
                     };
                     return pkg;
@@ -39,3 +41,7 @@ function filterWord(word) {
     return word.replace(/[^0-9a-z]/gi, "").toLowerCase(); //allow letters and numbers, since yt subs use number numbers and word number interchangeably
 }
 exports.filterWord = filterWord;
+function shouldApplyWordFilter(subtitleLanguageCode) {
+    return subtitleLanguageCode === "en"; //for non english languages, we can't possibly know what weird characters exist in the language, so just don't bother.
+}
+exports.shouldApplyWordFilter = shouldApplyWordFilter;
