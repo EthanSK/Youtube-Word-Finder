@@ -16,6 +16,7 @@ export interface ClipToDownload {
 }
 
 let wordFoundCounts: { wordCount: number; alternativeWordCount: [] }
+//remember, if all words have reached their max rep counts, just end the search. do NOT end the search if searchWordsInSubs returns an empty array, because that could be due to other reasons
 
 export default function* findWords() {
   for (let i = 0; i < userDefaultsOnStart.maxNumberOfVideos!; i++) {
@@ -42,37 +43,19 @@ function searchWordsInSubs(videoMetadata: VideoMetadata): ClipToDownload[] {
     result.push(...clips)
     // console.log("result: ", result.length)
 
-    // for (const altWordKey in word.alternativeWords) {
-    //   const searchedAltWord = searchWordText(
-    //     videoMetadata,
-    //     word.alternativeWords[altWordKey].word
-    //   )
-    //   let start: number | undefined
-    //   let end: number | undefined
-    //   let phraseMatched: string | undefined
+    for (const altWordKey in word.alternativeWords) {
+      const altWord = word.alternativeWords[altWordKey].word
+      const clips = searchWordText(videoMetadata, altWord, true, i)
 
-    //   if (searchedAltWord) {
-    //     start = searchedAltWord.start
-    //     end = searchedAltWord.end
-    //     phraseMatched = searchedAltWord.phraseMatched
-    //   }
-    //   const altWordClip = {
-    //     id: videoMetadata.id,
-    //     url: videoMetadata.url,
-    //     start,
-    //     end,
-    //     wordSearchedText: word.alternativeWords[altWordKey].word,
-    //     phraseMatched
-    //   }
-    //   clip.altWordClips!.push(altWordClip)
-    // }
+      result.push(...clips)
+    }
   }
   return result
 }
 
 function searchWordText(
   videoMetadata: VideoMetadata,
-  wordText: string,
+  text: string,
   isAlternative: boolean,
   wordIndex: number,
   originalUnfilteredWord?: string
@@ -85,18 +68,18 @@ function searchWordText(
       start: phrase.start,
       end: phrase.end,
       phraseMatched: phrase.text,
-      wordSearchedText: wordText,
+      wordSearchedText: text,
       originalUnfilteredWord,
       isAlternative,
       wordIndex
     }
     if (videoMetadata.subtitles.isIndividualWords) {
-      if (wordText === filterWord(phrase.text)) {
+      if (text === filterWord(phrase.text)) {
         result.push(clip)
       }
     } else {
       for (const subPhrase of phrase.text.split(/\s+/)) {
-        if (wordText === filterWord(subPhrase)) {
+        if (text === filterWord(subPhrase)) {
           result.push(clip)
           // break //don't use same phrase twice for one word, even if there are multiple occurrences. actually, the bot will finish faster and it will still have done its correct job, so do it.
         }
