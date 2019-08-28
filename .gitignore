@@ -51,7 +51,7 @@ node_modules/
 jspm_packages/
 
 # TypeScript v1 declaration files
-typings/
+# typings/ # WE WANT OUR TYPINGS FFS
 
 # TypeScript cache
 *.tsbuildinfo

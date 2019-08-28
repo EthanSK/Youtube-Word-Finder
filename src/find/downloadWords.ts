@@ -35,7 +35,7 @@ async function downloadClip(clip: ClipToDownload) {
     endTime = endTime + userDefaultsOnStart.paddingToAdd //if -to is longer than vid, it just stops at end which is fine
   }
 
-  //to 2dpp
+  //to 2dp
   startTime = Math.round(startTime * 100) / 100
   endTime = Math.round(endTime * 100) / 100
 

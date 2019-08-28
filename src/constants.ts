@@ -10,7 +10,7 @@ const constants = {
     // subtitles: "subtitles", //can't figure out a way to specify different -o location when getting subs and info at same time, so just put it all in metadata
     metadata: "metadata",
     words: "words",
-    alternativeWords: "alternativeWordrs",
+    alternativeWords: "alternativeWords",
     autoFound: "autoFound",
     manuallyFound: "manuallyFound"
   },

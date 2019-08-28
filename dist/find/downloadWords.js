@@ -34,7 +34,7 @@ async function downloadClip(clip) {
         startTime = Math.max(startTime - userDefaults_1.userDefaultsOnStart.paddingToAdd, 0);
         endTime = endTime + userDefaults_1.userDefaultsOnStart.paddingToAdd; //if -to is longer than vid, it just stops at end which is fine
     }
-    //to 2dpp
+    //to 2dp
     startTime = Math.round(startTime * 100) / 100;
     endTime = Math.round(endTime * 100) / 100;
     let clipDir = path_1.default.join(filesystem_1.getDirName("wordsDir"), folderName);
