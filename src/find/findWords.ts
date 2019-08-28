@@ -47,8 +47,12 @@ export default function* findWords() {
         "info"
       )
     result.push(...clipsToDownload)
+
+    //for some fucked reason, uncommenting these console logs stops that weird bug where the percent found is > 100%. must be something to do with reference garbage collection, just keep them theyre harmless.
     // console.log("clipsToDownload", clipsToDownload.length)
     // console.log("word counts", wordFoundCounts.map(el => el.wordCount))
+    //id rather it do nothing and not console log
+    wordFoundCounts.map(el => el.wordCount)
   }
   return result
 }

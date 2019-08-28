@@ -24,8 +24,8 @@ let isRunning = false
 
 async function setup() {
   setUserDefaultsOnStart()
-  createWorkspaceFilesystem()
   userDefaultsCheck()
+  createWorkspaceFilesystem()
 }
 
 function userDefaultsCheck() {

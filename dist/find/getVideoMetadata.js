@@ -10,7 +10,7 @@ const logger_1 = require("../logger");
 const fs_1 = __importDefault(require("fs"));
 const constants_1 = __importDefault(require("../constants"));
 async function getVideoMetadata(videoIndex) {
-    logger_1.sendToConsoleOutput(`Getting video metadata and subtitles at index ${videoIndex}`, "loading");
+    logger_1.sendToConsoleOutput(`Getting metadata and subtitles for video ${videoIndex + 1}`, "loading");
     let id;
     switch (userDefaults_1.userDefaultsOnStart.videoSource) {
         case "Channel":

@@ -21,8 +21,8 @@ electron_1.ipcMain.on("stop-pressed", async (event, data) => {
 let isRunning = false;
 async function setup() {
     userDefaults_1.setUserDefaultsOnStart();
-    filesystem_1.createWorkspaceFilesystem();
     userDefaultsCheck();
+    filesystem_1.createWorkspaceFilesystem();
 }
 function userDefaultsCheck() {
     if (userDefaults_1.userDefaultsOnStart.videoSource === "Text file" &&

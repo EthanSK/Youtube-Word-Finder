@@ -10,7 +10,7 @@ export default async function getVideoMetadata(
   videoIndex: number
 ): Promise<string | undefined> {
   sendToConsoleOutput(
-    `Getting video metadata and subtitles at index ${videoIndex}`,
+    `Getting metadata and subtitles for video ${videoIndex + 1}`,
     "loading"
   )
   let id: string | undefined
