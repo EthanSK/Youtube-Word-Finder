@@ -30,7 +30,7 @@ function setUserDefaultsInitialValuesIfNeeded() {
       }
     }
   }
-  setIfNeeded({ paddingToAdd: 0.5 })
+  setIfNeeded({ paddingToAdd: 0.8 })
   setIfNeeded({ maxNumberOfVideos: 15 })
   setIfNeeded({ numberOfWordReps: 5 })
   setIfNeeded({ subtitleLanguageCode: "en" })

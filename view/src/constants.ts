@@ -20,7 +20,7 @@ const folderChooserDefaultOptions: OpenDialogOptions = {
 }
 
 const constants = {
-  maxConsoleOutputMessagesToDisplay: 500,
+  maxConsoleOutputMessagesToDisplay: 3000,
   fileChooserDefaultOptions,
   folderChooserDefaultOptions,
   maxNumAltWordsToDisplay: 30

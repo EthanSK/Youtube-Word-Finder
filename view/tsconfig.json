@@ -16,5 +16,5 @@
     "jsx": "react"
   },
   "include": ["src", "types"],
-  "files": ["../customTypes/shared-types.d.ts"]
+  "files": ["../typings/shared-types.d.ts"]
 }

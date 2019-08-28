@@ -11,19 +11,19 @@ const youtube_dl_1 = __importDefault(require("youtube-dl"));
 //   "./playground/testVideo.mp4",
 //   "./playground/testFfmpegOut.mp4"
 // ])
-youtube_dl_1.default.getInfo("https://www.youtube.com/watch?v=aLFgbkN3-hM", 
+youtube_dl_1.default.getInfo("https://www.youtube.com/watch?v=B7bqAsxee4I", 
 // ["--get-url"],
 (err, info) => {
     console.log("info :", info.url);
     let proc = child_process_1.spawn(ffmpeg_1.path, [
-        "-y",
-        "-ss",
-        "0",
         "-i",
         info.url,
-        "-t",
-        "1",
-        "./playground/testFfmpegOut.mp4"
+        "-y",
+        "-ss",
+        "-2.5",
+        "-to",
+        "20",
+        "./playground/test/testFfmpegOut.mp4"
     ]);
     proc.stdout.setEncoding("utf8");
     proc.stdout.on("data", function (data) {

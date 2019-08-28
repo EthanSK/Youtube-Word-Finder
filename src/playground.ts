@@ -9,20 +9,20 @@ import path from "path"
 //   "./playground/testFfmpegOut.mp4"
 // ])
 youtubedl.getInfo(
-  "https://www.youtube.com/watch?v=aLFgbkN3-hM",
+  "https://www.youtube.com/watch?v=B7bqAsxee4I",
   // ["--get-url"],
   (err: any, info: any) => {
     console.log("info :", info.url)
 
     let proc = spawn(ffmpegPath, [
-      "-y",
-      "-ss",
-      "0",
       "-i",
       info.url,
-      "-t",
-      "1",
-      "./playground/testFfmpegOut.mp4"
+      "-y",
+      "-ss",
+      "-2.5",
+      "-to",
+      "20",
+      "./playground/test/testFfmpegOut.mp4"
     ])
 
     proc.stdout.setEncoding("utf8")
@@ -32,6 +32,7 @@ youtubedl.getInfo(
     })
 
     proc.stderr.setEncoding("utf8")
+
     proc.stderr.on("data", function(data) {
       console.log("stderr data: ", data)
     })

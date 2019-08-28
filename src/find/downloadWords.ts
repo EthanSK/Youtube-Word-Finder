@@ -3,49 +3,104 @@ import { path as ffmpegPath } from "@ffmpeg-installer/ffmpeg"
 import { ClipToDownload } from "./findWords"
 import { getDirName, createDirIfNeeded } from "../filesystem"
 import path from "path"
+import { userDefaultsOnStart } from "../userDefaults"
+import constants from "../constants"
+import { sendToConsoleOutput } from "../logger"
+import fs from "fs"
 
 export function* downloadWords(clips: ClipToDownload[]) {
+  sendToConsoleOutput("Downloading clips", "loading")
+  createDirIfNeeded(getDirName("wordsDir"))
   //download non alt words first
-  const nonAltClips = clips.filter(clip => !clip.isAlternative)
+
+  const sortedClips = clips.sort((a, b) => {
+    return a.wordIndex - b.wordIndex
+  })
+
+  const nonAltClips = sortedClips.filter(clip => !clip.isAlternative)
+
   for (const clip of nonAltClips) {
     yield downloadClip(clip)
   }
 
-  const altWordClips = clips.filter(clip => clip.isAlternative)
+  const altWordClips = sortedClips.filter(clip => clip.isAlternative)
   for (const clip of altWordClips) {
     yield downloadClip(clip)
   }
+  sendToConsoleOutput("Finished downloading clips", "info")
 }
 
 async function downloadClip(clip: ClipToDownload) {
-  const folderName = `${clip.wordIndex}_${clip.wordSearchedText}`
-  //have an autoFound and manuallyFound dir
-  const clipDir = path.join(getDirName("wordsDir"), folderName)
-  createDirIfNeeded(clipDir) //so we only create the dirs if there is something to put in
+  const mainWord = userDefaultsOnStart.words![clip.wordIndex].mainWord
+  const folderName = `${clip.wordIndex}_${mainWord}` //coz alt word goes in main word folder
+  let startTime = clip.start
+  let endTime = clip.end
+  if (userDefaultsOnStart.paddingToAdd) {
+    startTime = Math.max(startTime - userDefaultsOnStart.paddingToAdd, 0)
+    endTime = endTime + userDefaultsOnStart.paddingToAdd //if -to is longer than vid, it just stops at end which is fine
+  }
 
-  let proc = spawn(ffmpegPath, [
-    "-y",
-    "-ss",
-    "0",
-    "-i",
-    "",
-    "-t",
-    "1",
-    "./playground/testFfmpegOut.mp4"
-  ])
+  let clipDir = path.join(getDirName("wordsDir"), folderName)
+  createDirIfNeeded(clipDir)
 
-  proc.stdout.setEncoding("utf8")
+  //no, this is annoying
+  // clipDir = path.join(clipDir, constants.folderNames.autoFound)
+  // createDirIfNeeded(clipDir)
 
-  proc.stdout.on("data", function(data) {
-    console.log("stdout data: ", data)
-  })
+  if (clip.isAlternative) {
+    clipDir = path.join(clipDir, constants.folderNames.alternativeWords)
+    createDirIfNeeded(clipDir)
+    clipDir = path.join(clipDir, clip.wordSearchedText)
+    createDirIfNeeded(clipDir)
+  }
 
-  proc.stderr.setEncoding("utf8")
-  proc.stderr.on("data", function(data) {
-    console.log("stderr data: ", data)
-  })
+  const fileName = `${clip.wordSearchedText}_${clip.id}_${clip.start}_${clip.end}`
 
-  proc.on("close", (code, signal) => {
-    console.log(code, signal)
+  const fullPath = path.join(clipDir, fileName + ".mp4")
+  sendToConsoleOutput(
+    `Downloading clip of ${clip.isAlternative ? "alternative " : ""}word: ${
+      clip.wordSearchedText
+    }`,
+    "loading"
+  )
+
+  return new Promise((resolve, reject) => {
+    if (fs.existsSync(fullPath)) {
+      sendToConsoleOutput(
+        `Found clip ${fullPath} already downloaded so skipping`,
+        "info"
+      )
+      resolve()
+      return
+    }
+
+    let proc = spawn(ffmpegPath, [
+      "-y", //overwrite
+      "-i",
+      clip.url,
+      "-ss",
+      startTime.toString(),
+      "-to",
+      endTime.toString(),
+      fullPath
+    ])
+
+    //stdout
+    proc.stdout.setEncoding("utf8")
+    proc.stdout.on("data", function(data) {
+      // console.log("stdout data: ", data)
+    })
+
+    //stderr
+    proc.stderr.setEncoding("utf8")
+    proc.stderr.on("data", function(data) {
+      // console.log("stderr data: ", data)
+    })
+
+    proc.on("exit", (code, signal) => {
+      console.log("close", code, signal)
+      sendToConsoleOutput(`Downloaded clip to ${fullPath}`, "success")
+      resolve()
+    })
   })
 }
