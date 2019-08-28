@@ -40,6 +40,10 @@ async function downloadClip(clip: ClipToDownload) {
     endTime = endTime + userDefaultsOnStart.paddingToAdd //if -to is longer than vid, it just stops at end which is fine
   }
 
+  //to 2dp
+  startTime = Math.round(startTime * 100) / 100
+  endTime = Math.round(endTime * 100) / 100
+
   let clipDir = path.join(getDirName("wordsDir"), folderName)
   createDirIfNeeded(clipDir)
 
@@ -54,7 +58,7 @@ async function downloadClip(clip: ClipToDownload) {
     createDirIfNeeded(clipDir)
   }
 
-  const fileName = `${clip.wordSearchedText}_${clip.id}_${clip.start}_${clip.end}`
+  const fileName = `${clip.wordSearchedText}_${clip.id}_${startTime}_${endTime}`
 
   const fullPath = path.join(clipDir, fileName + ".mp4")
   sendToConsoleOutput(

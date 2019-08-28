@@ -38,6 +38,9 @@ async function downloadClip(clip) {
         startTime = Math.max(startTime - userDefaults_1.userDefaultsOnStart.paddingToAdd, 0);
         endTime = endTime + userDefaults_1.userDefaultsOnStart.paddingToAdd; //if -to is longer than vid, it just stops at end which is fine
     }
+    //to 2dp
+    startTime = Math.round(startTime * 100) / 100;
+    endTime = Math.round(endTime * 100) / 100;
     let clipDir = path_1.default.join(filesystem_1.getDirName("wordsDir"), folderName);
     filesystem_1.createDirIfNeeded(clipDir);
     //no, this is annoying
@@ -49,7 +52,7 @@ async function downloadClip(clip) {
         clipDir = path_1.default.join(clipDir, clip.wordSearchedText);
         filesystem_1.createDirIfNeeded(clipDir);
     }
-    const fileName = `${clip.wordSearchedText}_${clip.id}_${clip.start}_${clip.end}`;
+    const fileName = `${clip.wordSearchedText}_${clip.id}_${startTime}_${endTime}`;
     const fullPath = path_1.default.join(clipDir, fileName + ".mp4");
     logger_1.sendToConsoleOutput(`Downloading clip of ${clip.isAlternative ? "alternative " : ""}word: ${clip.wordSearchedText}`, "loading");
     return new Promise((resolve, reject) => {
