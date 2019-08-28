@@ -6,11 +6,13 @@ import getVideoMetadata from "./getVideoMetadata"
 export interface ClipToDownload {
   id: string
   url: string
-  start?: number
-  end?: number
+  start: number
+  end: number
   wordSearchedText: string
-  altWordClips?: ClipToDownload[]
-  phraseMatched?: string //might not exist if only alternative clips could be found
+  originalUnfilteredWord?: string //in case we wanna use it for folder names for non alt
+  phraseMatched: string
+  isAlternative: boolean
+  wordIndex: number //needed for alt and non alt words too to decide download location
 }
 
 let wordFoundCounts: { wordCount: number; alternativeWordCount: [] }
@@ -20,17 +22,7 @@ export default function* findWords() {
     const id = yield getVideoMetadata(i)
     const videoMetadata = processVideoMetadata(id)
     const clipsToDownload = searchWordsInSubs(videoMetadata)
-    console.log(
-      "clipsToDownload",
-      clipsToDownload
-        .filter(el => el.phraseMatched)
-        .map(el => {
-          return { phrase: el.phraseMatched, word: el.wordSearchedText }
-        })
-    )
-    if (clipsToDownload.length === 0) {
-      break // no more were found
-    }
+    console.log("clipsToDownload", clipsToDownload.length)
   }
 }
 
@@ -40,26 +32,16 @@ function searchWordsInSubs(videoMetadata: VideoMetadata): ClipToDownload[] {
     const word = userDefaultsOnStart.words![i]
 
     // if (wordFoundCounts[i] >= userDefaultsOnStart.numberOfWordReps!) continue
-    const searchedWord = searchWordText(videoMetadata, word.mainWord)
-    let start: number | undefined
-    let end: number | undefined
-    let phraseMatched: string | undefined
+    const clips = searchWordText(
+      videoMetadata,
+      word.mainWord,
+      false,
+      i,
+      word.originalUnfilteredWord
+    )
+    result.push(...clips)
+    // console.log("result: ", result.length)
 
-    if (searchedWord) {
-      start = searchedWord.start
-      end = searchedWord.end
-      phraseMatched = searchedWord.phraseMatched
-    }
-
-    const clip: ClipToDownload = {
-      id: videoMetadata.id,
-      url: videoMetadata.url,
-      start,
-      end,
-      altWordClips: [],
-      wordSearchedText: word.mainWord,
-      phraseMatched
-    }
     // for (const altWordKey in word.alternativeWords) {
     //   const searchedAltWord = searchWordText(
     //     videoMetadata,
@@ -84,32 +66,42 @@ function searchWordsInSubs(videoMetadata: VideoMetadata): ClipToDownload[] {
     //   }
     //   clip.altWordClips!.push(altWordClip)
     // }
-
-    result.push(clip)
   }
   return result
 }
 
 function searchWordText(
   videoMetadata: VideoMetadata,
-  wordText: string
-): Partial<ClipToDownload> | undefined {
+  wordText: string,
+  isAlternative: boolean,
+  wordIndex: number,
+  originalUnfilteredWord?: string
+): ClipToDownload[] {
+  let result: ClipToDownload[] = []
   for (const phrase of videoMetadata.subtitles.phrases) {
-    const clip: Partial<ClipToDownload> = {
+    const clip = {
+      id: videoMetadata.id,
+      url: videoMetadata.url,
       start: phrase.start,
       end: phrase.end,
-      phraseMatched: phrase.text
+      phraseMatched: phrase.text,
+      wordSearchedText: wordText,
+      originalUnfilteredWord,
+      isAlternative,
+      wordIndex
     }
     if (videoMetadata.subtitles.isIndividualWords) {
       if (wordText === filterWord(phrase.text)) {
-        return clip
+        result.push(clip)
       }
     } else {
       for (const subPhrase of phrase.text.split(/\s+/)) {
         if (wordText === filterWord(subPhrase)) {
-          return clip
+          result.push(clip)
+          // break //don't use same phrase twice for one word, even if there are multiple occurrences. actually, the bot will finish faster and it will still have done its correct job, so do it.
         }
       }
     }
   }
+  return result
 }
