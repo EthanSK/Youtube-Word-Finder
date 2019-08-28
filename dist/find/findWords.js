@@ -12,6 +12,7 @@ let wordFoundCounts = [];
 //remember, if all words have reached their max rep counts, just end the search. do NOT end the search if searchWordsInSubs returns an empty array, because that could be due to other reasons
 function* findWords() {
     let result = [];
+    wordFoundCounts = []; //i think not having this may have been causing the glitch earlier
     for (let i = 0; i < userDefaults_1.userDefaultsOnStart.maxNumberOfVideos; i++) {
         const id = yield getVideoMetadata_1.default(i);
         if (!id) {
@@ -25,11 +26,8 @@ function* findWords() {
         if (altWordPercentFound)
             logger_1.sendToConsoleOutput(`Found ${Math.round(altWordPercentFound)}% of the alternative words (with repetitions) so far`, "info");
         result.push(...clipsToDownload);
-        //for some fucked reason, uncommenting these console logs stops that weird bug where the percent found is > 100%. must be something to do with reference garbage collection, just keep them theyre harmless.
         // console.log("clipsToDownload", clipsToDownload.length)
         // console.log("word counts", wordFoundCounts.map(el => el.wordCount))
-        //id rather it do nothing and not console log
-        wordFoundCounts.map(el => el.wordCount);
     }
     return result;
 }
@@ -118,6 +116,7 @@ function calculatePercentageFound(words) {
         wordFoundCounts.forEach(el => {
             foundCount += el.wordCount;
         });
+        console.log("found count: ", foundCount, "target count: ", targetCount);
         return (foundCount / targetCount) * 100;
     }
     else {

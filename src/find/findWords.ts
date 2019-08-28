@@ -24,6 +24,7 @@ let wordFoundCounts: {
 
 export default function* findWords() {
   let result: ClipToDownload[] = []
+  wordFoundCounts = [] //i think not having this may have been causing the glitch earlier
   for (let i = 0; i < userDefaultsOnStart.maxNumberOfVideos!; i++) {
     const id = yield getVideoMetadata(i)
     if (!id) {
@@ -48,11 +49,8 @@ export default function* findWords() {
       )
     result.push(...clipsToDownload)
 
-    //for some fucked reason, uncommenting these console logs stops that weird bug where the percent found is > 100%. must be something to do with reference garbage collection, just keep them theyre harmless.
     // console.log("clipsToDownload", clipsToDownload.length)
     // console.log("word counts", wordFoundCounts.map(el => el.wordCount))
-    //id rather it do nothing and not console log
-    wordFoundCounts.map(el => el.wordCount)
   }
   return result
 }
@@ -169,6 +167,7 @@ function calculatePercentageFound(
     wordFoundCounts.forEach(el => {
       foundCount += el.wordCount
     })
+    console.log("found count: ", foundCount, "target count: ", targetCount)
     return (foundCount / targetCount) * 100
   } else {
     let targetCount = 0
