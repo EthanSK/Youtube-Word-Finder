@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useContext, useRef } from "react"
 // import YouTubePlayer from "react-player/lib/players/YouTube"
 import ReactPlayer from "react-player"
 
 import "./WordFinderPage.css"
 import { ipcSend } from "../../../ipc"
 import constants from "../../../constants"
+import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext"
 const { ipcRenderer } = window.require("electron")
 
 const WordFinderPage = () => {
@@ -15,12 +16,28 @@ const WordFinderPage = () => {
     },
     arrIndex: 0
   })
-
+  const { state: userDefaultsState } = useContext(UserDefaultsContext)
   const [clips, setClips] = useState<ClipToDownload[]>([])
   const [isError, setIsError] = useState(false)
   const [intervalHandle, setIntervalHandle] = useState<NodeJS.Timeout>()
   const [curClipIndex, setCurClipIndex] = useState(0)
-  let playerRef: ReactPlayer | null
+  const [isPlaying, setIsPlaying] = useState(true)
+
+  let playerRef = useRef<ReactPlayer>(null)
+
+  function timesWithPadding(times: {
+    originalStart?: number
+    originalEnd?: number
+  }): { start?: number; end?: number } {
+    let start = times.originalStart
+    let end = times.originalEnd
+    if (userDefaultsState.paddingToAdd) {
+      start && (start = Math.max(start - userDefaultsState.paddingToAdd, 0))
+      end && (end = end + userDefaultsState.paddingToAdd) //if -to is longer than vid, it just stops at end which is fine
+    }
+    return { start, end }
+  }
+
   useEffect(() => {
     // console.log("send reque to restore defaults")
     ipcSend("request-word-finder-data", {}) //sending it here so it only requests when ready
@@ -46,20 +63,42 @@ const WordFinderPage = () => {
   }, [])
 
   function handlePlayerOnReady() {
-    console.log("handlePlayerOnReady")
-    playerRef && playerRef.seekTo(clips[curClipIndex].start)
-    checkToStopVideo()
+    // console.log("handlePlayerOnReady")
+    // playerRef &&
+    //   playerRef.seekTo(timesWithPadding(clips[curClipIndex].start).start!)
+    // checkToStopVideo()
   }
   function handlePlayerOnStart() {
-    playerRef && playerRef.seekTo(clips[curClipIndex].start)
+    playerRef.current &&
+      playerRef.current.seekTo(
+        timesWithPadding({ originalStart: clips[curClipIndex].start }).start!
+      )
+    checkToStopVideo()
   }
 
   function checkToStopVideo() {
-    // setIntervalHandle(
-    //   setInterval(() => {
-    //     playerRef && console.log("secs played: ", playerRef.getCurrentTime())
-    //   }, 100)
-    // )
+    setIntervalHandle(
+      setInterval(() => {
+        const endTime = timesWithPadding({
+          originalEnd: clips[curClipIndex].end
+        }).end
+        // console.log(
+        //   "cur: ",
+        //   playerRef.current && playerRef.current.getCurrentTime(),
+        //   "end",
+        //   clips[curClipIndex],
+        //   endTime
+        // )
+
+        if (
+          playerRef.current &&
+          endTime &&
+          playerRef.current.getCurrentTime() > endTime
+        ) {
+          setIsPlaying(false)
+        }
+      }, 100)
+    )
   }
 
   function getURL() {
@@ -80,13 +119,11 @@ const WordFinderPage = () => {
     <div id="wordFinderPageId">
       <ReactPlayer
         url={getURL()}
-        playing={true}
+        playing={isPlaying}
         width={640}
         height={360}
         style={playerStyle}
-        ref={player => {
-          playerRef = player
-        }}
+        ref={playerRef}
         onReady={handlePlayerOnReady}
         onStart={handlePlayerOnStart}
         onProgress={() => console.log("handling on progress")}
