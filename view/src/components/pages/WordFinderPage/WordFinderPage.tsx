@@ -41,6 +41,11 @@ const WordFinderPage = () => {
     return { start, end }
   }
 
+  //reload on curclipindex change
+  useEffect(() => {
+    reload()
+  }, [curClipIndex])
+
   useEffect(() => {
     // console.log("send reque to restore defaults")
     ipcSend("request-word-finder-data", {}) //sending it here so it only requests when ready
@@ -111,12 +116,25 @@ const WordFinderPage = () => {
   }
 
   function handleReloadClicked() {
+    reload()
+  }
+  function reload() {
     playerRef.current &&
+      clips[curClipIndex] &&
       playerRef.current.seekTo(
         timesWithPadding({ originalStart: clips[curClipIndex].start }).start!
       )
     setIsPlaying(true)
   }
+
+  function handleNextClicked() {
+    setCurClipIndex(curClipIndex => mod(curClipIndex + 1, clips.length))
+    //reload handled in useeffect
+  }
+  function handlePreviousClicked() {
+    setCurClipIndex(curClipIndex => mod(curClipIndex - 1, clips.length))
+  }
+  function handleDownloadClicked() {}
 
   const playerStyle = {
     margin: "auto"
@@ -130,16 +148,12 @@ const WordFinderPage = () => {
     //when any vars in this function change, and are hooked into, component will rerender
     let text = ""
     if (clips[curClipIndex]) {
-      text = `Clip found for word: ${clips[curClipIndex].wordSearchedText}. `
+      text = `Clip found for word: ${clips[curClipIndex].wordSearchedText} `
     } else {
       if (isFinishedScanning) {
-        text = `Could not find clip for word ${
-          windowData.word.mainWord
-        } or alternatives. Scanned ${scannedVidsCount} videos. `
+        text = `Could not find clip for word ${windowData.word.mainWord} or alternatives. Scanned ${scannedVidsCount} videos. `
       } else {
-        text = `Trying to find clip for word ${
-          windowData.word.mainWord
-        } or alternatives. `
+        text = `Trying to find clip for word ${windowData.word.mainWord} or alternatives. `
       }
     }
 
@@ -149,9 +163,8 @@ const WordFinderPage = () => {
   function setText2() {
     let text = ""
     if (clips[curClipIndex]) {
-      text = `${
-        clips.length
-      } other clips found. Scanned ${scannedVidsCount} videos. `
+      text = `${clips.length -
+        1} other clips found. Scanned ${scannedVidsCount} videos. `
     } else if (isFinishedScanning) {
       text = `Try increasing max number of vids & add more alternative words. `
     } else {
@@ -177,28 +190,29 @@ const WordFinderPage = () => {
         onProgress={() => console.log("handling on progress")}
       />
       <div id="wordFinderControls">
-        <div />
-
         <Button
           class="mediumButton"
           title="Previous clip"
-          onClick={handleReloadClicked}
+          extraClasses="wordFinderControlButton"
+          onClick={handlePreviousClicked}
         />
         <Button
           class="mediumButton"
           title="Next clip"
-          onClick={handleReloadClicked}
+          extraClasses="wordFinderControlButton"
+          onClick={handleNextClicked}
         />
         <Button
           class="mediumButton"
-          extraClasses="reloadButton"
+          extraClasses="reloadButton wordFinderControlButton"
           title="Reload clip"
           onClick={handleReloadClicked}
         />
         <Button
           class="mediumButton"
           title="Download clip"
-          onClick={handleReloadClicked}
+          extraClasses="wordFinderControlButton"
+          onClick={handleDownloadClicked}
         />
       </div>
       <p>{setText()}</p>
@@ -212,6 +226,10 @@ const WordFinderPage = () => {
       </p>
     </div>
   )
+}
+
+function mod(n: number, m: number) {
+  return ((n % m) + m) % m
 }
 
 export default WordFinderPage

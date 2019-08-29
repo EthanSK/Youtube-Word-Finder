@@ -11,6 +11,10 @@
   justify-content: space-between;
 }
 
+.wordFinderControlButton {
+  width: 25%;
+}
+
 /* .reloadButton {
   font-size: 40px;
 } */
