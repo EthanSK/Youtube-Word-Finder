@@ -86,6 +86,9 @@ export function searchWordText(
   originalUnfilteredWord?: string
 ): ClipToDownload[] {
   let result: ClipToDownload[] = []
+  const subLangCode = isForManualSearch
+    ? loadUserDefault("subtitleLanguageCode")
+    : userDefaultsOnStart.subtitleLanguageCode! //doing this in the for loop is SO FUCKING DUMB DO U KNOW HOW LONG IT TAKES
   for (const phrase of videoMetadata.subtitles.phrases) {
     const clip = {
       id: videoMetadata.id,
@@ -101,11 +104,7 @@ export function searchWordText(
     if (videoMetadata.subtitles.isIndividualWords) {
       if (
         text ===
-        (shouldApplyWordFilter(
-          isForManualSearch
-            ? loadUserDefault("subtitleLanguageCode")
-            : userDefaultsOnStart.subtitleLanguageCode!
-        )
+        (shouldApplyWordFilter(subLangCode)
           ? filterWord(phrase.text)
           : phrase.text)
       ) {
@@ -119,11 +118,7 @@ export function searchWordText(
       for (const subPhrase of phrase.text.split(/\s+/)) {
         if (
           text ===
-          (shouldApplyWordFilter(
-            isForManualSearch
-              ? loadUserDefault("subtitleLanguageCode")
-              : userDefaultsOnStart.subtitleLanguageCode!
-          )
+          (shouldApplyWordFilter(subLangCode)
             ? filterWord(subPhrase)
             : subPhrase)
         ) {

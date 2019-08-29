@@ -6,21 +6,25 @@ import { sendToConsoleOutput } from "../logger"
 import processVideoMetadata from "./processVideoMetadata"
 import { searchWordText } from "./findWords"
 
-function getCurrentlyDownloadedMetadataIds(): string[] {
+async function getCurrentlyDownloadedMetadataIds(): Promise<string[]> {
   const outputFolder = getDirName("metadataDir", true) //up to date output folder
-  const ids = fs
-    .readdirSync(outputFolder)
-    .filter(el => {
-      return el.includes(".info.json")
+  return new Promise((resolve, reject) => {
+    fs.readdir(outputFolder, (err, files) => {
+      if (err) reject(err)
+      const ids = files
+        .filter(el => {
+          return el.includes(".info.json")
+        })
+        .map(el => el.split(".")[0])
+      resolve(ids)
     })
-    .map(el => el.split(".")[0])
-  return ids
+  })
 }
 
 export async function getMetadataForManualSearch(
   idRetrieved: (id: string) => void
 ) {
-  const currentlyDownloaded = getCurrentlyDownloadedMetadataIds()
+  const currentlyDownloaded = await getCurrentlyDownloadedMetadataIds()
 
   //first return all the ones already downloaded
   for (const id of currentlyDownloaded) {
@@ -43,39 +47,38 @@ export async function getMetadataForManualSearch(
 
 export function findClipsForManualSearch(
   word: Word,
-  arrIndex: number
+  arrIndex: number,
+  id: string
 ): ClipToDownload[] {
   let result: ClipToDownload[] = []
-  const currentlyDownloaded = getCurrentlyDownloadedMetadataIds()
-  for (const id of currentlyDownloaded) {
-    const videoMetadata = processVideoMetadata(id, true)
+  const videoMetadata = processVideoMetadata(id, true)
 
-    if (word.mainWord === "") continue //it aint here boss
+  if (word.mainWord === "") return result //it aint here boss
 
+  const clips = searchWordText(
+    videoMetadata,
+    word.mainWord,
+    false,
+    arrIndex,
+    true,
+    word.originalUnfilteredWord
+  )
+  //also need to limit size here as may have returned mor ethan no word reps in one call
+  result.push(...clips)
+
+  for (const altWordKey in word.alternativeWords) {
+    if (!word.alternativeWords[altWordKey].isBeingUsed) continue
+
+    const altWordText = word.alternativeWords[altWordKey].word
     const clips = searchWordText(
       videoMetadata,
-      word.mainWord,
-      false,
-      arrIndex,
+      altWordText,
       true,
-      word.originalUnfilteredWord
+      arrIndex,
+      true
     )
-    //also need to limit size here as may have returned mor ethan no word reps in one call
     result.push(...clips)
-
-    for (const altWordKey in word.alternativeWords) {
-      if (!word.alternativeWords[altWordKey].isBeingUsed) continue
-
-      const altWordText = word.alternativeWords[altWordKey].word
-      const clips = searchWordText(
-        videoMetadata,
-        altWordText,
-        true,
-        arrIndex,
-        true
-      )
-      result.push(...clips)
-    }
   }
+
   return result
 }

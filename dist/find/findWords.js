@@ -57,6 +57,9 @@ function searchWordsInSubs(videoMetadata) {
 }
 function searchWordText(videoMetadata, text, isAlternative, wordIndex, isForManualSearch, originalUnfilteredWord) {
     let result = [];
+    const subLangCode = isForManualSearch
+        ? userDefaults_1.loadUserDefault("subtitleLanguageCode")
+        : userDefaults_1.userDefaultsOnStart.subtitleLanguageCode; //doing this in the for loop is SO FUCKING DUMB DO U KNOW HOW LONG IT TAKES
     for (const phrase of videoMetadata.subtitles.phrases) {
         const clip = {
             id: videoMetadata.id,
@@ -71,9 +74,7 @@ function searchWordText(videoMetadata, text, isAlternative, wordIndex, isForManu
         };
         if (videoMetadata.subtitles.isIndividualWords) {
             if (text ===
-                (words_1.shouldApplyWordFilter(isForManualSearch
-                    ? userDefaults_1.loadUserDefault("subtitleLanguageCode")
-                    : userDefaults_1.userDefaultsOnStart.subtitleLanguageCode)
+                (words_1.shouldApplyWordFilter(subLangCode)
                     ? words_1.filterWord(phrase.text)
                     : phrase.text)) {
                 if (isForManualSearch) {
@@ -87,9 +88,7 @@ function searchWordText(videoMetadata, text, isAlternative, wordIndex, isForManu
         else {
             for (const subPhrase of phrase.text.split(/\s+/)) {
                 if (text ===
-                    (words_1.shouldApplyWordFilter(isForManualSearch
-                        ? userDefaults_1.loadUserDefault("subtitleLanguageCode")
-                        : userDefaults_1.userDefaultsOnStart.subtitleLanguageCode)
+                    (words_1.shouldApplyWordFilter(subLangCode)
                         ? words_1.filterWord(subPhrase)
                         : subPhrase)) {
                     if (isForManualSearch) {

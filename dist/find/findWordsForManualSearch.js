@@ -10,18 +10,23 @@ const userDefaults_1 = require("../userDefaults");
 const logger_1 = require("../logger");
 const processVideoMetadata_1 = __importDefault(require("./processVideoMetadata"));
 const findWords_1 = require("./findWords");
-function getCurrentlyDownloadedMetadataIds() {
+async function getCurrentlyDownloadedMetadataIds() {
     const outputFolder = filesystem_1.getDirName("metadataDir", true); //up to date output folder
-    const ids = fs_1.default
-        .readdirSync(outputFolder)
-        .filter(el => {
-        return el.includes(".info.json");
-    })
-        .map(el => el.split(".")[0]);
-    return ids;
+    return new Promise((resolve, reject) => {
+        fs_1.default.readdir(outputFolder, (err, files) => {
+            if (err)
+                reject(err);
+            const ids = files
+                .filter(el => {
+                return el.includes(".info.json");
+            })
+                .map(el => el.split(".")[0]);
+            resolve(ids);
+        });
+    });
 }
 async function getMetadataForManualSearch(idRetrieved) {
-    const currentlyDownloaded = getCurrentlyDownloadedMetadataIds();
+    const currentlyDownloaded = await getCurrentlyDownloadedMetadataIds();
     //first return all the ones already downloaded
     for (const id of currentlyDownloaded) {
         idRetrieved(id);
@@ -37,23 +42,20 @@ async function getMetadataForManualSearch(idRetrieved) {
     }
 }
 exports.getMetadataForManualSearch = getMetadataForManualSearch;
-function findClipsForManualSearch(word, arrIndex) {
+function findClipsForManualSearch(word, arrIndex, id) {
     let result = [];
-    const currentlyDownloaded = getCurrentlyDownloadedMetadataIds();
-    for (const id of currentlyDownloaded) {
-        const videoMetadata = processVideoMetadata_1.default(id, true);
-        if (word.mainWord === "")
-            continue; //it aint here boss
-        const clips = findWords_1.searchWordText(videoMetadata, word.mainWord, false, arrIndex, true, word.originalUnfilteredWord);
-        //also need to limit size here as may have returned mor ethan no word reps in one call
+    const videoMetadata = processVideoMetadata_1.default(id, true);
+    if (word.mainWord === "")
+        return result; //it aint here boss
+    const clips = findWords_1.searchWordText(videoMetadata, word.mainWord, false, arrIndex, true, word.originalUnfilteredWord);
+    //also need to limit size here as may have returned mor ethan no word reps in one call
+    result.push(...clips);
+    for (const altWordKey in word.alternativeWords) {
+        if (!word.alternativeWords[altWordKey].isBeingUsed)
+            continue;
+        const altWordText = word.alternativeWords[altWordKey].word;
+        const clips = findWords_1.searchWordText(videoMetadata, altWordText, true, arrIndex, true);
         result.push(...clips);
-        for (const altWordKey in word.alternativeWords) {
-            if (!word.alternativeWords[altWordKey].isBeingUsed)
-                continue;
-            const altWordText = word.alternativeWords[altWordKey].word;
-            const clips = findWords_1.searchWordText(videoMetadata, altWordText, true, arrIndex, true);
-            result.push(...clips);
-        }
     }
     return result;
 }

@@ -70,19 +70,29 @@ ipc.on("request-word-finder-data", async (event, data) => {
 
   //put it all in try catch to stop running if there was  a problem. we also need to tell the user in the manual search window
   const wordData: WordFinderRequestWindowData = wordFinderDataQueue.shift()! //will defo exist otherwise our code is wrong
-  let response: WordFinderResponseWindowData = {
-    ...wordData,
-    clips: []
-  }
 
   try {
     createWorkspaceFilesystem(true)
-    await getMetadataForManualSearch()
-    const clips = await findClipsForManualSearch(
-      wordData.word,
-      wordData.arrIndex
-    ) //await it to catch errors
-    // response.clips = clips
+    await getMetadataForManualSearch(async id => {
+      console.log("finding clips for id :", id)
+      const clips = await findClipsForManualSearch(
+        wordData.word,
+        wordData.arrIndex,
+        id
+      ) //await it to catch errors
+      // const wordData: WordFinderRequestWindowData = {
+      //   word: {
+      //     mainWord: Date.now().toString(),
+      //     originalUnfilteredWord: "poo"
+      //   },
+      //   arrIndex: 69
+      // }
+      let response: WordFinderResponseWindowData = {
+        ...wordData,
+        clips: clips
+      }
+      event.sender.send("response-word-finder-data-batch", response)
+    })
   } catch (error) {
     //dont send the stop running event to the manual search window, coz there could be an auto search in progress
     sendToConsoleOutput(
@@ -91,6 +101,4 @@ ipc.on("request-word-finder-data", async (event, data) => {
       "error"
     )
   }
-
-  // event.sender.send("response-word-finder-data", response) //send found data here
 })

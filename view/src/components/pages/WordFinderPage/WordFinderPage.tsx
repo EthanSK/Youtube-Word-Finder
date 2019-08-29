@@ -7,32 +7,35 @@ import { ipcSend } from "../../../ipc"
 const { ipcRenderer } = window.require("electron")
 
 const WordFinderPage = () => {
-  const [windowData, setWindowData] = useState<WordFinderResponseWindowData>({
+  const [windowData, setWindowData] = useState<WordFinderRequestWindowData>({
     word: {
       mainWord: "Loading...",
       originalUnfilteredWord: "Loading..."
     },
-    arrIndex: 0,
-    clips: []
+    arrIndex: 0
   })
+
+  const [clips, setClips] = useState<ClipToDownload[]>([])
   let playerRef: ReactPlayer | null
   let interval: NodeJS.Timeout
   useEffect(() => {
     // console.log("send reque to restore defaults")
     ipcSend("request-word-finder-data", {}) //sending it here so it only requests when ready
-    const channel = "response-word-finder-data"
+    const channel = "response-word-finder-data-batch"
     var handleUserDefaultRestore = function(
       event: Electron.IpcRendererEvent,
       data: WordFinderResponseWindowData
     ) {
-      setWindowData(data)
-      // console.log("set window data: ", data)
+      setWindowData({ word: data.word, arrIndex: data.arrIndex })
+      setClips([...clips, ...data.clips])
+      console.log("set window data: ", windowData)
     }
 
-    ipcRenderer.once(channel, handleUserDefaultRestore) //one time thing
+    ipcRenderer.on(channel, handleUserDefaultRestore) //called multiple times with new data
 
     return () => {
       clearInterval(interval)
+      ipcRenderer.removeListener(channel, handleUserDefaultRestore)
     }
   }, [])
 

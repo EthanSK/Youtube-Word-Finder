@@ -61,20 +61,28 @@ electron_1.ipcMain.on("request-word-finder-data", async (event, data) => {
     //then we need to send the ClipToDownload object back to the window
     //put it all in try catch to stop running if there was  a problem. we also need to tell the user in the manual search window
     const wordData = wordFinderDataQueue.shift(); //will defo exist otherwise our code is wrong
-    let response = {
-        ...wordData,
-        clips: []
-    };
     try {
         filesystem_1.createWorkspaceFilesystem(true);
-        await findWordsForManualSearch_1.getMetadataForManualSearch();
-        const clips = await findWordsForManualSearch_1.findClipsForManualSearch(wordData.word, wordData.arrIndex); //await it to catch errors
-        // response.clips = clips
+        await findWordsForManualSearch_1.getMetadataForManualSearch(async (id) => {
+            console.log("finding clips for id :", id);
+            const clips = await findWordsForManualSearch_1.findClipsForManualSearch(wordData.word, wordData.arrIndex, id); //await it to catch errors
+            // const wordData: WordFinderRequestWindowData = {
+            //   word: {
+            //     mainWord: Date.now().toString(),
+            //     originalUnfilteredWord: "poo"
+            //   },
+            //   arrIndex: 69
+            // }
+            let response = {
+                ...wordData,
+                clips: clips
+            };
+            event.sender.send("response-word-finder-data-batch", response);
+        });
     }
     catch (error) {
         //dont send the stop running event to the manual search window, coz there could be an auto search in progress
         logger_1.sendToConsoleOutput(`There was an error manually searching for word ${wordData.word}: ` +
             error.message, "error");
     }
-    // event.sender.send("response-word-finder-data", response) //send found data here
 });
