@@ -22,7 +22,7 @@ function createWindow() {
     backgroundColor: "#282828",
     //remember to add icon here for linux coz appaz u need it. wow it didn't work in postilkesbot test
     width: 700,
-    height: 450,
+    height: 550,
     minWidth: 200,
     minHeight: 200,
     webPreferences: {
@@ -64,12 +64,13 @@ ipc.on("open-word-finder", (event, data: WordFinderRequestWindowData) => {
 
 ipc.on("request-word-finder-data", async (event, data) => {
   console.log("requested word finder data")
-  //we first need to get the sub files if we don't have already. check how many are downloaded, and download up until max vids
-  //then we need to pick a word that matches the one theyre searching for
-  //then we need to send the ClipToDownload object back to the window
 
   //put it all in try catch to stop running if there was  a problem. we also need to tell the user in the manual search window
   const wordData: WordFinderRequestWindowData = wordFinderDataQueue.shift()! //will defo exist otherwise our code is wrong
+  event.sender.send("response-word-finder-data-batch", {
+    ...wordData,
+    clips: []
+  }) //send initial response to load in word data that we have instantly
 
   try {
     createWorkspaceFilesystem(true)
@@ -80,25 +81,25 @@ ipc.on("request-word-finder-data", async (event, data) => {
         wordData.arrIndex,
         id
       ) //await it to catch errors
-      // const wordData: WordFinderRequestWindowData = {
-      //   word: {
-      //     mainWord: Date.now().toString(),
-      //     originalUnfilteredWord: "poo"
-      //   },
-      //   arrIndex: 69
-      // }
+
       let response: WordFinderResponseWindowData = {
         ...wordData,
         clips: clips
       }
       event.sender.send("response-word-finder-data-batch", response)
     })
+    // throw new Error("test error")
   } catch (error) {
     //dont send the stop running event to the manual search window, coz there could be an auto search in progress
     sendToConsoleOutput(
-      `There was an error manually searching for word ${wordData.word}: ` +
+      `There was an error manually searching for word ${wordData.word.mainWord}: ` +
         error.message,
       "error"
     )
+    event.sender.send("response-word-finder-data-batch", {
+      ...wordData,
+      clips: [],
+      isError: true
+    })
   }
 })

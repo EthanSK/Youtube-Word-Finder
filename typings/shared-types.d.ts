@@ -25,6 +25,7 @@ interface WordFinderRequestWindowData {
 
 interface WordFinderResponseWindowData extends WordFinderRequestWindowData {
   clips: ClipToDownload[]
+  isError?: boolean
 }
 
 interface AlternativeWord {

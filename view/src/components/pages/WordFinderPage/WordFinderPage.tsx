@@ -4,6 +4,7 @@ import ReactPlayer from "react-player"
 
 import "./WordFinderPage.css"
 import { ipcSend } from "../../../ipc"
+import constants from "../../../constants"
 const { ipcRenderer } = window.require("electron")
 
 const WordFinderPage = () => {
@@ -16,8 +17,10 @@ const WordFinderPage = () => {
   })
 
   const [clips, setClips] = useState<ClipToDownload[]>([])
+  const [isError, setIsError] = useState(false)
+  const [intervalHandle, setIntervalHandle] = useState<NodeJS.Timeout>()
+  const [curClipIndex, setCurClipIndex] = useState(0)
   let playerRef: ReactPlayer | null
-  let interval: NodeJS.Timeout
   useEffect(() => {
     // console.log("send reque to restore defaults")
     ipcSend("request-word-finder-data", {}) //sending it here so it only requests when ready
@@ -28,39 +31,56 @@ const WordFinderPage = () => {
     ) {
       setWindowData({ word: data.word, arrIndex: data.arrIndex })
       setClips([...clips, ...data.clips])
+      if (data.isError) {
+        setIsError(true)
+      }
       console.log("set window data: ", windowData)
     }
 
     ipcRenderer.on(channel, handleUserDefaultRestore) //called multiple times with new data
 
     return () => {
-      clearInterval(interval)
+      if (intervalHandle) clearInterval(intervalHandle)
       ipcRenderer.removeListener(channel, handleUserDefaultRestore)
     }
   }, [])
 
   function handlePlayerOnReady() {
-    playerRef && playerRef.seekTo(30)
+    console.log("handlePlayerOnReady")
+    playerRef && playerRef.seekTo(clips[curClipIndex].start)
     checkToStopVideo()
   }
   function handlePlayerOnStart() {
-    // playerRef && playerRef.seekTo(20)
+    playerRef && playerRef.seekTo(clips[curClipIndex].start)
   }
 
   function checkToStopVideo() {
-    // interval = setInterval(() => {
-    //   console.log("secs played: ", playerRef!.getCurrentTime())
-    // }, 100)
+    // setIntervalHandle(
+    //   setInterval(() => {
+    //     playerRef && console.log("secs played: ", playerRef.getCurrentTime())
+    //   }, 100)
+    // )
+  }
+
+  function getURL() {
+    // console.log("get url,", clips[curClipIndex] && clips[curClipIndex].id)
+    // return "https://www.youtube.com/watch?v=ERBVFcutl3M"
+    if (clips[curClipIndex])
+      return constants.youtubeVideoURLPrefix + clips[curClipIndex].id
   }
 
   const playerStyle = {
     margin: "auto"
   }
+
+  const errorMessageStyle = {
+    color: "red"
+  }
   return (
     <div id="wordFinderPageId">
-      {/* <ReactPlayer
-        url="https://www.youtube.com/watch?v=ERBVFcutl3M"
-        playing={false}
+      <ReactPlayer
+        url={getURL()}
+        playing={true}
         width={640}
         height={360}
         style={playerStyle}
@@ -70,8 +90,15 @@ const WordFinderPage = () => {
         onReady={handlePlayerOnReady}
         onStart={handlePlayerOnStart}
         onProgress={() => console.log("handling on progress")}
-      ></ReactPlayer> */}
+      ></ReactPlayer>
       <p>Word: {windowData.word.mainWord}</p>
+      <p className="errorMessage" style={errorMessageStyle}>
+        {(function() {
+          return isError
+            ? "An error occurred. Check console for more info."
+            : ""
+        })()}
+      </p>
     </div>
   )
 }

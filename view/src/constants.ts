@@ -23,7 +23,8 @@ const constants = {
   maxConsoleOutputMessagesToDisplay: 3000,
   fileChooserDefaultOptions,
   folderChooserDefaultOptions,
-  maxNumAltWordsToDisplay: 30
+  maxNumAltWordsToDisplay: 30,
+  youtubeVideoURLPrefix: "https://www.youtube.com/watch?v="
 }
 
 export default constants
