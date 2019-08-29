@@ -6,6 +6,7 @@ import "./WordFinderPage.css"
 import { ipcSend } from "../../../ipc"
 import constants from "../../../constants"
 import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext"
+import Button from "../../elements/Button/Button"
 const { ipcRenderer } = window.require("electron")
 
 const WordFinderPage = () => {
@@ -62,50 +63,49 @@ const WordFinderPage = () => {
     }
   }, [])
 
-  function handlePlayerOnReady() {
-    // console.log("handlePlayerOnReady")
-    // playerRef &&
-    //   playerRef.seekTo(timesWithPadding(clips[curClipIndex].start).start!)
-    // checkToStopVideo()
-  }
+  function handlePlayerOnReady() {}
   function handlePlayerOnStart() {
     playerRef.current &&
       playerRef.current.seekTo(
         timesWithPadding({ originalStart: clips[curClipIndex].start }).start!
       )
+    //   setIsPlaying(true)
+
     checkToStopVideo()
   }
 
   function checkToStopVideo() {
-    setIntervalHandle(
+    useInterval(
       setInterval(() => {
         const endTime = timesWithPadding({
           originalEnd: clips[curClipIndex].end
         }).end
-        // console.log(
-        //   "cur: ",
-        //   playerRef.current && playerRef.current.getCurrentTime(),
-        //   "end",
-        //   clips[curClipIndex],
-        //   endTime
-        // )
-
         if (
           playerRef.current &&
           endTime &&
           playerRef.current.getCurrentTime() > endTime
         ) {
-          setIsPlaying(false)
+          console.log("is playing? ", isPlaying)
+          if (isPlaying) {
+            console.log("pausing")
+            setIsPlaying(false)
+          }
         }
-      }, 100)
+      }, 50)
     )
   }
 
   function getURL() {
-    // console.log("get url,", clips[curClipIndex] && clips[curClipIndex].id)
-    // return "https://www.youtube.com/watch?v=ERBVFcutl3M"
     if (clips[curClipIndex])
       return constants.youtubeVideoURLPrefix + clips[curClipIndex].id
+  }
+
+  function handleReloadClicked() {
+    playerRef.current &&
+      playerRef.current.seekTo(
+        timesWithPadding({ originalStart: clips[curClipIndex].start }).start!
+      )
+    setIsPlaying(true)
   }
 
   const playerStyle = {
@@ -128,7 +128,20 @@ const WordFinderPage = () => {
         onStart={handlePlayerOnStart}
         onProgress={() => console.log("handling on progress")}
       ></ReactPlayer>
-      <p>Word: {windowData.word.mainWord}</p>
+      <div id="wordFinderControls">
+        <div>
+          <p>
+            Word found:{" "}
+            {clips[curClipIndex] && clips[curClipIndex].wordSearchedText}
+          </p>
+        </div>
+        <Button
+          class="emojiButton"
+          extraClasses="reloadButton"
+          title="🔄"
+          onClick={handleReloadClicked}
+        ></Button>
+      </div>
       <p className="errorMessage" style={errorMessageStyle}>
         {(function() {
           return isError

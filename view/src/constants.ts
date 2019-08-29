@@ -24,7 +24,7 @@ const constants = {
   fileChooserDefaultOptions,
   folderChooserDefaultOptions,
   maxNumAltWordsToDisplay: 30,
-  youtubeVideoURLPrefix: "https://www.youtube.com/watch?v="
+  youtubeVideoURLPrefix: "https://www.youtube.com/watch?v=" //adding the options to stop more videos showing doesn't work
 }
 
 export default constants

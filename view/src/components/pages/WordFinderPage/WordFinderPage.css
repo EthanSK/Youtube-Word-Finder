@@ -1,0 +1,11 @@
+#wordFinderControls {
+  display: flex;
+  margin-top: 10px;
+  justify-content: space-between;
+  /* width: 100%; */
+  /* background-color: green; */
+}
+
+.reloadButton {
+  font-size: 40px;
+}
