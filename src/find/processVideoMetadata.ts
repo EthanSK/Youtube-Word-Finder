@@ -1,11 +1,10 @@
 import webvtt, { SubtitleCue } from "node-webvtt"
-import { getFilesInDir, getDirName } from "../filesystem"
-import { sendToConsoleOutput } from "../logger"
+import { getDirName } from "../filesystem"
 import fs from "fs"
 import moment from "moment"
 import { removeFirstOccurrence } from "../utils"
 import path from "path"
-import { userDefaultsOnStart } from "../userDefaults"
+import { userDefaultsOnStart, loadUserDefault } from "../userDefaults"
 
 export interface Phrase {
   start: number
@@ -24,19 +23,29 @@ export interface VideoMetadata {
   url: string
 }
 
-const infoFileExt = ".info.json"
-const subtitleFileExt = ".vtt" //can't be sure if it will be .en.vtt if lang code is different
+const infoFileExt = "info.json"
+const subtitleFileExt = "vtt" //can't be sure if it will be .en.vtt if lang code is different
 
-export default function processVideoMetadata(id: string): VideoMetadata {
+export default function processVideoMetadata(
+  id: string,
+  useUpdatedDefaults?: boolean
+): VideoMetadata {
   // sendToConsoleOutput(
   //   `Processing video metadata and subtitles for video with ID ${id}`,
   //   "loading"
   // ) //user doesn't need to know this lol
 
-  const infoFile = path.join(getDirName("metadataDir"), `${id}.info.json`)
+  const infoFile = path.join(
+    getDirName("metadataDir", useUpdatedDefaults),
+    `${id}.${infoFileExt}`
+  )
+  const subLangCode = useUpdatedDefaults
+    ? loadUserDefault("subtitleLanguageCode")
+    : userDefaultsOnStart.subtitleLanguageCode
+
   const subsFile = path.join(
-    getDirName("metadataDir"),
-    `${id}.${userDefaultsOnStart.subtitleLanguageCode}.vtt`
+    getDirName("metadataDir", useUpdatedDefaults),
+    `${id}.${subLangCode}.${subtitleFileExt}`
   )
 
   const subs = transformSubtitles(subsFile)

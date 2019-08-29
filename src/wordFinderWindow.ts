@@ -3,16 +3,26 @@ import constants from "./constants"
 import { mainWindow } from "./main"
 import path from "path"
 import { sendToConsoleOutput } from "./logger"
+import { getRandomInt } from "./utils"
+import { setUserDefaultsOnStart } from "./userDefaults"
+import {
+  getMetadataForManualSearch,
+  findClipsForManualSearch
+} from "./find/findWordsForManualSearch"
+import { createWorkspaceFilesystem } from "./filesystem"
+import { delay } from "bluebird"
 
 export let wordFinderWindow: BrowserWindow | null
+
+let wordFinderDataQueue: WordFinderRequestWindowData[] = []
 
 function createWindow() {
   // Create the browser window.
   wordFinderWindow = new BrowserWindow({
     backgroundColor: "#282828",
     //remember to add icon here for linux coz appaz u need it. wow it didn't work in postilkesbot test
-    width: 640,
-    height: 360,
+    width: 700,
+    height: 450,
     minWidth: 200,
     minHeight: 200,
     webPreferences: {
@@ -26,7 +36,7 @@ function createWindow() {
   // Open the DevTools.
   //   win.webContents.openDevTools()
   if (process.env.NODE_ENV === "development") {
-    // wordFinderWindow.setPosition(600, 600)
+    wordFinderWindow.setPosition(getRandomInt(500, 700), getRandomInt(500, 700)) //slightly rando pos because user can overlay windows
     // and load the index.html of the app.
     wordFinderWindow.loadURL("http://localhost:3000?wordFinder")
   } else {
@@ -47,6 +57,40 @@ function createWindow() {
   })
 }
 
-ipc.on("open-word-finder", (event, data: { word: Word; arrIndex: number }) => {
-  createWindow() //allow multiple windows open so user can work on multiple while other is loading
+ipc.on("open-word-finder", (event, data: WordFinderRequestWindowData) => {
+  wordFinderDataQueue.push(data)
+  createWindow() //allow multiple windows open so user can work on multiple while others are loading
+})
+
+ipc.on("request-word-finder-data", async (event, data) => {
+  console.log("requested word finder data")
+  //we first need to get the sub files if we don't have already. check how many are downloaded, and download up until max vids
+  //then we need to pick a word that matches the one theyre searching for
+  //then we need to send the ClipToDownload object back to the window
+
+  //put it all in try catch to stop running if there was  a problem. we also need to tell the user in the manual search window
+  const wordData: WordFinderRequestWindowData = wordFinderDataQueue.shift()! //will defo exist otherwise our code is wrong
+  let response: WordFinderResponseWindowData = {
+    ...wordData,
+    clips: []
+  }
+
+  try {
+    createWorkspaceFilesystem(true)
+    await getMetadataForManualSearch()
+    const clips = await findClipsForManualSearch(
+      wordData.word,
+      wordData.arrIndex
+    ) //await it to catch errors
+    // response.clips = clips
+  } catch (error) {
+    //dont send the stop running event to the manual search window, coz there could be an auto search in progress
+    sendToConsoleOutput(
+      `There was an error manually searching for word ${wordData.word}: ` +
+        error.message,
+      "error"
+    )
+  }
+
+  // event.sender.send("response-word-finder-data", response) //send found data here
 })

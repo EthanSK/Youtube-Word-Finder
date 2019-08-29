@@ -54,28 +54,19 @@ export function loadUserDefault(key: keyof UserDefaultsState) {
 export let userDefaultsOnStart: UserDefaultsState //this should be the source of truth to use settings througout the run
 export function setUserDefaultsOnStart() {
   userDefaultsOnStart = load(`${userDefaultsKey}`)
-  createOutputNameIfNeeded()
+  if (!userDefaultsOnStart.outputFolderName) {
+    createOutputName(userDefaultsOnStart)
+  }
 }
 
-function createOutputNameIfNeeded() {
-  if (!userDefaultsOnStart.outputFolderName) {
-    if (
-      userDefaultsOnStart.videoSource === "Channel" &&
-      userDefaultsOnStart.channelId
-    )
-      userDefaultsOnStart.outputFolderName = userDefaultsOnStart.channelId
-    if (
-      userDefaultsOnStart.videoSource === "Playlist" &&
-      userDefaultsOnStart.playlistId
-    )
-      userDefaultsOnStart.outputFolderName = userDefaultsOnStart.playlistId
-    if (
-      userDefaultsOnStart.videoSource === "Text file" &&
-      userDefaultsOnStart.videoTextFile
-    )
-      userDefaultsOnStart.outputFolderName = userDefaultsOnStart.videoTextFile
-  }
-  if (!userDefaultsOnStart.outputFolderName) {
-    userDefaultsOnStart.outputFolderName += "_" + Date.now().toString() //so it's unique every time
-  }
+export function createOutputName(userDefaults: UserDefaultsState): string {
+  let result: string = ""
+  if (userDefaults.videoSource === "Channel" && userDefaults.channelId)
+    result = userDefaults.channelId
+  if (userDefaults.videoSource === "Playlist" && userDefaults.playlistId)
+    result = userDefaults.playlistId
+  if (userDefaults.videoSource === "Text file" && userDefaults.videoTextFile)
+    result = userDefaults.videoTextFile
+  result += "_" + Date.now().toString() //so it's unique every time
+  return result
 }

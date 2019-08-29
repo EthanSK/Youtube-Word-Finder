@@ -1,20 +1,8 @@
-import { userDefaultsOnStart } from "../userDefaults"
+import { userDefaultsOnStart, loadUserDefault } from "../userDefaults"
 import processVideoMetadata, { VideoMetadata } from "./processVideoMetadata"
 import { filterWord, shouldApplyWordFilter } from "../words"
 import getVideoMetadata from "./getVideoMetadata"
 import { sendToConsoleOutput } from "../logger"
-
-export interface ClipToDownload {
-  id: string
-  url: string
-  start: number
-  end: number
-  wordSearchedText: string
-  originalUnfilteredWord?: string //in case we wanna use it for folder names for non alt
-  phraseMatched: string
-  isAlternative: boolean
-  wordIndex: number //needed for alt and non alt words too to decide download location
-}
 
 let wordFoundCounts: {
   wordCount: number
@@ -68,6 +56,7 @@ function searchWordsInSubs(videoMetadata: VideoMetadata): ClipToDownload[] {
       word.mainWord,
       false,
       i,
+      false,
       word.originalUnfilteredWord
     )
     //also need to limit size here as may have returned mor ethan no word reps in one call
@@ -81,18 +70,19 @@ function searchWordsInSubs(videoMetadata: VideoMetadata): ClipToDownload[] {
       if (!wordFoundCounts[i].alternativeWordCount[altWordText])
         wordFoundCounts[i].alternativeWordCount[altWordText] = 0
 
-      const clips = searchWordText(videoMetadata, altWordText, true, i)
+      const clips = searchWordText(videoMetadata, altWordText, true, i, false)
       result.push(...clips)
     }
   }
   return result
 }
 
-function searchWordText(
+export function searchWordText(
   videoMetadata: VideoMetadata,
   text: string,
   isAlternative: boolean,
   wordIndex: number,
+  isForManualSearch: boolean,
   originalUnfilteredWord?: string
 ): ClipToDownload[] {
   let result: ClipToDownload[] = []
@@ -111,21 +101,37 @@ function searchWordText(
     if (videoMetadata.subtitles.isIndividualWords) {
       if (
         text ===
-        (shouldApplyWordFilter(userDefaultsOnStart.subtitleLanguageCode!)
+        (shouldApplyWordFilter(
+          isForManualSearch
+            ? loadUserDefault("subtitleLanguageCode")
+            : userDefaultsOnStart.subtitleLanguageCode!
+        )
           ? filterWord(phrase.text)
           : phrase.text)
       ) {
-        pushIfNeeded(clip)
+        if (isForManualSearch) {
+          result.push(clip)
+        } else {
+          pushIfNeeded(clip)
+        }
       }
     } else {
       for (const subPhrase of phrase.text.split(/\s+/)) {
         if (
           text ===
-          (shouldApplyWordFilter(userDefaultsOnStart.subtitleLanguageCode!)
+          (shouldApplyWordFilter(
+            isForManualSearch
+              ? loadUserDefault("subtitleLanguageCode")
+              : userDefaultsOnStart.subtitleLanguageCode!
+          )
             ? filterWord(subPhrase)
             : subPhrase)
         ) {
-          pushIfNeeded(clip)
+          if (isForManualSearch) {
+            result.push(clip)
+          } else {
+            pushIfNeeded(clip)
+          }
         }
       }
     }

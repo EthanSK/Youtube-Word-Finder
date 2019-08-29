@@ -10,15 +10,18 @@ const moment_1 = __importDefault(require("moment"));
 const utils_1 = require("../utils");
 const path_1 = __importDefault(require("path"));
 const userDefaults_1 = require("../userDefaults");
-const infoFileExt = ".info.json";
-const subtitleFileExt = ".vtt"; //can't be sure if it will be .en.vtt if lang code is different
-function processVideoMetadata(id) {
+const infoFileExt = "info.json";
+const subtitleFileExt = "vtt"; //can't be sure if it will be .en.vtt if lang code is different
+function processVideoMetadata(id, useUpdatedDefaults) {
     // sendToConsoleOutput(
     //   `Processing video metadata and subtitles for video with ID ${id}`,
     //   "loading"
     // ) //user doesn't need to know this lol
-    const infoFile = path_1.default.join(filesystem_1.getDirName("metadataDir"), `${id}.info.json`);
-    const subsFile = path_1.default.join(filesystem_1.getDirName("metadataDir"), `${id}.${userDefaults_1.userDefaultsOnStart.subtitleLanguageCode}.vtt`);
+    const infoFile = path_1.default.join(filesystem_1.getDirName("metadataDir", useUpdatedDefaults), `${id}.${infoFileExt}`);
+    const subLangCode = useUpdatedDefaults
+        ? userDefaults_1.loadUserDefault("subtitleLanguageCode")
+        : userDefaults_1.userDefaultsOnStart.subtitleLanguageCode;
+    const subsFile = path_1.default.join(filesystem_1.getDirName("metadataDir", useUpdatedDefaults), `${id}.${subLangCode}.${subtitleFileExt}`);
     const subs = transformSubtitles(subsFile);
     const jsonInfo = JSON.parse(fs_1.default.readFileSync(infoFile).toString());
     return {

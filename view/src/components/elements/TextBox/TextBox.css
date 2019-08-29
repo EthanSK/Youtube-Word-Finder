@@ -25,7 +25,8 @@
   flex-grow: 1;
 }
 
-.textBoxLabel {
+.textBoxLabel,
+p {
   color: var(--text-color);
   margin: 10px;
   white-space: nowrap;

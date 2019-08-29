@@ -7,7 +7,6 @@ import processVideoMetadata from "./processVideoMetadata"
 import findWords from "./findWords"
 import getVideoMetadata from "./getVideoMetadata"
 import { VideoMetadata } from "./processVideoMetadata"
-import { ClipToDownload } from "./findWords"
 import { downloadWords } from "./downloadWords"
 
 ipcMain.on("start-pressed", (event, data) => {

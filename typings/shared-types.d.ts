@@ -6,6 +6,27 @@ interface Word {
   }
 }
 
+interface ClipToDownload {
+  id: string
+  url: string
+  start: number
+  end: number
+  wordSearchedText: string
+  originalUnfilteredWord?: string //in case we wanna use it for folder names for non alt
+  phraseMatched: string
+  isAlternative: boolean
+  wordIndex: number //needed for alt and non alt words too to decide download location
+}
+
+interface WordFinderRequestWindowData {
+  word: Word
+  arrIndex: number
+}
+
+interface WordFinderResponseWindowData extends WordFinderRequestWindowData {
+  clips: ClipToDownload[]
+}
+
 interface AlternativeWord {
   word: string
   isBeingUsed: boolean

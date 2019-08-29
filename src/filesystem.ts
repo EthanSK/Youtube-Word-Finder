@@ -1,8 +1,14 @@
 import fs from "fs"
-import { userDefaultsOnStart } from "./userDefaults"
+import {
+  userDefaultsOnStart,
+  loadUserDefault,
+  createOutputName,
+  userDefaultsKey
+} from "./userDefaults"
 import path from "path"
 import constants from "./constants"
 import del from "del"
+import { load } from "./store"
 
 export function createDirIfNeeded(path: string) {
   if (!fs.existsSync(path)) {
@@ -12,19 +18,39 @@ export function createDirIfNeeded(path: string) {
 
 export type WorkspaceDir = "mainDir" | "tempDir" | "metadataDir" | "wordsDir"
 
-export function getDirName(dir: WorkspaceDir): string {
+export function getDirName(
+  dir: WorkspaceDir,
+  useUpdatedDefaults: boolean = false
+): string {
   switch (dir) {
     case "mainDir":
-      return path.join(
-        userDefaultsOnStart.outputLocation!,
-        userDefaultsOnStart.outputFolderName!
-      )
+      if (useUpdatedDefaults) {
+        let outputFolderName = loadUserDefault("outputFolderName")
+        if (!outputFolderName)
+          outputFolderName = createOutputName(load(userDefaultsKey))
+        return path.join(loadUserDefault("outputLocation"), outputFolderName)
+      } else {
+        return path.join(
+          userDefaultsOnStart.outputLocation!,
+          userDefaultsOnStart.outputFolderName!
+        )
+      }
+
     case "tempDir":
-      return path.join(getDirName("mainDir"), constants.folderNames.temp)
+      return path.join(
+        getDirName("mainDir", useUpdatedDefaults),
+        constants.folderNames.temp
+      )
     case "metadataDir":
-      return path.join(getDirName("tempDir"), constants.folderNames.metadata)
+      return path.join(
+        getDirName("tempDir", useUpdatedDefaults),
+        constants.folderNames.metadata
+      )
     case "wordsDir":
-      return path.join(getDirName("mainDir"), constants.folderNames.words)
+      return path.join(
+        getDirName("mainDir", useUpdatedDefaults),
+        constants.folderNames.words
+      )
   }
 }
 
@@ -40,20 +66,21 @@ export function getFilesInDir(dir: string): Promise<string[]> {
   })
 }
 
-export function createWorkspaceFilesystem() {
+export function createWorkspaceFilesystem(useUpdatedDefaults: boolean = false) {
   // createDirIfNeeded(userDefaultsOnStart.outputLocation) //shourdn't need to do this, they should have selected a dir that exists already
 
-  createDirIfNeeded(getDirName("mainDir"))
-  createDirIfNeeded(getDirName("tempDir"))
-  createDirIfNeeded(getDirName("metadataDir"))
+  createDirIfNeeded(getDirName("mainDir", useUpdatedDefaults))
+  createDirIfNeeded(getDirName("tempDir", useUpdatedDefaults))
+  createDirIfNeeded(getDirName("metadataDir", useUpdatedDefaults))
 }
 
 export function createYoutubeDlFilePath(
   dir: WorkspaceDir,
-  fileName: "id" | "title"
+  fileName: "id" | "title",
+  useUpdatedDefaults = false
 ): string {
   const ret = path.join(
-    getDirName(dir),
+    getDirName(dir, useUpdatedDefaults),
     `%(${fileName})s` //${Date.now().toString()}_
   )
   console.log(ret)

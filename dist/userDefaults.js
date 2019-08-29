@@ -49,22 +49,20 @@ function loadUserDefault(key) {
 exports.loadUserDefault = loadUserDefault;
 function setUserDefaultsOnStart() {
     exports.userDefaultsOnStart = store_1.load(`${exports.userDefaultsKey}`);
-    createOutputNameIfNeeded();
+    if (!exports.userDefaultsOnStart.outputFolderName) {
+        createOutputName(exports.userDefaultsOnStart);
+    }
 }
 exports.setUserDefaultsOnStart = setUserDefaultsOnStart;
-function createOutputNameIfNeeded() {
-    if (!exports.userDefaultsOnStart.outputFolderName) {
-        if (exports.userDefaultsOnStart.videoSource === "Channel" &&
-            exports.userDefaultsOnStart.channelId)
-            exports.userDefaultsOnStart.outputFolderName = exports.userDefaultsOnStart.channelId;
-        if (exports.userDefaultsOnStart.videoSource === "Playlist" &&
-            exports.userDefaultsOnStart.playlistId)
-            exports.userDefaultsOnStart.outputFolderName = exports.userDefaultsOnStart.playlistId;
-        if (exports.userDefaultsOnStart.videoSource === "Text file" &&
-            exports.userDefaultsOnStart.videoTextFile)
-            exports.userDefaultsOnStart.outputFolderName = exports.userDefaultsOnStart.videoTextFile;
-    }
-    if (!exports.userDefaultsOnStart.outputFolderName) {
-        exports.userDefaultsOnStart.outputFolderName += "_" + Date.now().toString(); //so it's unique every time
-    }
+function createOutputName(userDefaults) {
+    let result = "";
+    if (userDefaults.videoSource === "Channel" && userDefaults.channelId)
+        result = userDefaults.channelId;
+    if (userDefaults.videoSource === "Playlist" && userDefaults.playlistId)
+        result = userDefaults.playlistId;
+    if (userDefaults.videoSource === "Text file" && userDefaults.videoTextFile)
+        result = userDefaults.videoTextFile;
+    result += "_" + Date.now().toString(); //so it's unique every time
+    return result;
 }
+exports.createOutputName = createOutputName;

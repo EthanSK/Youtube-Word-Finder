@@ -8,22 +8,31 @@ const userDefaults_1 = require("./userDefaults");
 const path_1 = __importDefault(require("path"));
 const constants_1 = __importDefault(require("./constants"));
 const del_1 = __importDefault(require("del"));
+const store_1 = require("./store");
 function createDirIfNeeded(path) {
     if (!fs_1.default.existsSync(path)) {
         fs_1.default.mkdirSync(path);
     }
 }
 exports.createDirIfNeeded = createDirIfNeeded;
-function getDirName(dir) {
+function getDirName(dir, useUpdatedDefaults = false) {
     switch (dir) {
         case "mainDir":
-            return path_1.default.join(userDefaults_1.userDefaultsOnStart.outputLocation, userDefaults_1.userDefaultsOnStart.outputFolderName);
+            if (useUpdatedDefaults) {
+                let outputFolderName = userDefaults_1.loadUserDefault("outputFolderName");
+                if (!outputFolderName)
+                    outputFolderName = userDefaults_1.createOutputName(store_1.load(userDefaults_1.userDefaultsKey));
+                return path_1.default.join(userDefaults_1.loadUserDefault("outputLocation"), outputFolderName);
+            }
+            else {
+                return path_1.default.join(userDefaults_1.userDefaultsOnStart.outputLocation, userDefaults_1.userDefaultsOnStart.outputFolderName);
+            }
         case "tempDir":
-            return path_1.default.join(getDirName("mainDir"), constants_1.default.folderNames.temp);
+            return path_1.default.join(getDirName("mainDir", useUpdatedDefaults), constants_1.default.folderNames.temp);
         case "metadataDir":
-            return path_1.default.join(getDirName("tempDir"), constants_1.default.folderNames.metadata);
+            return path_1.default.join(getDirName("tempDir", useUpdatedDefaults), constants_1.default.folderNames.metadata);
         case "wordsDir":
-            return path_1.default.join(getDirName("mainDir"), constants_1.default.folderNames.words);
+            return path_1.default.join(getDirName("mainDir", useUpdatedDefaults), constants_1.default.folderNames.words);
     }
 }
 exports.getDirName = getDirName;
@@ -40,15 +49,15 @@ function getFilesInDir(dir) {
     });
 }
 exports.getFilesInDir = getFilesInDir;
-function createWorkspaceFilesystem() {
+function createWorkspaceFilesystem(useUpdatedDefaults = false) {
     // createDirIfNeeded(userDefaultsOnStart.outputLocation) //shourdn't need to do this, they should have selected a dir that exists already
-    createDirIfNeeded(getDirName("mainDir"));
-    createDirIfNeeded(getDirName("tempDir"));
-    createDirIfNeeded(getDirName("metadataDir"));
+    createDirIfNeeded(getDirName("mainDir", useUpdatedDefaults));
+    createDirIfNeeded(getDirName("tempDir", useUpdatedDefaults));
+    createDirIfNeeded(getDirName("metadataDir", useUpdatedDefaults));
 }
 exports.createWorkspaceFilesystem = createWorkspaceFilesystem;
-function createYoutubeDlFilePath(dir, fileName) {
-    const ret = path_1.default.join(getDirName(dir), `%(${fileName})s` //${Date.now().toString()}_
+function createYoutubeDlFilePath(dir, fileName, useUpdatedDefaults = false) {
+    const ret = path_1.default.join(getDirName(dir, useUpdatedDefaults), `%(${fileName})s` //${Date.now().toString()}_
     );
     console.log(ret);
     return ret;

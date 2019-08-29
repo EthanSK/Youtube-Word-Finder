@@ -1,41 +1,48 @@
 import youtubedl from "youtube-dl"
 import { createYoutubeDlFilePath, getDirName } from "../filesystem"
-import { userDefaultsOnStart } from "../userDefaults"
+import { userDefaultsOnStart, userDefaultsKey } from "../userDefaults"
 import { sendToConsoleOutput } from "../logger"
 import fs from "fs"
 import constants from "../constants"
 import path from "path"
+import { load } from "../store"
 
 export default async function getVideoMetadata(
-  videoIndex: number
+  videoIndex: number,
+  useUpdatedDefaults: boolean = false
 ): Promise<string | undefined> {
   sendToConsoleOutput(
     `Getting metadata and subtitles for video ${videoIndex + 1}`,
     "loading"
   )
+  const userDefaults: UserDefaultsState = useUpdatedDefaults
+    ? load(userDefaultsKey)
+    : userDefaultsOnStart
   let id: string | undefined
-  switch (userDefaultsOnStart.videoSource) {
+  switch (userDefaults.videoSource) {
     case "Channel":
       id = await downloadInfoAndSubs(
-        constants.youtube.channelURLPrefix + userDefaultsOnStart.channelId,
+        constants.youtube.channelURLPrefix + userDefaults.channelId,
+        useUpdatedDefaults,
         videoIndex + 1
       )
       break
     case "Playlist":
       id = await downloadInfoAndSubs(
-        constants.youtube.playlistURLPrefix + userDefaultsOnStart.playlistId,
+        constants.youtube.playlistURLPrefix + userDefaults.playlistId,
+        useUpdatedDefaults,
         videoIndex + 1
       )
       break
     case "Text file":
       const url = fs
-        .readFileSync(userDefaultsOnStart.videoTextFile!, "utf8")
+        .readFileSync(userDefaults.videoTextFile!, "utf8")
         .split(/\r\n|\r|\n/)
         .filter(url => url) //non falsy urls only
         .map(url => {
           return url
         })[videoIndex]
-      id = await downloadInfoAndSubs(url)
+      id = await downloadInfoAndSubs(url, useUpdatedDefaults)
       break
   }
   // sendToConsoleOutput("Got video metadata and subtitles", "info") //unecessary
@@ -45,15 +52,18 @@ export default async function getVideoMetadata(
 //this should only get one video at a time. if using text file, don't need playlistIndex, else we do, othrewise it will adowlnoad the whole channel
 async function downloadInfoAndSubs(
   url: string,
+  useUpdatedDefaults: boolean,
+
   playlistIndex?: number
 ): Promise<string | undefined> {
+  const userDefaults = useUpdatedDefaults
+    ? load(userDefaultsKey)
+    : userDefaultsOnStart
+
   if (!url) throw new Error("Video input URL cannot be found")
-  if (userDefaultsOnStart.videoSource !== "Text file" && !playlistIndex)
+  if (userDefaults.videoSource !== "Text file" && !playlistIndex)
     throw new Error("Playlist index is not set for channel or playlist url")
-  if (
-    userDefaultsOnStart.videoSource === "Text file" &&
-    !url.includes("watch?v=")
-  )
+  if (userDefaults.videoSource === "Text file" && !url.includes("watch?v="))
     throw new Error("Detected an invalid URL in the videos text file")
 
   return new Promise((resolve, reject) => {
@@ -65,9 +75,9 @@ async function downloadInfoAndSubs(
       // "--write-sub ", //only using auto because it has individual word timings
       "--write-auto-sub",
       "--sub-lang", //dont enable this without setting a sub lang after it
-      userDefaultsOnStart.subtitleLanguageCode! //will always be set by default to something
+      userDefaults.subtitleLanguageCode! //will always be set by default to something
     ]
-    if (userDefaultsOnStart.videoSource !== "Text file") {
+    if (userDefaults.videoSource !== "Text file") {
       flags.push(
         "--playlist-start",
         playlistIndex!.toString(),
@@ -75,7 +85,10 @@ async function downloadInfoAndSubs(
         playlistIndex!.toString()
       ) //only get video at this index
     }
-    flags.push("-o", createYoutubeDlFilePath("metadataDir", "id"))
+    flags.push(
+      "-o",
+      createYoutubeDlFilePath("metadataDir", "id", useUpdatedDefaults)
+    )
 
     youtubedl.exec(url, flags, {}, function(err, output) {
       if (err) return reject(err)
