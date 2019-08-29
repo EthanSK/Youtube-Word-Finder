@@ -28,8 +28,8 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true
     },
-    title: constants.wordFinder.name,
-    parent: mainWindow!
+    title: constants.wordFinder.name
+    // parent: mainWindow!
   })
   sendToConsoleOutput("Started finding word manually", "info")
 
@@ -92,8 +92,9 @@ ipc.on("request-word-finder-data", async (event, data) => {
   } catch (error) {
     //dont send the stop running event to the manual search window, coz there could be an auto search in progress
     sendToConsoleOutput(
-      `There was an error manually searching for word ${wordData.word.mainWord}: ` +
-        error.message,
+      `There was an error manually searching for word ${
+        wordData.word.mainWord
+      }: ` + error.message,
       "error"
     )
     event.sender.send("response-word-finder-data-batch", {

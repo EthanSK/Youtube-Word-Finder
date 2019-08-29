@@ -18,8 +18,8 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true
     },
-    title: constants.wordOptions.name,
-    parent: mainWindow!
+    title: constants.wordOptions.name
+    // parent: mainWindow!
   })
   sendToConsoleOutput("Started changing word options", "settings")
 

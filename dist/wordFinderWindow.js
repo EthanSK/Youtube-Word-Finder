@@ -5,7 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const electron_1 = require("electron");
 const constants_1 = __importDefault(require("./constants"));
-const main_1 = require("./main");
 const path_1 = __importDefault(require("path"));
 const logger_1 = require("./logger");
 const utils_1 = require("./utils");
@@ -24,8 +23,8 @@ function createWindow() {
         webPreferences: {
             nodeIntegration: true
         },
-        title: constants_1.default.wordFinder.name,
-        parent: main_1.mainWindow
+        title: constants_1.default.wordFinder.name
+        // parent: mainWindow!
     });
     logger_1.sendToConsoleOutput("Started finding word manually", "info");
     // Open the DevTools.
@@ -77,8 +76,7 @@ electron_1.ipcMain.on("request-word-finder-data", async (event, data) => {
     }
     catch (error) {
         //dont send the stop running event to the manual search window, coz there could be an auto search in progress
-        logger_1.sendToConsoleOutput(`There was an error manually searching for word ${wordData.word.mainWord}: ` +
-            error.message, "error");
+        logger_1.sendToConsoleOutput(`There was an error manually searching for word ${wordData.word.mainWord}: ` + error.message, "error");
         event.sender.send("response-word-finder-data-batch", {
             ...wordData,
             clips: [],

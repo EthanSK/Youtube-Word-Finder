@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext, useRef } from "react"
 // import YouTubePlayer from "react-player/lib/players/YouTube"
 import ReactPlayer from "react-player"
+import useInterval from "../../../utils/useInterval"
 
 import "./WordFinderPage.css"
 import { ipcSend } from "../../../ipc"
@@ -20,7 +21,6 @@ const WordFinderPage = () => {
   const { state: userDefaultsState } = useContext(UserDefaultsContext)
   const [clips, setClips] = useState<ClipToDownload[]>([])
   const [isError, setIsError] = useState(false)
-  const [intervalHandle, setIntervalHandle] = useState<NodeJS.Timeout>()
   const [curClipIndex, setCurClipIndex] = useState(0)
   const [isPlaying, setIsPlaying] = useState(true)
 
@@ -58,7 +58,6 @@ const WordFinderPage = () => {
     ipcRenderer.on(channel, handleUserDefaultRestore) //called multiple times with new data
 
     return () => {
-      if (intervalHandle) clearInterval(intervalHandle)
       ipcRenderer.removeListener(channel, handleUserDefaultRestore)
     }
   }, [])
@@ -70,30 +69,25 @@ const WordFinderPage = () => {
         timesWithPadding({ originalStart: clips[curClipIndex].start }).start!
       )
     //   setIsPlaying(true)
-
-    checkToStopVideo()
   }
 
-  function checkToStopVideo() {
-    useInterval(
-      setInterval(() => {
-        const endTime = timesWithPadding({
-          originalEnd: clips[curClipIndex].end
-        }).end
-        if (
-          playerRef.current &&
-          endTime &&
-          playerRef.current.getCurrentTime() > endTime
-        ) {
-          console.log("is playing? ", isPlaying)
-          if (isPlaying) {
-            console.log("pausing")
-            setIsPlaying(false)
-          }
-        }
-      }, 50)
-    )
-  }
+  //checks to stop interval
+  useInterval(() => {
+    const endTime = timesWithPadding({
+      originalEnd: clips[curClipIndex].end
+    }).end
+    if (
+      playerRef.current &&
+      endTime &&
+      playerRef.current.getCurrentTime() > endTime
+    ) {
+      // console.log("is playing? ", isPlaying)
+      if (isPlaying) {
+        // console.log("pausing")
+        setIsPlaying(false)
+      }
+    }
+  }, 50)
 
   function getURL() {
     if (clips[curClipIndex])
@@ -127,7 +121,7 @@ const WordFinderPage = () => {
         onReady={handlePlayerOnReady}
         onStart={handlePlayerOnStart}
         onProgress={() => console.log("handling on progress")}
-      ></ReactPlayer>
+      />
       <div id="wordFinderControls">
         <div>
           <p>
@@ -140,7 +134,7 @@ const WordFinderPage = () => {
           extraClasses="reloadButton"
           title="🔄"
           onClick={handleReloadClicked}
-        ></Button>
+        />
       </div>
       <p className="errorMessage" style={errorMessageStyle}>
         {(function() {
