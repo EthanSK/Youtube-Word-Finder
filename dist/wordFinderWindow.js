@@ -79,7 +79,8 @@ electron_1.ipcMain.on("request-word-finder-data", async (event, data) => {
             const clips = await findWordsForManualSearch_1.findClipsForManualSearch(wordData.word, wordData.arrIndex, id); //await it to catch errors
             let response = {
                 ...wordData,
-                clips: clips
+                clips: clips,
+                didScanNewVideo: true
             };
             event.sender.send("response-word-finder-data-batch", response);
         });
@@ -94,4 +95,5 @@ electron_1.ipcMain.on("request-word-finder-data", async (event, data) => {
             isError: true
         });
     }
+    event.sender.send("response-word-finder-data-batch-finished");
 });

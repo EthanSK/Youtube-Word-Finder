@@ -23,6 +23,8 @@ const WordFinderPage = () => {
   const [isError, setIsError] = useState(false)
   const [curClipIndex, setCurClipIndex] = useState(0)
   const [isPlaying, setIsPlaying] = useState(true)
+  const [scannedVidsCount, setScannedVidsCount] = useState(0)
+  const [isFinishedScanning, setIsFinishedScanning] = useState(false)
 
   let playerRef = useRef<ReactPlayer>(null)
 
@@ -48,14 +50,24 @@ const WordFinderPage = () => {
       data: WordFinderResponseWindowData
     ) {
       setWindowData({ word: data.word, arrIndex: data.arrIndex })
-      setClips([...clips, ...data.clips])
+
+      setClips(clips => [...clips, ...data.clips]) //must be callback or it wont work
       if (data.isError) {
         setIsError(true)
       }
-      console.log("set window data: ", windowData)
+      if (data.didScanNewVideo) {
+        setScannedVidsCount(scannedVidsCount => scannedVidsCount + 1)
+      }
     }
 
     ipcRenderer.on(channel, handleUserDefaultRestore) //called multiple times with new data
+
+    ipcRenderer.once(
+      "response-word-finder-data-batch-finished",
+      (event, data) => {
+        setIsFinishedScanning(true)
+      }
+    )
 
     return () => {
       ipcRenderer.removeListener(channel, handleUserDefaultRestore)
@@ -91,8 +103,11 @@ const WordFinderPage = () => {
   }, 50)
 
   function getURL() {
-    if (clips[curClipIndex])
+    if (clips[curClipIndex]) {
+      // console.log("clip word length: ", clips.length)
+      console.log("clip cur id : ", clips[curClipIndex].id)
       return constants.youtubeVideoURLPrefix + clips[curClipIndex].id
+    }
   }
 
   function handleReloadClicked() {
@@ -110,6 +125,44 @@ const WordFinderPage = () => {
   const errorMessageStyle = {
     color: "red"
   }
+
+  function setText() {
+    //when any vars in this function change, and are hooked into, component will rerender
+    let text = ""
+    if (clips[curClipIndex]) {
+      text = `Clip found for word: ${clips[curClipIndex].wordSearchedText}. `
+    } else {
+      if (isFinishedScanning) {
+        text = `Could not find clip for word ${
+          windowData.word.mainWord
+        } or alternatives. Scanned ${scannedVidsCount} videos. `
+      } else {
+        text = `Trying to find clip for word ${
+          windowData.word.mainWord
+        } or alternatives. `
+      }
+    }
+
+    return text
+  }
+
+  function setText2() {
+    let text = ""
+    if (clips[curClipIndex]) {
+      text = `${
+        clips.length
+      } other clips found. Scanned ${scannedVidsCount} videos. `
+    } else if (isFinishedScanning) {
+      text = `Try increasing max number of vids & add more alternative words. `
+    } else {
+      text = `Scanned ${scannedVidsCount} videos. `
+    }
+    if (isFinishedScanning) {
+      text += "Scan complete. "
+    }
+
+    return text
+  }
   return (
     <div id="wordFinderPageId">
       <ReactPlayer
@@ -124,19 +177,32 @@ const WordFinderPage = () => {
         onProgress={() => console.log("handling on progress")}
       />
       <div id="wordFinderControls">
-        <div>
-          <p>
-            Word found:{" "}
-            {clips[curClipIndex] && clips[curClipIndex].wordSearchedText}
-          </p>
-        </div>
+        <div />
+
         <Button
-          class="emojiButton"
+          class="mediumButton"
+          title="Previous clip"
+          onClick={handleReloadClicked}
+        />
+        <Button
+          class="mediumButton"
+          title="Next clip"
+          onClick={handleReloadClicked}
+        />
+        <Button
+          class="mediumButton"
           extraClasses="reloadButton"
-          title="🔄"
+          title="Reload clip"
+          onClick={handleReloadClicked}
+        />
+        <Button
+          class="mediumButton"
+          title="Download clip"
           onClick={handleReloadClicked}
         />
       </div>
+      <p>{setText()}</p>
+      <p>{setText2()}</p>
       <p className="errorMessage" style={errorMessageStyle}>
         {(function() {
           return isError

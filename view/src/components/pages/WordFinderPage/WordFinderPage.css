@@ -6,6 +6,11 @@
   /* background-color: green; */
 }
 
-.reloadButton {
-  font-size: 40px;
+#wordFinderText {
+  display: flex;
+  justify-content: space-between;
 }
+
+/* .reloadButton {
+  font-size: 40px;
+} */

@@ -98,7 +98,8 @@ ipc.on("request-word-finder-data", async (event, data) => {
 
       let response: WordFinderResponseWindowData = {
         ...wordData,
-        clips: clips
+        clips: clips,
+        didScanNewVideo: true
       }
       event.sender.send("response-word-finder-data-batch", response)
     })
@@ -117,4 +118,5 @@ ipc.on("request-word-finder-data", async (event, data) => {
       isError: true
     })
   }
+  event.sender.send("response-word-finder-data-batch-finished")
 })
