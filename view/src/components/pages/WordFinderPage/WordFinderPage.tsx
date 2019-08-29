@@ -73,6 +73,7 @@ const WordFinderPage = () => {
 
   //checks to stop interval
   useInterval(() => {
+    if (!clips[curClipIndex]) return
     const endTime = timesWithPadding({
       originalEnd: clips[curClipIndex].end
     }).end

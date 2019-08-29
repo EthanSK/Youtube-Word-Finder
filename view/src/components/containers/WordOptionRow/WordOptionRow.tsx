@@ -49,12 +49,14 @@ const WordOptionRow = (props: {
     // newWords[props.arrIndex].originalUnfilteredWord = event.currentTarget.value
     // userDefaultsDispatch({ type: "set", payload: { words: newWords } })
 
-    const newWord: Word = {
-      mainWord: shouldApplyWordFilter(userDefaultsState.subtitleLanguageCode)
-        ? filterWord(event.currentTarget.value)
-        : event.currentTarget.value,
-      originalUnfilteredWord: event.currentTarget.value
-    }
+    let newWord: Word = userDefaultsState.words![props.arrIndex] //keep current word
+    newWord.mainWord = shouldApplyWordFilter(
+      userDefaultsState.subtitleLanguageCode
+    )
+      ? filterWord(event.currentTarget.value)
+      : event.currentTarget.value
+
+    newWord.originalUnfilteredWord = event.currentTarget.value
     userDefaultsDispatch({
       type: "setWord",
       wordPkg: { arrIndex: props.arrIndex, word: newWord }
