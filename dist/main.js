@@ -12,14 +12,22 @@ require("./wordOptionsWindow");
 require("./wordFinderWindow");
 require("./userDefaults");
 require("./find/run");
+const electron_window_state_1 = __importDefault(require("electron-window-state"));
 dotenv_1.default.config();
 function createWindow() {
+    let mainWindowState = electron_window_state_1.default({
+        defaultWidth: 850,
+        defaultHeight: 600,
+        file: "mainWindow.json"
+    });
     // Create the browser window.
     exports.mainWindow = new electron_1.BrowserWindow({
         backgroundColor: "#282828",
+        x: mainWindowState.x,
+        y: mainWindowState.y,
         //remember to add icon here for linux coz appaz u need it. wow it didn't work in postilkesbot test
-        width: 850,
-        height: 600,
+        width: mainWindowState.width,
+        height: mainWindowState.height,
         minWidth: 300,
         minHeight: 400,
         webPreferences: {
@@ -28,10 +36,11 @@ function createWindow() {
         // titleBarStyle: "hiddenInset",
         title: constants_1.default.app.name
     });
+    mainWindowState.manage(exports.mainWindow);
     // Open the DevTools.
     //   win.webContents.openDevTools()
     if (process.env.NODE_ENV === "development") {
-        exports.mainWindow.setPosition(300, 300);
+        // mainWindow.setPosition(300, 300)
         // and load the index.html of the app.
         exports.mainWindow.loadURL("http://localhost:3000?app");
     }

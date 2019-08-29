@@ -7,17 +7,24 @@ const electron_1 = require("electron");
 const constants_1 = __importDefault(require("./constants"));
 const path_1 = __importDefault(require("path"));
 const logger_1 = require("./logger");
-const utils_1 = require("./utils");
 const findWordsForManualSearch_1 = require("./find/findWordsForManualSearch");
 const filesystem_1 = require("./filesystem");
+const electron_window_state_1 = __importDefault(require("electron-window-state"));
 let wordFinderDataQueue = [];
 function createWindow() {
+    let mainWindowState = electron_window_state_1.default({
+        defaultWidth: 700,
+        defaultHeight: 550,
+        file: "wordFinderWindow.json"
+    });
     // Create the browser window.
     exports.wordFinderWindow = new electron_1.BrowserWindow({
         backgroundColor: "#282828",
         //remember to add icon here for linux coz appaz u need it. wow it didn't work in postilkesbot test
-        width: 700,
-        height: 550,
+        width: mainWindowState.width,
+        height: mainWindowState.height,
+        x: mainWindowState.x,
+        y: mainWindowState.y,
         minWidth: 200,
         minHeight: 200,
         webPreferences: {
@@ -26,11 +33,12 @@ function createWindow() {
         title: constants_1.default.wordFinder.name
         // parent: mainWindow!
     });
+    mainWindowState.manage(exports.wordFinderWindow);
     logger_1.sendToConsoleOutput("Started finding word manually", "info");
     // Open the DevTools.
     //   win.webContents.openDevTools()
     if (process.env.NODE_ENV === "development") {
-        exports.wordFinderWindow.setPosition(utils_1.getRandomInt(500, 700), utils_1.getRandomInt(500, 700)); //slightly rando pos because user can overlay windows
+        // wordFinderWindow.setPosition(getRandomInt(500, 700), getRandomInt(500, 700)) //slightly rando pos because user can overlay windows
         // and load the index.html of the app.
         exports.wordFinderWindow.loadURL("http://localhost:3000?wordFinder");
     }
@@ -40,6 +48,9 @@ function createWindow() {
         exports.wordFinderWindow.loadURL(`file://${path_1.default.join(__dirname, "../view/build/index.html?wordFinder")}` //must use loadurl if using the query string ? to have multiple pages
         );
     }
+    exports.wordFinderWindow.on("move", () => {
+        mainWindowState.saveState(exports.wordFinderWindow); //so when opening multiple windows they spawn on top
+    });
     // Emitted when the window is closed.
     exports.wordFinderWindow.on("closed", () => {
         // Dereference the window object, usually you would store windows

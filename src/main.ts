@@ -7,18 +7,27 @@ import "./wordOptionsWindow"
 import "./wordFinderWindow"
 import "./userDefaults"
 import "./find/run"
+import windowStateKeeper from "electron-window-state"
 
 dotenv.config()
 
 export let mainWindow: BrowserWindow | null
 
 function createWindow() {
+  let mainWindowState = windowStateKeeper({
+    defaultWidth: 850,
+    defaultHeight: 600,
+    file: "mainWindow.json"
+  })
+
   // Create the browser window.
   mainWindow = new BrowserWindow({
     backgroundColor: "#282828",
+    x: mainWindowState.x,
+    y: mainWindowState.y,
     //remember to add icon here for linux coz appaz u need it. wow it didn't work in postilkesbot test
-    width: 850,
-    height: 600,
+    width: mainWindowState.width,
+    height: mainWindowState.height,
     minWidth: 300,
     minHeight: 400,
     webPreferences: {
@@ -27,11 +36,12 @@ function createWindow() {
     // titleBarStyle: "hiddenInset",
     title: constants.app.name
   })
+  mainWindowState.manage(mainWindow)
 
   // Open the DevTools.
   //   win.webContents.openDevTools()
   if (process.env.NODE_ENV === "development") {
-    mainWindow.setPosition(300, 300)
+    // mainWindow.setPosition(300, 300)
     // and load the index.html of the app.
     mainWindow.loadURL("http://localhost:3000?app")
   } else {

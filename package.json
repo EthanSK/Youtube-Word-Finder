@@ -39,6 +39,7 @@
     "dotenv": "^8.1.0",
     "electron-log": "^3.0.7",
     "electron-store": "^4.0.0",
+    "electron-window-state": "^5.0.3",
     "moment": "^2.24.0",
     "node-webvtt": "^1.6.1",
     "react-player": "^1.12.0",

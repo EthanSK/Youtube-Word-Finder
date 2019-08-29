@@ -3,16 +3,24 @@ import constants from "./constants"
 import { mainWindow } from "./main"
 import path from "path"
 import { sendToConsoleOutput } from "./logger"
+import windowStateKeeper from "electron-window-state"
 
 export let wordOptionsWindow: BrowserWindow | null
 
 function createWindow() {
+  let mainWindowState = windowStateKeeper({
+    defaultWidth: 700,
+    defaultHeight: 700,
+    file: "wordOptionsWindow.json"
+  })
   // Create the browser window.
   wordOptionsWindow = new BrowserWindow({
     backgroundColor: "#282828",
     //remember to add icon here for linux coz appaz u need it. wow it didn't work in postilkesbot test
-    width: 700,
-    height: 700,
+    width: mainWindowState.width,
+    height: mainWindowState.height,
+    x: mainWindowState.x,
+    y: mainWindowState.y,
     minWidth: 200,
     minHeight: 200,
     webPreferences: {
@@ -21,6 +29,8 @@ function createWindow() {
     title: constants.wordOptions.name
     // parent: mainWindow!
   })
+  mainWindowState.manage(wordOptionsWindow)
+
   sendToConsoleOutput("Started changing word options", "settings")
 
   // Open the DevTools.

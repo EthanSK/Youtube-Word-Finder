@@ -7,13 +7,21 @@ const electron_1 = require("electron");
 const constants_1 = __importDefault(require("./constants"));
 const path_1 = __importDefault(require("path"));
 const logger_1 = require("./logger");
+const electron_window_state_1 = __importDefault(require("electron-window-state"));
 function createWindow() {
+    let mainWindowState = electron_window_state_1.default({
+        defaultWidth: 700,
+        defaultHeight: 700,
+        file: "wordOptionsWindow.json"
+    });
     // Create the browser window.
     exports.wordOptionsWindow = new electron_1.BrowserWindow({
         backgroundColor: "#282828",
         //remember to add icon here for linux coz appaz u need it. wow it didn't work in postilkesbot test
-        width: 700,
-        height: 700,
+        width: mainWindowState.width,
+        height: mainWindowState.height,
+        x: mainWindowState.x,
+        y: mainWindowState.y,
         minWidth: 200,
         minHeight: 200,
         webPreferences: {
@@ -22,6 +30,7 @@ function createWindow() {
         title: constants_1.default.wordOptions.name
         // parent: mainWindow!
     });
+    mainWindowState.manage(exports.wordOptionsWindow);
     logger_1.sendToConsoleOutput("Started changing word options", "settings");
     // Open the DevTools.
     //   win.webContents.openDevTools()

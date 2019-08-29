@@ -11,18 +11,26 @@ import {
 } from "./find/findWordsForManualSearch"
 import { createWorkspaceFilesystem } from "./filesystem"
 import { delay } from "bluebird"
+import windowStateKeeper from "electron-window-state"
 
 export let wordFinderWindow: BrowserWindow | null
 
 let wordFinderDataQueue: WordFinderRequestWindowData[] = []
 
 function createWindow() {
+  let mainWindowState = windowStateKeeper({
+    defaultWidth: 700,
+    defaultHeight: 550,
+    file: "wordFinderWindow.json"
+  })
   // Create the browser window.
   wordFinderWindow = new BrowserWindow({
     backgroundColor: "#282828",
     //remember to add icon here for linux coz appaz u need it. wow it didn't work in postilkesbot test
-    width: 700,
-    height: 550,
+    width: mainWindowState.width,
+    height: mainWindowState.height,
+    x: mainWindowState.x,
+    y: mainWindowState.y,
     minWidth: 200,
     minHeight: 200,
     webPreferences: {
@@ -31,12 +39,14 @@ function createWindow() {
     title: constants.wordFinder.name
     // parent: mainWindow!
   })
+  mainWindowState.manage(wordFinderWindow)
+
   sendToConsoleOutput("Started finding word manually", "info")
 
   // Open the DevTools.
   //   win.webContents.openDevTools()
   if (process.env.NODE_ENV === "development") {
-    wordFinderWindow.setPosition(getRandomInt(500, 700), getRandomInt(500, 700)) //slightly rando pos because user can overlay windows
+    // wordFinderWindow.setPosition(getRandomInt(500, 700), getRandomInt(500, 700)) //slightly rando pos because user can overlay windows
     // and load the index.html of the app.
     wordFinderWindow.loadURL("http://localhost:3000?wordFinder")
   } else {
@@ -46,6 +56,10 @@ function createWindow() {
       `file://${path.join(__dirname, "../view/build/index.html?wordFinder")}` //must use loadurl if using the query string ? to have multiple pages
     )
   }
+
+  wordFinderWindow.on("move", () => {
+    mainWindowState.saveState(wordFinderWindow!) //so when opening multiple windows they spawn on top
+  })
 
   // Emitted when the window is closed.
   wordFinderWindow.on("closed", () => {
