@@ -35,6 +35,9 @@ const WordFinderPage = () => {
   const [downloadingClips, setDownloadingClips] = useState<DownloadingClip[]>(
     []
   )
+  const [didStopAtClipEnd, setDidStopAtClipEnd] = useState(false)
+
+  const [isVideoURLExpiredError, setIsVideoURLExpiredError] = useState(false)
   let playerRef = useRef<ReactPlayer>(null)
 
   function getCurrentDownloadingClip(): DownloadingClip | undefined {
@@ -84,7 +87,7 @@ const WordFinderPage = () => {
 
   useEffect(() => {
     // console.log("send reque to restore defaults")
-    ipcSend("request-word-finder-data", {}) //sending it here so it only requests when ready
+    ipcSend("request-word-finder-data", { shouldGetUpdated: false }) //sending it here so it only requests when ready
     const channel = "response-word-finder-data-batch"
     var handleUserDefaultRestore = function(
       event: Electron.IpcRendererEvent,
@@ -106,6 +109,7 @@ const WordFinderPage = () => {
     ipcRenderer.once(
       "response-word-finder-data-batch-finished",
       (event, data) => {
+        // setCurClipIndex(curClipIndex => mod(curClipIndex, clips.length)) //make sure the clip index is valid if we just cleared and redownloaded. this causes weird bugs
         setIsFinishedScanning(true)
       }
     )
@@ -130,16 +134,19 @@ const WordFinderPage = () => {
     const endTime = timesWithPadding({
       originalEnd: clips[curClipIndex].end
     }).end
+
     if (
       playerRef.current &&
       endTime &&
-      playerRef.current.getCurrentTime() > endTime
+      playerRef.current.getCurrentTime() > endTime &&
+      !didStopAtClipEnd
     ) {
       // console.log("is playing? ", isPlaying)
 
       if (isPlaying) {
         // console.log("pausing")
         setIsPlaying(false)
+        setDidStopAtClipEnd(true)
       }
     }
   }, 50)
@@ -161,6 +168,7 @@ const WordFinderPage = () => {
       playerRef.current.seekTo(
         timesWithPadding({ originalStart: clips[curClipIndex].start }).start!
       )
+    setDidStopAtClipEnd(false)
     setIsPlaying(true)
   }
 
@@ -197,6 +205,25 @@ const WordFinderPage = () => {
       data: ResponseClipToDownloadIPCPkg
     ) {
       if (indexOfThisClip !== data.index) return
+      if (data.isVideoURLExpiredError) {
+        console.log("video url expired")
+        const data: WordFinderRequestWindowData = windowData
+        ipcSend("reopen-window-url-expired", data)
+
+        // setIsVideoURLExpiredError(true)
+        // setClips([])
+        // setIsFinishedScanning(true)
+
+        // ipcSend("request-word-finder-data", { shouldGetUpdated: true })
+
+        //on get new data, set clip index to     setCurClipIndex(curClipIndex => mod(curClipIndex, clips.length)) so the new index is defo valid
+
+        return
+      }
+      if (data.isError) {
+        setIsError(true)
+        return
+      }
       const path = data.downloadPath
       const clip: DownloadingClip = {
         clip: clips[data.index],
@@ -225,12 +252,16 @@ const WordFinderPage = () => {
     //when any vars in this function change, and are hooked into, component will rerender
     let text = ""
     if (clips[curClipIndex]) {
-      text = `Clip found for word: ${clips[curClipIndex].wordSearchedText} `
+      text += `Clip found for word: ${clips[curClipIndex].wordSearchedText} ${
+        clips[curClipIndex].isAlternative
+          ? `(alternative for ${clips[curClipIndex].mainWord})`
+          : ""
+      }`
     } else {
       if (isFinishedScanning) {
-        text = `Could not find clip for word ${windowData.word.mainWord} or alternatives. Scanned ${scannedVidsCount} videos. `
+        text += `Could not find clip for word ${windowData.word.mainWord} or alternatives. Scanned ${scannedVidsCount} videos. `
       } else {
-        text = `Trying to find clip for word ${windowData.word.mainWord} or alternatives. `
+        text += `Trying to find clip for word ${windowData.word.mainWord} or alternatives. `
       }
     }
 
@@ -247,10 +278,18 @@ const WordFinderPage = () => {
     } else {
       text = `Scanned ${scannedVidsCount} videos. `
     }
+
+    text += `Clip index: ${curClipIndex}. `
+
+    if (clips[curClipIndex]) {
+      text += `Clip length: ${(
+        timesWithPadding({ originalEnd: clips[curClipIndex].end }).end! -
+        timesWithPadding({ originalStart: clips[curClipIndex].start }).start!
+      ).toFixed(2)} seconds. `
+    }
     if (isFinishedScanning) {
       text += "Scan complete. "
     }
-
     return text
   }
   return (
@@ -264,6 +303,8 @@ const WordFinderPage = () => {
         ref={playerRef}
         onReady={handlePlayerOnReady}
         onStart={handlePlayerOnStart}
+        onPause={() => setIsPlaying(false)}
+        onPlay={() => setIsPlaying(true)}
       />
       <div id="wordFinderControls">
         <Button
@@ -317,9 +358,13 @@ const WordFinderPage = () => {
       </p>
       <p className="errorMessage" style={errorMessageStyle}>
         {(function() {
-          return isError
-            ? "An error occurred. Check console for more info."
-            : ""
+          if (isVideoURLExpiredError) {
+            return "Raw video URL expired. Redownloading updated metadata for all videos."
+          } else if (isError) {
+            return "An error occurred. Check console for more info."
+          } else {
+            return ""
+          }
         })()}
       </p>
     </div>

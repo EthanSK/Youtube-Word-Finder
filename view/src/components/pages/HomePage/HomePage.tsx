@@ -50,7 +50,7 @@ const HomePage = () => {
           <OutputFolderNameTextBox key="OutputFolderNameTextBoxInstance" />
         </div>
         <div className="homePageRightSide">
-          <ConsoleOutput placeholder="👋 This app finds and downloads clips from YouTube of specified words being spoken! This is the output box." />
+          <ConsoleOutput placeholder="👋 This app finds and downloads clips from YouTube of specified words being spoken! This is the output box. If you have any problems running the app, check out the app's official webpage, or contact us!" />
           <StartButton />
         </div>
       </div>

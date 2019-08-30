@@ -97,6 +97,6 @@ export function createYoutubeDlFilePath(
   return ret
 }
 
-export async function cleanupDirs() {
-  del([getDirName("tempDir")])
+export async function cleanupDirs(useUpdatedDefaults: boolean) {
+  await del([getDirName("tempDir", useUpdatedDefaults)])
 }

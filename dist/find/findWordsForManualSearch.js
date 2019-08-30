@@ -25,11 +25,14 @@ async function getCurrentlyDownloadedMetadataIds() {
         });
     });
 }
-async function getMetadataForManualSearch(idRetrieved) {
-    const currentlyDownloaded = await getCurrentlyDownloadedMetadataIds();
-    //first return all the ones already downloaded
-    for (const id of currentlyDownloaded) {
-        idRetrieved(id);
+async function getMetadataForManualSearch(idRetrieved, shouldGetUpdated = false) {
+    let currentlyDownloaded = [];
+    if (!shouldGetUpdated) {
+        currentlyDownloaded = await getCurrentlyDownloadedMetadataIds();
+        //first return all the ones already downloaded
+        for (const id of currentlyDownloaded) {
+            idRetrieved(id);
+        }
     }
     //then get the remaining subs needed
     for (let i = currentlyDownloaded.length; i < userDefaults_1.loadUserDefault("maxNumberOfVideos"); i++) {

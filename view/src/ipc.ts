@@ -13,6 +13,7 @@ export type IPCRendererSendChannel =
   | "request-word-finder-data"
   | "download-manually-found-word"
   | "go-to-file-path"
+  | "reopen-window-url-expired"
 
 export function ipcSend(channel: IPCRendererSendChannel, data?: any) {
   // console.log("sending ipc from renderer: ", channel, data)

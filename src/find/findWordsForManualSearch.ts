@@ -22,14 +22,18 @@ async function getCurrentlyDownloadedMetadataIds(): Promise<string[]> {
 }
 
 export async function getMetadataForManualSearch(
-  idRetrieved: (id: string) => void
+  idRetrieved: (id: string) => void,
+  shouldGetUpdated = false
 ) {
-  const currentlyDownloaded = await getCurrentlyDownloadedMetadataIds()
-
-  //first return all the ones already downloaded
-  for (const id of currentlyDownloaded) {
-    idRetrieved(id)
+  let currentlyDownloaded = []
+  if (!shouldGetUpdated) {
+    currentlyDownloaded = await getCurrentlyDownloadedMetadataIds()
+    //first return all the ones already downloaded
+    for (const id of currentlyDownloaded) {
+      idRetrieved(id)
+    }
   }
+
   //then get the remaining subs needed
   for (
     let i = currentlyDownloaded.length;

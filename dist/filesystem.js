@@ -65,7 +65,7 @@ function createYoutubeDlFilePath(dir, fileName, useUpdatedDefaults = false) {
     return ret;
 }
 exports.createYoutubeDlFilePath = createYoutubeDlFilePath;
-async function cleanupDirs() {
-    del_1.default([getDirName("tempDir")]);
+async function cleanupDirs(useUpdatedDefaults) {
+    await del_1.default([getDirName("tempDir", useUpdatedDefaults)]);
 }
 exports.cleanupDirs = cleanupDirs;

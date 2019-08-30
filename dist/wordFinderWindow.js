@@ -66,33 +66,52 @@ electron_1.ipcMain.on("open-word-finder", (event, data) => {
     createWindow(); //allow multiple windows open so user can work on multiple while others are loading
 });
 electron_1.ipcMain.on("go-to-file-path", (event, data) => {
+    console.log("go to file in finder: ", data);
     electron_1.shell.showItemInFolder(data);
+});
+electron_1.ipcMain.on("reopen-window-url-expired", async (event, data) => {
+    exports.wordFinderWindow.close(); //it will glitch out if we have multiple windows open and have changed window, but it such an edge case and not worth dealing with
+    await filesystem_1.cleanupDirs(true);
+    wordFinderDataQueue.push(data);
+    createWindow();
+    logger_1.sendToConsoleOutput("Reopening window and finding updated video metadata as raw URL had expired", "info");
 });
 electron_1.ipcMain.on("download-manually-found-word", async (event, data) => {
     filesystem_1.createWorkspaceFilesystem(true); //it might be deleted
     filesystem_1.createDirIfNeeded(filesystem_1.getDirName("wordsManuallyFoundDir", true));
+    let path = "Could not get path";
     try {
-        const path = await downloadWords_1.downloadClip(data.clip, true);
+        path = await downloadWords_1.downloadClip(data.clip, true);
         // console.log("manual clip path: ", path)
         const response = {
             downloadPath: path,
             index: data.index
         };
-        event.sender.send("downloaded-manually-found-word", response);
+        if (!event.sender.isDestroyed())
+            event.sender.send("downloaded-manually-found-word", response);
     }
     catch (error) {
         logger_1.sendToConsoleOutput("There was an error downloading the manually found clip: " +
             error.message, "error");
+        const response = {
+            downloadPath: path,
+            index: data.index,
+            isError: true,
+            isVideoURLExpiredError: error.name === "URIError"
+        };
+        if (!event.sender.isDestroyed())
+            event.sender.send("downloaded-manually-found-word", response);
     }
 });
 electron_1.ipcMain.on("request-word-finder-data", async (event, data) => {
     console.log("requested word finder data");
     //put it all in try catch to stop running if there was  a problem. we also need to tell the user in the manual search window
     const wordData = wordFinderDataQueue.shift(); //will defo exist otherwise our code is wrong
-    event.sender.send("response-word-finder-data-batch", {
-        ...wordData,
-        clips: []
-    }); //send initial response to load in word data that we have instantly
+    if (!event.sender.isDestroyed())
+        event.sender.send("response-word-finder-data-batch", {
+            ...wordData,
+            clips: []
+        }); //send initial response to load in word data that we have instantly
     try {
         filesystem_1.createWorkspaceFilesystem(true);
         await findWordsForManualSearch_1.getMetadataForManualSearch(async (id) => {
@@ -103,7 +122,8 @@ electron_1.ipcMain.on("request-word-finder-data", async (event, data) => {
                 clips: clips,
                 didScanNewVideo: true
             };
-            event.sender.send("response-word-finder-data-batch", response);
+            if (!event.sender.isDestroyed())
+                event.sender.send("response-word-finder-data-batch", response);
         });
         // throw new Error("test error")
     }
@@ -111,11 +131,13 @@ electron_1.ipcMain.on("request-word-finder-data", async (event, data) => {
         //dont send the stop running event to the manual search window, coz there could be an auto search in progress
         logger_1.sendToConsoleOutput(`There was an error manually searching for word ${wordData.word.mainWord}: ` +
             error.message, "error");
-        event.sender.send("response-word-finder-data-batch", {
-            ...wordData,
-            clips: [],
-            isError: true
-        });
+        if (!event.sender.isDestroyed())
+            event.sender.send("response-word-finder-data-batch", {
+                ...wordData,
+                clips: [],
+                isError: true
+            });
     }
-    event.sender.send("response-word-finder-data-batch-finished");
+    if (!event.sender.isDestroyed())
+        event.sender.send("response-word-finder-data-batch-finished");
 });

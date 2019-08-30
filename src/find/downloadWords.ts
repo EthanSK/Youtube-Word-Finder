@@ -69,6 +69,7 @@ export async function downloadClip(
   )
 
   return new Promise((resolve, reject) => {
+    let wasErrorFound = false
     if (fs.existsSync(fullPath)) {
       sendToConsoleOutput(
         `Found clip ${fullPath} already downloaded so skipping`,
@@ -91,18 +92,39 @@ export async function downloadClip(
 
     //stdout
     proc.stdout.setEncoding("utf8")
-    proc.stdout.on("data", function(data) {
-      // console.log("stdout data: ", data)
-    })
+    proc.stdout.on("data", function(data) {})
 
     //stderr
     proc.stderr.setEncoding("utf8")
-    proc.stderr.on("data", function(data) {
+    proc.stderr.on("data", function(data: string) {
       // console.log("stderr data: ", data)
+      if (data.includes("HTTP error 403 Forbidden")) {
+        console.log("raw video url expired")
+        wasErrorFound = true
+        reject(
+          new URIError(
+            "Raw video URL expired. Need to get updated metadata for video. If this problem persists, delete the temp folder in your chosen output location."
+          )
+        )
+        return
+      }
+
+      if (data.includes("error") || data.includes("Error")) {
+        reject(
+          new Error(
+            data //honestly idk what else to do.
+          )
+        )
+      }
+    })
+
+    proc.stderr.on("error", function(err) {
+      console.log("there was an error ffmpeg dl: ", err)
     })
 
     proc.on("exit", (code, signal) => {
       console.log("close", code, signal)
+      if (wasErrorFound) return //don't resolve
       sendToConsoleOutput(`Downloaded clip to ${fullPath}`, "success")
       resolve(fullPath)
     })

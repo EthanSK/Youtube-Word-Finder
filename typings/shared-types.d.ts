@@ -27,6 +27,8 @@ interface ClipToDownloadIPCPkg {
 interface ResponseClipToDownloadIPCPkg {
   downloadPath: string
   index: number
+  isError?: boolean
+  isVideoURLExpiredError?: boolean
 }
 
 interface WordFinderRequestWindowData {
