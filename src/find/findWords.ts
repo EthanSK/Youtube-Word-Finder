@@ -20,6 +20,7 @@ export default function* findWords() {
       break
     } //no more vids in playlist
     const videoMetadata = processVideoMetadata(id)
+    if (!videoMetadata) continue
     const clipsToDownload = searchWordsInSubs(videoMetadata)
     sendToConsoleOutput(
       `Found ${Math.round(

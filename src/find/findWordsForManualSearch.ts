@@ -56,7 +56,7 @@ export function findClipsForManualSearch(
 ): ClipToDownload[] {
   let result: ClipToDownload[] = []
   const videoMetadata = processVideoMetadata(id, true)
-
+  if (!videoMetadata) return result
   if (word.mainWord === "") return result //it aint here boss
 
   const clips = searchWordText(

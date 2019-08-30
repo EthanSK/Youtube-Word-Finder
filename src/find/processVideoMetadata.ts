@@ -5,6 +5,7 @@ import moment from "moment"
 import { removeFirstOccurrence } from "../utils"
 import path from "path"
 import { userDefaultsOnStart, loadUserDefault } from "../userDefaults"
+import { sendToConsoleOutput } from "../logger"
 
 export interface Phrase {
   start: number
@@ -29,7 +30,7 @@ const subtitleFileExt = "vtt" //can't be sure if it will be .en.vtt if lang code
 export default function processVideoMetadata(
   id: string,
   useUpdatedDefaults?: boolean
-): VideoMetadata {
+): VideoMetadata | undefined {
   // sendToConsoleOutput(
   //   `Processing video metadata and subtitles for video with ID ${id}`,
   //   "loading"
@@ -48,9 +49,9 @@ export default function processVideoMetadata(
     `${id}.${subLangCode}.${subtitleFileExt}`
   )
 
-  const subs = transformSubtitles(subsFile)
+  const subs = transformSubtitles(subsFile, id)
   const jsonInfo = JSON.parse(fs.readFileSync(infoFile).toString())
-
+  if (!subs) return
   return {
     subtitles: subs,
     id: jsonInfo.id,
@@ -72,8 +73,20 @@ function convertTimingFormat(timing: string): number {
   return totalSeconds
 }
 
-function transformSubtitles(file: string): TransformedSubtitles {
-  const subsFile = fs.readFileSync(file).toString()
+function transformSubtitles(
+  file: string,
+  id: string
+): TransformedSubtitles | undefined {
+  let subsFile
+  try {
+    subsFile = fs.readFileSync(file).toString()
+  } catch (error) {
+    sendToConsoleOutput(
+      `Could not find subtitle file. This might be because the video with ID ${id} does not have subtitles. This is a non fatal error, and execution will continue.`,
+      "error"
+    )
+    return
+  }
   const subs = webvtt.parse(subsFile, { meta: true })
   const hasIndividualWordTimings = doesTextIncludeTimingTag(subsFile) //<c> tag is how individual timings are done. check for the closing /c tag to make sure it's not fluke.
   let result: TransformedSubtitles = {

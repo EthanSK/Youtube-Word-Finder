@@ -20,6 +20,8 @@ function* findWords() {
             break;
         } //no more vids in playlist
         const videoMetadata = processVideoMetadata_1.default(id);
+        if (!videoMetadata)
+            continue;
         const clipsToDownload = searchWordsInSubs(videoMetadata);
         logger_1.sendToConsoleOutput(`Found ${Math.round(calculatePercentageFound("main"))}% of the main words (with repetitions) so far`, "info");
         const altWordPercentFound = calculatePercentageFound("alternative");

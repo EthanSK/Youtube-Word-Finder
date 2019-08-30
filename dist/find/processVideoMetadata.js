@@ -10,6 +10,7 @@ const moment_1 = __importDefault(require("moment"));
 const utils_1 = require("../utils");
 const path_1 = __importDefault(require("path"));
 const userDefaults_1 = require("../userDefaults");
+const logger_1 = require("../logger");
 const infoFileExt = "info.json";
 const subtitleFileExt = "vtt"; //can't be sure if it will be .en.vtt if lang code is different
 function processVideoMetadata(id, useUpdatedDefaults) {
@@ -22,8 +23,10 @@ function processVideoMetadata(id, useUpdatedDefaults) {
         ? userDefaults_1.loadUserDefault("subtitleLanguageCode")
         : userDefaults_1.userDefaultsOnStart.subtitleLanguageCode;
     const subsFile = path_1.default.join(filesystem_1.getDirName("metadataDir", useUpdatedDefaults), `${id}.${subLangCode}.${subtitleFileExt}`);
-    const subs = transformSubtitles(subsFile);
+    const subs = transformSubtitles(subsFile, id);
     const jsonInfo = JSON.parse(fs_1.default.readFileSync(infoFile).toString());
+    if (!subs)
+        return;
     return {
         subtitles: subs,
         id: jsonInfo.id,
@@ -42,8 +45,15 @@ function convertTimingFormat(timing) {
         parsedTiming.milliseconds() / 1000;
     return totalSeconds;
 }
-function transformSubtitles(file) {
-    const subsFile = fs_1.default.readFileSync(file).toString();
+function transformSubtitles(file, id) {
+    let subsFile;
+    try {
+        subsFile = fs_1.default.readFileSync(file).toString();
+    }
+    catch (error) {
+        logger_1.sendToConsoleOutput(`Could not find subtitle file. This might be because the video with ID ${id} does not have subtitles. This is a non fatal error, and execution will continue.`, "error");
+        return;
+    }
     const subs = node_webvtt_1.default.parse(subsFile, { meta: true });
     const hasIndividualWordTimings = doesTextIncludeTimingTag(subsFile); //<c> tag is how individual timings are done. check for the closing /c tag to make sure it's not fluke.
     let result = {

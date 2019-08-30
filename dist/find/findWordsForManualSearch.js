@@ -48,6 +48,8 @@ exports.getMetadataForManualSearch = getMetadataForManualSearch;
 function findClipsForManualSearch(word, arrIndex, id) {
     let result = [];
     const videoMetadata = processVideoMetadata_1.default(id, true);
+    if (!videoMetadata)
+        return result;
     if (word.mainWord === "")
         return result; //it aint here boss
     const clips = findWords_1.searchWordText(videoMetadata, word.mainWord, false, arrIndex, true, word.mainWord, word.originalUnfilteredWord);
