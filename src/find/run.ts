@@ -88,7 +88,6 @@ export default async function stoppableRun() {
       resumeValue = await n.value
     }
   } catch (error) {
-    await cleanup()
     ipcSend("stopped-running", { error: null })
     sendToConsoleOutput(
       "There was an error running the bot: " + error.message,
