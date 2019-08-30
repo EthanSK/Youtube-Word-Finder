@@ -11,12 +11,14 @@ ipcMain.on("save-user-default", (event, data: UserDefaultsState) => {
   saveUserDefault(data)
   if (data && data.wordsToFindTextFile) handleNewWordsTextFile()
   if (
-    (data && data.videoSource) ||
-    data.videoTextFile ||
-    data.playlistId ||
-    data.channelId
-  )
-    cleanupDirs(true) //if we change the video source, delete the cached metadata
+    data &&
+    (data.videoSource ||
+      data.videoTextFile ||
+      data.playlistId ||
+      data.channelId)
+  ) {
+    cleanupDirs(true)
+  } //if we change the video source, delete the cached metadata
 })
 
 ipcMain.on("restore-user-defaults", (event, data) => {

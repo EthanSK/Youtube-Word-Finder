@@ -10,11 +10,13 @@ electron_1.ipcMain.on("save-user-default", (event, data) => {
     saveUserDefault(data);
     if (data && data.wordsToFindTextFile)
         words_1.handleNewWordsTextFile();
-    if ((data && data.videoSource) ||
-        data.videoTextFile ||
-        data.playlistId ||
-        data.channelId)
-        filesystem_1.cleanupDirs(true); //if we change the video source, delete the cached metadata
+    if (data &&
+        (data.videoSource ||
+            data.videoTextFile ||
+            data.playlistId ||
+            data.channelId)) {
+        filesystem_1.cleanupDirs(true);
+    } //if we change the video source, delete the cached metadata
 });
 electron_1.ipcMain.on("restore-user-defaults", (event, data) => {
     setUserDefaultsInitialValuesIfNeeded();
