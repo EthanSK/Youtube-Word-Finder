@@ -12,6 +12,7 @@ export type IPCRendererSendChannel =
   | "open-word-finder"
   | "request-word-finder-data"
   | "download-manually-found-word"
+  | "go-to-file-path"
 
 export function ipcSend(channel: IPCRendererSendChannel, data?: any) {
   // console.log("sending ipc from renderer: ", channel, data)

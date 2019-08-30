@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain as ipc } from "electron"
+import { app, BrowserWindow, ipcMain as ipc, shell } from "electron"
 import constants from "./constants"
 import { mainWindow } from "./main"
 import path from "path"
@@ -25,7 +25,7 @@ let wordFinderDataQueue: WordFinderRequestWindowData[] = []
 function createWindow() {
   let mainWindowState = windowStateKeeper({
     defaultWidth: 700,
-    defaultHeight: 550,
+    defaultHeight: 600,
     file: "wordFinderWindow.json"
   })
   // Create the browser window.
@@ -79,6 +79,10 @@ function createWindow() {
 ipc.on("open-word-finder", (event, data: WordFinderRequestWindowData) => {
   wordFinderDataQueue.push(data)
   createWindow() //allow multiple windows open so user can work on multiple while others are loading
+})
+
+ipc.on("go-to-file-path", (event, data: string) => {
+  shell.showItemInFolder(data)
 })
 
 ipc.on(

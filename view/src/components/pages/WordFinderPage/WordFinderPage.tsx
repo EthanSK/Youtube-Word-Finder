@@ -53,7 +53,7 @@ const WordFinderPage = () => {
         curClip.downloadPath = newValue.downloadPath
         //these are the only things that can change
 
-        return downloadingClips
+        return [...downloadingClips]
       } else {
         return [...downloadingClips, newValue]
       }
@@ -171,12 +171,17 @@ const WordFinderPage = () => {
   function handlePreviousClicked() {
     setCurClipIndex(curClipIndex => mod(curClipIndex - 1, clips.length))
   }
+
   function handleDownloadClicked() {
     const downloadingClip = getCurrentDownloadingClip()
     if (downloadingClip && !downloadingClip.didFinishDownload) return
     const clipPkg: ClipToDownloadIPCPkg = {
       clip: clips[curClipIndex],
       index: curClipIndex
+    }
+    if (downloadingClip && downloadingClip.didFinishDownload) {
+      ipcSend("go-to-file-path", downloadingClip.downloadPath) //open in finder
+      return
     }
     ipcSend("download-manually-found-word", clipPkg)
     setCurrentDownloadingClip({
@@ -199,7 +204,7 @@ const WordFinderPage = () => {
         didFinishDownload: true,
         downloadPath: path
       }
-      console.log("download clip: ", clip, "path", path)
+      // console.log("download clip: ", clip, "path", path)
 
       setCurrentDownloadingClip(clip)
       ipcRenderer.removeListener(channel, handleDownloadedWord) //only remove the listener if the event was for the correct index
@@ -285,7 +290,7 @@ const WordFinderPage = () => {
             const downloadingClip = getCurrentDownloadingClip()
             if (downloadingClip) {
               return downloadingClip.didFinishDownload
-                ? "Download clip again"
+                ? "Go to clip file"
                 : "Downloading..."
             } else {
               return "Download clip"

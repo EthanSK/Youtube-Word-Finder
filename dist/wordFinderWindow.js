@@ -15,7 +15,7 @@ let wordFinderDataQueue = [];
 function createWindow() {
     let mainWindowState = electron_window_state_1.default({
         defaultWidth: 700,
-        defaultHeight: 550,
+        defaultHeight: 600,
         file: "wordFinderWindow.json"
     });
     // Create the browser window.
@@ -64,6 +64,9 @@ function createWindow() {
 electron_1.ipcMain.on("open-word-finder", (event, data) => {
     wordFinderDataQueue.push(data);
     createWindow(); //allow multiple windows open so user can work on multiple while others are loading
+});
+electron_1.ipcMain.on("go-to-file-path", (event, data) => {
+    electron_1.shell.showItemInFolder(data);
 });
 electron_1.ipcMain.on("download-manually-found-word", async (event, data) => {
     filesystem_1.createWorkspaceFilesystem(true); //it might be deleted
