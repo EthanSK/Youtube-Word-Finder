@@ -57,22 +57,13 @@ function userDefaultsCheck() {
   //the rest either don't matter or are set by default. even words text file is not needed, as long as we provided words manually
 }
 
-async function cleanup() {
-  // cleanupDirs() // not during testing
-}
-
 function* run() {
   sendToConsoleOutput(`Started running at ${new Date()}`, "startstop")
   yield setup() //yield so we catch erros
   const clips: ClipToDownload[] = yield* findWords()
   console.log("clips", clips.length)
   yield* downloadWords(clips)
-  // const videoURLs: VideoListItem[] = yield getNextVideosBatch() //this should actually only be called when we don't have any more videos
-  // const id: string = yield downloadVideoMetadata(videoURLs[0].url)
-  // const videoMetadata: VideoMetadata = yield processVideoMetadata(id)
-  // console.log("video metadata: ", videoMetadata.subtitles.phrases[0])
-  // yield* findWords(videoMetadata)
-  // yield cleanup()
+  //don't delete dirs after finish, keep em cached for manual word search
   sendToConsoleOutput(`Finished running at ${new Date()}`, "startstop")
   ipcSend("stopped-running", { error: null })
 }
