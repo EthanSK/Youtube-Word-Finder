@@ -6,7 +6,7 @@
   "scripts": {
     "start": "electron .",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder",
+    "dist": "npm run build && electron-builder",
     "build": "npm run react-build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "react-start": "cd view && npm start",
@@ -48,10 +48,8 @@
   "postinstall": "electron-builder install-app-deps",
   "build": {
     "appId": "com.ethansk.youtubewordfinder",
-    "productName": "Youtube Word",
+    "productName": "Youtube Word Finder",
     "copyright": "Copyright © 2019 ${author}",
-    "asar": true,
-    "asarUnpack": "node_modules/puppeteer/.local-chromium/**/*",
     "directories": {
       "buildResources": "resources",
       "output": "executables"

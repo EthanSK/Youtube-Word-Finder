@@ -1,12 +1,12 @@
 import { spawn } from "child_process"
-import { path as ffmpegPath } from "@ffmpeg-installer/ffmpeg"
+import { path as ffmpegPathNoAsar } from "@ffmpeg-installer/ffmpeg"
 import { getDirName, createDirIfNeeded } from "../filesystem"
 import path from "path"
 import { userDefaultsOnStart, loadUserDefault } from "../userDefaults"
 import constants from "../constants"
 import { sendToConsoleOutput } from "../logger"
 import fs from "fs"
-
+const ffmpegPath = ffmpegPathNoAsar.replace("app.asar", "app.asar.unpacked")
 export function* downloadWords(clips: ClipToDownload[]) {
   sendToConsoleOutput("Downloading clips", "loading")
   createDirIfNeeded(getDirName("wordsDir"))

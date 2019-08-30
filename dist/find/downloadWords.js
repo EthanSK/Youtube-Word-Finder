@@ -11,6 +11,7 @@ const userDefaults_1 = require("../userDefaults");
 const constants_1 = __importDefault(require("../constants"));
 const logger_1 = require("../logger");
 const fs_1 = __importDefault(require("fs"));
+const ffmpegPath = ffmpeg_1.path.replace("app.asar", "app.asar.unpacked");
 function* downloadWords(clips) {
     logger_1.sendToConsoleOutput("Downloading clips", "loading");
     filesystem_1.createDirIfNeeded(filesystem_1.getDirName("wordsDir"));
@@ -59,7 +60,7 @@ async function downloadClip(clip, isForManualSearch = false) {
             resolve(fullPath);
             return;
         }
-        let proc = child_process_1.spawn(ffmpeg_1.path, [
+        let proc = child_process_1.spawn(ffmpegPath, [
             "-y",
             "-i",
             clip.url,

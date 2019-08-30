@@ -131,14 +131,16 @@ const WordFinderPage = () => {
   //checks to stop interval
   useInterval(() => {
     if (!clips[curClipIndex]) return
+
     const endTime = timesWithPadding({
       originalEnd: clips[curClipIndex].end
     }).end
+    const adjustedEndTime = endTime && endTime - 0.35 //because ffmpeg seems to cut short/youtube player cuts long
 
     if (
       playerRef.current &&
-      endTime &&
-      playerRef.current.getCurrentTime() > endTime &&
+      adjustedEndTime &&
+      playerRef.current.getCurrentTime() > adjustedEndTime &&
       !didStopAtClipEnd
     ) {
       // console.log("is playing? ", isPlaying)
@@ -296,6 +298,7 @@ const WordFinderPage = () => {
     <div id="wordFinderPageId">
       <ReactPlayer
         url={getURL()}
+        controls={true}
         playing={isPlaying}
         width={640}
         height={360}

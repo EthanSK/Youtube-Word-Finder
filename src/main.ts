@@ -25,7 +25,7 @@ function createWindow() {
     backgroundColor: "#282828",
     x: mainWindowState.x,
     y: mainWindowState.y,
-    //remember to add icon here for linux coz appaz u need it. wow it didn't work in postilkesbot test
+    icon: path.join(__dirname, "..", "resources", "512x512.png"), //remember to add icon here for linux coz appaz u need it. wow it didn't work in postilkesbot test
     width: mainWindowState.width,
     height: mainWindowState.height,
     minWidth: 300,
