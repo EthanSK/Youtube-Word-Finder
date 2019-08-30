@@ -146,7 +146,7 @@ const WordFinderPage = () => {
       if (isPlaying) {
         // console.log("pausing")
         setIsPlaying(false)
-        setDidStopAtClipEnd(true)
+        setDidStopAtClipEnd(true) //so we can keep playing after clip endsn
       }
     }
   }, 50)
@@ -261,7 +261,7 @@ const WordFinderPage = () => {
       if (isFinishedScanning) {
         text += `Could not find clip for word ${windowData.word.mainWord} or alternatives. Scanned ${scannedVidsCount} videos. `
       } else {
-        text += `Trying to find clip for word ${windowData.word.mainWord} or alternatives. `
+        text += `Trying to find clip for word ${windowData.word.mainWord} or alternatives... `
       }
     }
 

@@ -1,6 +1,7 @@
 import { ipcMain } from "electron"
 import { handleNewWordsTextFile } from "./words"
 import { save, load } from "./store"
+import { cleanupDirs } from "./filesystem"
 
 export const userDefaultsKey = "userDefaults"
 
@@ -9,6 +10,13 @@ export const userDefaultsKey = "userDefaults"
 ipcMain.on("save-user-default", (event, data: UserDefaultsState) => {
   saveUserDefault(data)
   if (data && data.wordsToFindTextFile) handleNewWordsTextFile()
+  if (
+    (data && data.videoSource) ||
+    data.videoTextFile ||
+    data.playlistId ||
+    data.channelId
+  )
+    cleanupDirs(true) //if we change the video source, delete the cached metadata
 })
 
 ipcMain.on("restore-user-defaults", (event, data) => {
@@ -30,9 +38,9 @@ function setUserDefaultsInitialValuesIfNeeded() {
       }
     }
   }
-  setIfNeeded({ paddingToAdd: 0.8 })
-  setIfNeeded({ maxNumberOfVideos: 15 })
-  setIfNeeded({ numberOfWordReps: 5 })
+  setIfNeeded({ paddingToAdd: 1.2 })
+  setIfNeeded({ maxNumberOfVideos: 25 })
+  setIfNeeded({ numberOfWordReps: 3 })
   setIfNeeded({ subtitleLanguageCode: "en" })
   setIfNeeded({ videoSource: "Channel" })
   setIfNeeded({ downloadOrder: "allMainThenAllAlt" })

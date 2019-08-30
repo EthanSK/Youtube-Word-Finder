@@ -42,11 +42,12 @@ export default async function getVideoMetadata(
         .map(url => {
           return url
         })[videoIndex]
-      id = await downloadInfoAndSubs(url, useUpdatedDefaults)
+
+      if (url) id = await downloadInfoAndSubs(url, useUpdatedDefaults)
       break
   }
   // sendToConsoleOutput("Got video metadata and subtitles", "info") //unecessary
-  return id!
+  return id
 }
 
 //this should only get one video at a time. if using text file, don't need playlistIndex, else we do, othrewise it will adowlnoad the whole channel

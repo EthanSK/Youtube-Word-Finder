@@ -31,7 +31,8 @@ async function getVideoMetadata(videoIndex, useUpdatedDefaults = false) {
                 .map(url => {
                 return url;
             })[videoIndex];
-            id = await downloadInfoAndSubs(url, useUpdatedDefaults);
+            if (url)
+                id = await downloadInfoAndSubs(url, useUpdatedDefaults);
             break;
     }
     // sendToConsoleOutput("Got video metadata and subtitles", "info") //unecessary

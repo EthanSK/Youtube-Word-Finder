@@ -3,12 +3,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const electron_1 = require("electron");
 const words_1 = require("./words");
 const store_1 = require("./store");
+const filesystem_1 = require("./filesystem");
 exports.userDefaultsKey = "userDefaults";
 //it's better to just copy and paste the state interface that define a type union of keys, because we'll end up finding the full types useful in the main process code
 electron_1.ipcMain.on("save-user-default", (event, data) => {
     saveUserDefault(data);
     if (data && data.wordsToFindTextFile)
         words_1.handleNewWordsTextFile();
+    if ((data && data.videoSource) ||
+        data.videoTextFile ||
+        data.playlistId ||
+        data.channelId)
+        filesystem_1.cleanupDirs(true); //if we change the video source, delete the cached metadata
 });
 electron_1.ipcMain.on("restore-user-defaults", (event, data) => {
     setUserDefaultsInitialValuesIfNeeded();
@@ -27,9 +33,9 @@ function setUserDefaultsInitialValuesIfNeeded() {
             }
         }
     }
-    setIfNeeded({ paddingToAdd: 0.8 });
-    setIfNeeded({ maxNumberOfVideos: 15 });
-    setIfNeeded({ numberOfWordReps: 5 });
+    setIfNeeded({ paddingToAdd: 1.2 });
+    setIfNeeded({ maxNumberOfVideos: 25 });
+    setIfNeeded({ numberOfWordReps: 3 });
     setIfNeeded({ subtitleLanguageCode: "en" });
     setIfNeeded({ videoSource: "Channel" });
     setIfNeeded({ downloadOrder: "allMainThenAllAlt" });

@@ -25,7 +25,7 @@ let wordFinderDataQueue: WordFinderRequestWindowData[] = []
 
 function createWindow() {
   let mainWindowState = windowStateKeeper({
-    defaultWidth: 700,
+    defaultWidth: 720,
     defaultHeight: 600,
     file: "wordFinderWindow.json"
   })

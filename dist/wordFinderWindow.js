@@ -14,7 +14,7 @@ const downloadWords_1 = require("./find/downloadWords");
 let wordFinderDataQueue = [];
 function createWindow() {
     let mainWindowState = electron_window_state_1.default({
-        defaultWidth: 700,
+        defaultWidth: 720,
         defaultHeight: 600,
         file: "wordFinderWindow.json"
     });

@@ -19,7 +19,7 @@ const SubtitleLanguageTextBox = (props: { key: string }) => {
         useDefaultIfUndefined: true,
         payload: {
           instructionToFollow:
-            "Ensure the language code you have provided is valid. For example, to scan for English subtitles, use code 'en'"
+            "Ensure the language code you have provided is valid. For example, to scan for English subtitles, use code 'en'. Using any language other than English is purely experimental and is not guaranteed to work."
         }
       }}
       onFinishEditing={function(event) {
