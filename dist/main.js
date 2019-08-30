@@ -60,6 +60,7 @@ function createWindow() {
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
         exports.mainWindow = null;
+        electron_1.app.quit();
     });
 }
 // This method will be called when Electron has finished

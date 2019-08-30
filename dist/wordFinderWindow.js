@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const electron_1 = require("electron");
 const constants_1 = __importDefault(require("./constants"));
+const main_1 = require("./main");
 const path_1 = __importDefault(require("path"));
 const logger_1 = require("./logger");
 const findWordsForManualSearch_1 = require("./find/findWordsForManualSearch");
@@ -14,7 +15,7 @@ const downloadWords_1 = require("./find/downloadWords");
 let wordFinderDataQueue = [];
 function createWindow() {
     let mainWindowState = electron_window_state_1.default({
-        defaultWidth: 720,
+        defaultWidth: 750,
         defaultHeight: 600,
         file: "wordFinderWindow.json"
     });
@@ -31,8 +32,8 @@ function createWindow() {
         webPreferences: {
             nodeIntegration: true
         },
-        title: constants_1.default.wordFinder.name
-        // parent: mainWindow!
+        title: constants_1.default.wordFinder.name,
+        parent: main_1.mainWindow
     });
     mainWindowState.manage(exports.wordFinderWindow);
     logger_1.sendToConsoleOutput("Started finding word manually", "info");

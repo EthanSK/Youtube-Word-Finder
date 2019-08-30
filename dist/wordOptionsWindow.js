@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const electron_1 = require("electron");
 const constants_1 = __importDefault(require("./constants"));
+const main_1 = require("./main");
 const path_1 = __importDefault(require("path"));
 const logger_1 = require("./logger");
 const electron_window_state_1 = __importDefault(require("electron-window-state"));
@@ -27,8 +28,8 @@ function createWindow() {
         webPreferences: {
             nodeIntegration: true
         },
-        title: constants_1.default.wordOptions.name
-        // parent: mainWindow!
+        title: constants_1.default.wordOptions.name,
+        parent: main_1.mainWindow
     });
     mainWindowState.manage(exports.wordOptionsWindow);
     logger_1.sendToConsoleOutput("Started changing word options", "settings");

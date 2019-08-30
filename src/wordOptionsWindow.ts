@@ -26,8 +26,8 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true
     },
-    title: constants.wordOptions.name
-    // parent: mainWindow!
+    title: constants.wordOptions.name,
+    parent: mainWindow!
   })
   mainWindowState.manage(wordOptionsWindow)
 
