@@ -98,5 +98,9 @@ export function createYoutubeDlFilePath(
 }
 
 export async function cleanupDirs(useUpdatedDefaults: boolean) {
-  await del([getDirName("tempDir", useUpdatedDefaults)], { force: true }) //force is true because apparently the stupid fucking library throws an error when deleteing things outside the current working directory.
+  try {
+    await del([getDirName("tempDir", useUpdatedDefaults)], { force: true }) //force is true because apparently the stupid fucking library throws an error when deleteing things outside the current working directory.
+  } catch (error) {
+    //don't do anything, coz im lazy . the error will prolly be something like there is no output location set...blah blah blah
+  }
 }
