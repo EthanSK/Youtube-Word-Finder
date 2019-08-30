@@ -66,6 +66,6 @@ function createYoutubeDlFilePath(dir, fileName, useUpdatedDefaults = false) {
 }
 exports.createYoutubeDlFilePath = createYoutubeDlFilePath;
 async function cleanupDirs(useUpdatedDefaults) {
-    await del_1.default([getDirName("tempDir", useUpdatedDefaults)]);
+    await del_1.default([getDirName("tempDir", useUpdatedDefaults)], { force: true }); //force is true because apparently the stupid fucking library throws an error when deleteing things outside the current working directory.
 }
 exports.cleanupDirs = cleanupDirs;
