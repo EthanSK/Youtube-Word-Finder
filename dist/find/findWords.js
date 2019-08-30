@@ -40,7 +40,7 @@ function searchWordsInSubs(videoMetadata) {
         const word = userDefaults_1.userDefaultsOnStart.words[i];
         if (word.mainWord === "")
             continue; //it aint here boss
-        const clips = searchWordText(videoMetadata, word.mainWord, false, i, false, word.originalUnfilteredWord);
+        const clips = searchWordText(videoMetadata, word.mainWord, false, i, false, word.mainWord, word.originalUnfilteredWord);
         //also need to limit size here as may have returned mor ethan no word reps in one call
         result.push(...clips);
         for (const altWordKey in word.alternativeWords) {
@@ -49,13 +49,13 @@ function searchWordsInSubs(videoMetadata) {
             const altWordText = word.alternativeWords[altWordKey].word;
             if (!wordFoundCounts[i].alternativeWordCount[altWordText])
                 wordFoundCounts[i].alternativeWordCount[altWordText] = 0;
-            const clips = searchWordText(videoMetadata, altWordText, true, i, false);
+            const clips = searchWordText(videoMetadata, altWordText, true, i, false, word.mainWord);
             result.push(...clips);
         }
     }
     return result;
 }
-function searchWordText(videoMetadata, text, isAlternative, wordIndex, isForManualSearch, originalUnfilteredWord) {
+function searchWordText(videoMetadata, text, isAlternative, wordIndex, isForManualSearch, mainWord, originalUnfilteredWord) {
     let result = [];
     const subLangCode = isForManualSearch
         ? userDefaults_1.loadUserDefault("subtitleLanguageCode")
@@ -70,7 +70,8 @@ function searchWordText(videoMetadata, text, isAlternative, wordIndex, isForManu
             wordSearchedText: text,
             originalUnfilteredWord,
             isAlternative,
-            wordIndex
+            wordIndex,
+            mainWord
         };
         if (videoMetadata.subtitles.isIndividualWords) {
             if (text ===

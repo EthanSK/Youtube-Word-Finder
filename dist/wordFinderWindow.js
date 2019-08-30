@@ -10,6 +10,7 @@ const logger_1 = require("./logger");
 const findWordsForManualSearch_1 = require("./find/findWordsForManualSearch");
 const filesystem_1 = require("./filesystem");
 const electron_window_state_1 = __importDefault(require("electron-window-state"));
+const downloadWords_1 = require("./find/downloadWords");
 let wordFinderDataQueue = [];
 function createWindow() {
     let mainWindowState = electron_window_state_1.default({
@@ -64,6 +65,20 @@ electron_1.ipcMain.on("open-word-finder", (event, data) => {
     wordFinderDataQueue.push(data);
     createWindow(); //allow multiple windows open so user can work on multiple while others are loading
 });
+electron_1.ipcMain.on("download-manually-found-word", async (event, data) => {
+    filesystem_1.createWorkspaceFilesystem(true); //it might be deleted
+    filesystem_1.createDirIfNeeded(filesystem_1.getDirName("wordsManuallyFoundDir", true));
+    try {
+        const path = await downloadWords_1.downloadClip(data, true);
+        event.sender.send("downloaded-manually-found-word", {
+            downloadPath: path
+        });
+    }
+    catch (error) {
+        logger_1.sendToConsoleOutput("There was an error downloading the manually found clip: " +
+            error.message, "error");
+    }
+});
 electron_1.ipcMain.on("request-word-finder-data", async (event, data) => {
     console.log("requested word finder data");
     //put it all in try catch to stop running if there was  a problem. we also need to tell the user in the manual search window
@@ -88,7 +103,8 @@ electron_1.ipcMain.on("request-word-finder-data", async (event, data) => {
     }
     catch (error) {
         //dont send the stop running event to the manual search window, coz there could be an auto search in progress
-        logger_1.sendToConsoleOutput(`There was an error manually searching for word ${wordData.word.mainWord}: ` + error.message, "error");
+        logger_1.sendToConsoleOutput(`There was an error manually searching for word ${wordData.word.mainWord}: ` +
+            error.message, "error");
         event.sender.send("response-word-finder-data-batch", {
             ...wordData,
             clips: [],

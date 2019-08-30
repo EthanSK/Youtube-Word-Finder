@@ -25,23 +25,24 @@ function* downloadWords(clips) {
     logger_1.sendToConsoleOutput("Finished downloading clips", "info");
 }
 exports.downloadWords = downloadWords;
-async function downloadClip(clip) {
-    const mainWord = userDefaults_1.userDefaultsOnStart.words[clip.wordIndex].mainWord;
-    const folderName = `${clip.wordIndex}_${mainWord}`; //coz alt word goes in main word folder
+async function downloadClip(clip, isForManualSearch = false) {
+    const folderName = `${clip.wordIndex}_${clip.mainWord}`; //coz alt word goes in main word folder
     let startTime = clip.start;
     let endTime = clip.end;
-    if (userDefaults_1.userDefaultsOnStart.paddingToAdd) {
-        startTime = Math.max(startTime - userDefaults_1.userDefaultsOnStart.paddingToAdd, 0);
-        endTime = endTime + userDefaults_1.userDefaultsOnStart.paddingToAdd; //if -to is longer than vid, it just stops at end which is fine
+    const paddingToAdd = isForManualSearch
+        ? userDefaults_1.loadUserDefault("paddingToAdd")
+        : userDefaults_1.userDefaultsOnStart.paddingToAdd;
+    if (paddingToAdd) {
+        startTime = Math.max(startTime - paddingToAdd, 0);
+        endTime = endTime + paddingToAdd; //if -to is longer than vid, it just stops at end which is fine
     }
     //to 2dp
     startTime = Math.round(startTime * 100) / 100;
     endTime = Math.round(endTime * 100) / 100;
-    let clipDir = path_1.default.join(filesystem_1.getDirName("wordsDir"), folderName);
+    let clipDir = path_1.default.join(isForManualSearch
+        ? filesystem_1.getDirName("wordsManuallyFoundDir", true)
+        : filesystem_1.getDirName("wordsDir"), folderName);
     filesystem_1.createDirIfNeeded(clipDir);
-    //no, this is annoying
-    // clipDir = path.join(clipDir, constants.folderNames.autoFound)
-    // createDirIfNeeded(clipDir)
     if (clip.isAlternative) {
         clipDir = path_1.default.join(clipDir, constants_1.default.folderNames.alternativeWords);
         filesystem_1.createDirIfNeeded(clipDir);
@@ -54,7 +55,7 @@ async function downloadClip(clip) {
     return new Promise((resolve, reject) => {
         if (fs_1.default.existsSync(fullPath)) {
             logger_1.sendToConsoleOutput(`Found clip ${fullPath} already downloaded so skipping`, "info");
-            resolve();
+            resolve(fullPath);
             return;
         }
         let proc = child_process_1.spawn(ffmpeg_1.path, [
@@ -80,7 +81,8 @@ async function downloadClip(clip) {
         proc.on("exit", (code, signal) => {
             console.log("close", code, signal);
             logger_1.sendToConsoleOutput(`Downloaded clip to ${fullPath}`, "success");
-            resolve();
+            resolve(fullPath);
         });
     });
 }
+exports.downloadClip = downloadClip;

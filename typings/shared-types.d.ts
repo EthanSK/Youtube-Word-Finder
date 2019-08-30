@@ -16,6 +16,7 @@ interface ClipToDownload {
   phraseMatched: string
   isAlternative: boolean
   wordIndex: number //needed for alt and non alt words too to decide download location
+  mainWord: string
 }
 
 interface WordFinderRequestWindowData {

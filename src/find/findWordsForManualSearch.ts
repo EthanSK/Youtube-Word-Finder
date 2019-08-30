@@ -61,6 +61,7 @@ export function findClipsForManualSearch(
     false,
     arrIndex,
     true,
+    word.mainWord,
     word.originalUnfilteredWord
   )
   //also need to limit size here as may have returned mor ethan no word reps in one call
@@ -75,7 +76,8 @@ export function findClipsForManualSearch(
       altWordText,
       true,
       arrIndex,
-      true
+      true,
+      word.mainWord
     )
     result.push(...clips)
   }

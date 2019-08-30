@@ -9,9 +9,14 @@ import {
   getMetadataForManualSearch,
   findClipsForManualSearch
 } from "./find/findWordsForManualSearch"
-import { createWorkspaceFilesystem } from "./filesystem"
+import {
+  createWorkspaceFilesystem,
+  getDirName,
+  createDirIfNeeded
+} from "./filesystem"
 import { delay } from "bluebird"
 import windowStateKeeper from "electron-window-state"
+import { downloadClip } from "./find/downloadWords"
 
 export let wordFinderWindow: BrowserWindow | null
 
@@ -76,6 +81,24 @@ ipc.on("open-word-finder", (event, data: WordFinderRequestWindowData) => {
   createWindow() //allow multiple windows open so user can work on multiple while others are loading
 })
 
+ipc.on("download-manually-found-word", async (event, data: ClipToDownload) => {
+  createWorkspaceFilesystem(true) //it might be deleted
+  createDirIfNeeded(getDirName("wordsManuallyFoundDir", true))
+
+  try {
+    const path = await downloadClip(data, true)
+    event.sender.send("downloaded-manually-found-word", {
+      downloadPath: path
+    })
+  } catch (error) {
+    sendToConsoleOutput(
+      "There was an error downloading the manually found clip: " +
+        error.message,
+      "error"
+    )
+  }
+})
+
 ipc.on("request-word-finder-data", async (event, data) => {
   console.log("requested word finder data")
 
@@ -107,9 +130,8 @@ ipc.on("request-word-finder-data", async (event, data) => {
   } catch (error) {
     //dont send the stop running event to the manual search window, coz there could be an auto search in progress
     sendToConsoleOutput(
-      `There was an error manually searching for word ${
-        wordData.word.mainWord
-      }: ` + error.message,
+      `There was an error manually searching for word ${wordData.word.mainWord}: ` +
+        error.message,
       "error"
     )
     event.sender.send("response-word-finder-data-batch", {

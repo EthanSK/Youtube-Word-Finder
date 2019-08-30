@@ -100,6 +100,7 @@ const WordFinderPage = () => {
       playerRef.current.getCurrentTime() > endTime
     ) {
       // console.log("is playing? ", isPlaying)
+
       if (isPlaying) {
         // console.log("pausing")
         setIsPlaying(false)
@@ -134,7 +135,13 @@ const WordFinderPage = () => {
   function handlePreviousClicked() {
     setCurClipIndex(curClipIndex => mod(curClipIndex - 1, clips.length))
   }
-  function handleDownloadClicked() {}
+  function handleDownloadClicked() {
+    ipcSend("download-manually-found-word", clips[curClipIndex]!)
+    ipcRenderer.once("downloaded-manually-found-word", (event, data) => {
+      const path = data.downloadPath
+      console.log("download clip: ", path)
+    })
+  }
 
   const playerStyle = {
     margin: "auto"
@@ -187,7 +194,6 @@ const WordFinderPage = () => {
         ref={playerRef}
         onReady={handlePlayerOnReady}
         onStart={handlePlayerOnStart}
-        onProgress={() => console.log("handling on progress")}
       />
       <div id="wordFinderControls">
         <Button
@@ -205,7 +211,7 @@ const WordFinderPage = () => {
         <Button
           class="mediumButton"
           extraClasses="reloadButton wordFinderControlButton"
-          title="Reload clip"
+          title="Watch clip again"
           onClick={handleReloadClicked}
         />
         <Button

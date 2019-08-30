@@ -2,7 +2,7 @@ import { spawn } from "child_process"
 import { path as ffmpegPath } from "@ffmpeg-installer/ffmpeg"
 import { getDirName, createDirIfNeeded } from "../filesystem"
 import path from "path"
-import { userDefaultsOnStart } from "../userDefaults"
+import { userDefaultsOnStart, loadUserDefault } from "../userDefaults"
 import constants from "../constants"
 import { sendToConsoleOutput } from "../logger"
 import fs from "fs"
@@ -24,26 +24,32 @@ export function* downloadWords(clips: ClipToDownload[]) {
   sendToConsoleOutput("Finished downloading clips", "info")
 }
 
-async function downloadClip(clip: ClipToDownload) {
-  const mainWord = userDefaultsOnStart.words![clip.wordIndex].mainWord
-  const folderName = `${clip.wordIndex}_${mainWord}` //coz alt word goes in main word folder
+export async function downloadClip(
+  clip: ClipToDownload,
+  isForManualSearch = false
+): Promise<string> {
+  const folderName = `${clip.wordIndex}_${clip.mainWord}` //coz alt word goes in main word folder
   let startTime = clip.start
   let endTime = clip.end
-  if (userDefaultsOnStart.paddingToAdd) {
-    startTime = Math.max(startTime - userDefaultsOnStart.paddingToAdd, 0)
-    endTime = endTime + userDefaultsOnStart.paddingToAdd //if -to is longer than vid, it just stops at end which is fine
+  const paddingToAdd = isForManualSearch
+    ? loadUserDefault("paddingToAdd")
+    : userDefaultsOnStart.paddingToAdd
+  if (paddingToAdd) {
+    startTime = Math.max(startTime - paddingToAdd, 0)
+    endTime = endTime + paddingToAdd //if -to is longer than vid, it just stops at end which is fine
   }
 
   //to 2dp
   startTime = Math.round(startTime * 100) / 100
   endTime = Math.round(endTime * 100) / 100
 
-  let clipDir = path.join(getDirName("wordsDir"), folderName)
+  let clipDir = path.join(
+    isForManualSearch
+      ? getDirName("wordsManuallyFoundDir", true)
+      : getDirName("wordsDir"),
+    folderName
+  )
   createDirIfNeeded(clipDir)
-
-  //no, this is annoying
-  // clipDir = path.join(clipDir, constants.folderNames.autoFound)
-  // createDirIfNeeded(clipDir)
 
   if (clip.isAlternative) {
     clipDir = path.join(clipDir, constants.folderNames.alternativeWords)
@@ -68,7 +74,7 @@ async function downloadClip(clip: ClipToDownload) {
         `Found clip ${fullPath} already downloaded so skipping`,
         "info"
       )
-      resolve()
+      resolve(fullPath)
       return
     }
 
@@ -98,7 +104,7 @@ async function downloadClip(clip: ClipToDownload) {
     proc.on("exit", (code, signal) => {
       console.log("close", code, signal)
       sendToConsoleOutput(`Downloaded clip to ${fullPath}`, "success")
-      resolve()
+      resolve(fullPath)
     })
   })
 }

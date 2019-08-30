@@ -33,6 +33,8 @@ function getDirName(dir, useUpdatedDefaults = false) {
             return path_1.default.join(getDirName("tempDir", useUpdatedDefaults), constants_1.default.folderNames.metadata);
         case "wordsDir":
             return path_1.default.join(getDirName("mainDir", useUpdatedDefaults), constants_1.default.folderNames.words);
+        case "wordsManuallyFoundDir":
+            return path_1.default.join(getDirName("mainDir", useUpdatedDefaults), constants_1.default.folderNames.wordsManuallyFound);
     }
 }
 exports.getDirName = getDirName;

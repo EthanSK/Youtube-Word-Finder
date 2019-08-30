@@ -57,6 +57,7 @@ function searchWordsInSubs(videoMetadata: VideoMetadata): ClipToDownload[] {
       false,
       i,
       false,
+      word.mainWord,
       word.originalUnfilteredWord
     )
     //also need to limit size here as may have returned mor ethan no word reps in one call
@@ -70,7 +71,14 @@ function searchWordsInSubs(videoMetadata: VideoMetadata): ClipToDownload[] {
       if (!wordFoundCounts[i].alternativeWordCount[altWordText])
         wordFoundCounts[i].alternativeWordCount[altWordText] = 0
 
-      const clips = searchWordText(videoMetadata, altWordText, true, i, false)
+      const clips = searchWordText(
+        videoMetadata,
+        altWordText,
+        true,
+        i,
+        false,
+        word.mainWord
+      )
       result.push(...clips)
     }
   }
@@ -83,6 +91,7 @@ export function searchWordText(
   isAlternative: boolean,
   wordIndex: number,
   isForManualSearch: boolean,
+  mainWord: string,
   originalUnfilteredWord?: string
 ): ClipToDownload[] {
   let result: ClipToDownload[] = []
@@ -99,7 +108,8 @@ export function searchWordText(
       wordSearchedText: text,
       originalUnfilteredWord,
       isAlternative,
-      wordIndex
+      wordIndex,
+      mainWord
     }
     if (videoMetadata.subtitles.isIndividualWords) {
       if (

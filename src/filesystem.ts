@@ -16,7 +16,12 @@ export function createDirIfNeeded(path: string) {
   }
 }
 
-export type WorkspaceDir = "mainDir" | "tempDir" | "metadataDir" | "wordsDir"
+export type WorkspaceDir =
+  | "mainDir"
+  | "tempDir"
+  | "metadataDir"
+  | "wordsDir"
+  | "wordsManuallyFoundDir"
 
 export function getDirName(
   dir: WorkspaceDir,
@@ -50,6 +55,11 @@ export function getDirName(
       return path.join(
         getDirName("mainDir", useUpdatedDefaults),
         constants.folderNames.words
+      )
+    case "wordsManuallyFoundDir":
+      return path.join(
+        getDirName("mainDir", useUpdatedDefaults),
+        constants.folderNames.wordsManuallyFound
       )
   }
 }

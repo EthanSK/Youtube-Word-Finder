@@ -47,14 +47,14 @@ function findClipsForManualSearch(word, arrIndex, id) {
     const videoMetadata = processVideoMetadata_1.default(id, true);
     if (word.mainWord === "")
         return result; //it aint here boss
-    const clips = findWords_1.searchWordText(videoMetadata, word.mainWord, false, arrIndex, true, word.originalUnfilteredWord);
+    const clips = findWords_1.searchWordText(videoMetadata, word.mainWord, false, arrIndex, true, word.mainWord, word.originalUnfilteredWord);
     //also need to limit size here as may have returned mor ethan no word reps in one call
     result.push(...clips);
     for (const altWordKey in word.alternativeWords) {
         if (!word.alternativeWords[altWordKey].isBeingUsed)
             continue;
         const altWordText = word.alternativeWords[altWordKey].word;
-        const clips = findWords_1.searchWordText(videoMetadata, altWordText, true, arrIndex, true);
+        const clips = findWords_1.searchWordText(videoMetadata, altWordText, true, arrIndex, true, word.mainWord);
         result.push(...clips);
     }
     return result;
