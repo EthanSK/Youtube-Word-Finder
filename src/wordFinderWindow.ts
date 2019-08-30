@@ -15,7 +15,6 @@ import {
   createDirIfNeeded,
   cleanupDirs
 } from "./filesystem"
-import { delay } from "bluebird"
 import windowStateKeeper from "electron-window-state"
 import { downloadClip } from "./find/downloadWords"
 
