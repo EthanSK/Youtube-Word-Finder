@@ -10,6 +10,13 @@ import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext"
 import Button from "../../elements/Button/Button"
 const { ipcRenderer } = window.require("electron")
 
+interface DownloadingClip {
+  clip: ClipToDownload
+  clipIndex: number
+  didFinishDownload: boolean
+  downloadPath?: string
+}
+
 const WordFinderPage = () => {
   const [windowData, setWindowData] = useState<WordFinderRequestWindowData>({
     word: {
@@ -25,8 +32,33 @@ const WordFinderPage = () => {
   const [isPlaying, setIsPlaying] = useState(true)
   const [scannedVidsCount, setScannedVidsCount] = useState(0)
   const [isFinishedScanning, setIsFinishedScanning] = useState(false)
-
+  const [downloadingClips, setDownloadingClips] = useState<DownloadingClip[]>(
+    []
+  )
   let playerRef = useRef<ReactPlayer>(null)
+
+  function getCurrentDownloadingClip(): DownloadingClip | undefined {
+    return downloadingClips.filter(el => el.clipIndex === curClipIndex)[0]
+  }
+
+  function setCurrentDownloadingClip(newValue: DownloadingClip) {
+    setDownloadingClips(downloadingClips => {
+      const curClips = downloadingClips
+      let curClip = curClips.filter(el => el.clipIndex === curClipIndex)[0]
+      //if already exits, modify props
+      // console.log("new value", newValue)
+      if (curClip) {
+        curClip.clip = newValue.clip
+        curClip.didFinishDownload = newValue.didFinishDownload
+        curClip.downloadPath = newValue.downloadPath
+        //these are the only things that can change
+
+        return downloadingClips
+      } else {
+        return [...downloadingClips, newValue]
+      }
+    })
+  }
 
   function timesWithPadding(times: {
     originalStart?: number
@@ -41,9 +73,13 @@ const WordFinderPage = () => {
     return { start, end }
   }
 
+  // useEffect(() => {
+
+  // }, [downloadingClips])
+
   //reload on curclipindex change
   useEffect(() => {
-    reload()
+    watchClipAgain()
   }, [curClipIndex])
 
   useEffect(() => {
@@ -111,15 +147,15 @@ const WordFinderPage = () => {
   function getURL() {
     if (clips[curClipIndex]) {
       // console.log("clip word length: ", clips.length)
-      console.log("clip cur id : ", clips[curClipIndex].id)
+      // console.log("clip cur id : ", clips[curClipIndex].id)
       return constants.youtubeVideoURLPrefix + clips[curClipIndex].id
     }
   }
 
   function handleReloadClicked() {
-    reload()
+    watchClipAgain()
   }
-  function reload() {
+  function watchClipAgain() {
     playerRef.current &&
       clips[curClipIndex] &&
       playerRef.current.seekTo(
@@ -136,11 +172,40 @@ const WordFinderPage = () => {
     setCurClipIndex(curClipIndex => mod(curClipIndex - 1, clips.length))
   }
   function handleDownloadClicked() {
-    ipcSend("download-manually-found-word", clips[curClipIndex]!)
-    ipcRenderer.once("downloaded-manually-found-word", (event, data) => {
-      const path = data.downloadPath
-      console.log("download clip: ", path)
+    const downloadingClip = getCurrentDownloadingClip()
+    if (downloadingClip && !downloadingClip.didFinishDownload) return
+    const clipPkg: ClipToDownloadIPCPkg = {
+      clip: clips[curClipIndex],
+      index: curClipIndex
+    }
+    ipcSend("download-manually-found-word", clipPkg)
+    setCurrentDownloadingClip({
+      clip: clips[curClipIndex],
+      clipIndex: curClipIndex,
+      didFinishDownload: false
     })
+    const indexOfThisClip = curClipIndex //so if we change the index, the copy won't change
+
+    const channel = "downloaded-manually-found-word"
+    var handleDownloadedWord = function(
+      event: Electron.IpcRendererEvent,
+      data: ResponseClipToDownloadIPCPkg
+    ) {
+      if (indexOfThisClip !== data.index) return
+      const path = data.downloadPath
+      const clip: DownloadingClip = {
+        clip: clips[data.index],
+        clipIndex: data.index,
+        didFinishDownload: true,
+        downloadPath: path
+      }
+      console.log("download clip: ", clip, "path", path)
+
+      setCurrentDownloadingClip(clip)
+      ipcRenderer.removeListener(channel, handleDownloadedWord) //only remove the listener if the event was for the correct index
+    }
+
+    ipcRenderer.on(channel, handleDownloadedWord)
   }
 
   const playerStyle = {
@@ -216,13 +281,35 @@ const WordFinderPage = () => {
         />
         <Button
           class="mediumButton"
-          title="Download clip"
+          title={(function() {
+            const downloadingClip = getCurrentDownloadingClip()
+            if (downloadingClip) {
+              return downloadingClip.didFinishDownload
+                ? "Download clip again"
+                : "Downloading..."
+            } else {
+              return "Download clip"
+            }
+          })()}
           extraClasses="wordFinderControlButton"
           onClick={handleDownloadClicked}
         />
       </div>
       <p>{setText()}</p>
       <p>{setText2()}</p>
+      <p className="miniText">
+        {(function() {
+          const downloadingClip = getCurrentDownloadingClip()
+          // console.log("thingy: ", downloadingClip)
+          if (downloadingClip) {
+            return downloadingClip.didFinishDownload
+              ? `Clip is downloaded at: ${downloadingClip.downloadPath}`
+              : `Downloading clip...`
+          } else {
+            return ""
+          }
+        })()}
+      </p>
       <p className="errorMessage" style={errorMessageStyle}>
         {(function() {
           return isError

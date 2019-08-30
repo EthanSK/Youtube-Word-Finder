@@ -69,10 +69,13 @@ electron_1.ipcMain.on("download-manually-found-word", async (event, data) => {
     filesystem_1.createWorkspaceFilesystem(true); //it might be deleted
     filesystem_1.createDirIfNeeded(filesystem_1.getDirName("wordsManuallyFoundDir", true));
     try {
-        const path = await downloadWords_1.downloadClip(data, true);
-        event.sender.send("downloaded-manually-found-word", {
-            downloadPath: path
-        });
+        const path = await downloadWords_1.downloadClip(data.clip, true);
+        // console.log("manual clip path: ", path)
+        const response = {
+            downloadPath: path,
+            index: data.index
+        };
+        event.sender.send("downloaded-manually-found-word", response);
     }
     catch (error) {
         logger_1.sendToConsoleOutput("There was an error downloading the manually found clip: " +

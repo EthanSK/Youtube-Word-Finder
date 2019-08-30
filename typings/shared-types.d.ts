@@ -19,6 +19,16 @@ interface ClipToDownload {
   mainWord: string
 }
 
+interface ClipToDownloadIPCPkg {
+  clip: ClipToDownload
+  index: number
+}
+
+interface ResponseClipToDownloadIPCPkg {
+  downloadPath: string
+  index: number
+}
+
 interface WordFinderRequestWindowData {
   word: Word
   arrIndex: number

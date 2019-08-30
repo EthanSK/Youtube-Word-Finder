@@ -81,23 +81,29 @@ ipc.on("open-word-finder", (event, data: WordFinderRequestWindowData) => {
   createWindow() //allow multiple windows open so user can work on multiple while others are loading
 })
 
-ipc.on("download-manually-found-word", async (event, data: ClipToDownload) => {
-  createWorkspaceFilesystem(true) //it might be deleted
-  createDirIfNeeded(getDirName("wordsManuallyFoundDir", true))
+ipc.on(
+  "download-manually-found-word",
+  async (event, data: ClipToDownloadIPCPkg) => {
+    createWorkspaceFilesystem(true) //it might be deleted
+    createDirIfNeeded(getDirName("wordsManuallyFoundDir", true))
 
-  try {
-    const path = await downloadClip(data, true)
-    event.sender.send("downloaded-manually-found-word", {
-      downloadPath: path
-    })
-  } catch (error) {
-    sendToConsoleOutput(
-      "There was an error downloading the manually found clip: " +
-        error.message,
-      "error"
-    )
+    try {
+      const path = await downloadClip(data.clip, true)
+      // console.log("manual clip path: ", path)
+      const response: ResponseClipToDownloadIPCPkg = {
+        downloadPath: path,
+        index: data.index
+      }
+      event.sender.send("downloaded-manually-found-word", response)
+    } catch (error) {
+      sendToConsoleOutput(
+        "There was an error downloading the manually found clip: " +
+          error.message,
+        "error"
+      )
+    }
   }
-})
+)
 
 ipc.on("request-word-finder-data", async (event, data) => {
   console.log("requested word finder data")
