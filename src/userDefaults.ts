@@ -70,13 +70,13 @@ export function setUserDefaultsOnStart() {
 }
 
 export function createOutputName(userDefaults: UserDefaultsState): string {
-  let result: string = ""
+  let result: string = "AUTO_GEN_OUTPUT_NAME"
   if (userDefaults.videoSource === "Channel" && userDefaults.channelId)
     result = userDefaults.channelId
   if (userDefaults.videoSource === "Playlist" && userDefaults.playlistId)
     result = userDefaults.playlistId
   if (userDefaults.videoSource === "Text file" && userDefaults.videoTextFile)
-    result = userDefaults.videoTextFile
-  result += "_" + Date.now().toString() //so it's unique every time
+    result = "textFileAsSource_AUTO_GEN_OUTPUT_NAME"
+  // result += "_" + Date.now().toString() //so it's unique every time //NO the point is we need to call this function every time if no output folder was given. it should always be the same.
   return result
 }

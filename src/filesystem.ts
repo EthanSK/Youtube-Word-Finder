@@ -9,6 +9,7 @@ import path from "path"
 import constants from "./constants"
 import del from "del"
 import { load } from "./store"
+import { saveUserDefault } from "./userDefaults"
 
 export function createDirIfNeeded(path: string) {
   if (!fs.existsSync(path)) {
@@ -31,14 +32,16 @@ export function getDirName(
     case "mainDir":
       if (useUpdatedDefaults) {
         let outputFolderName = loadUserDefault("outputFolderName")
-        if (!outputFolderName)
+        if (!outputFolderName) {
           outputFolderName = createOutputName(load(userDefaultsKey))
+        }
         return path.join(loadUserDefault("outputLocation"), outputFolderName)
       } else {
-        return path.join(
-          userDefaultsOnStart.outputLocation!,
-          userDefaultsOnStart.outputFolderName!
-        )
+        let outputFolderName = userDefaultsOnStart.outputFolderName
+        if (!outputFolderName) {
+          outputFolderName = createOutputName(load(userDefaultsKey))
+        }
+        return path.join(userDefaultsOnStart.outputLocation!, outputFolderName)
       }
 
     case "tempDir":

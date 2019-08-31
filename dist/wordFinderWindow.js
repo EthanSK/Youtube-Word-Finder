@@ -12,6 +12,7 @@ const findWordsForManualSearch_1 = require("./find/findWordsForManualSearch");
 const filesystem_1 = require("./filesystem");
 const electron_window_state_1 = __importDefault(require("electron-window-state"));
 const downloadWords_1 = require("./find/downloadWords");
+const run_1 = require("./find/run");
 let wordFinderDataQueue = [];
 function createWindow() {
     let mainWindowState = electron_window_state_1.default({
@@ -114,6 +115,7 @@ electron_1.ipcMain.on("request-word-finder-data", async (event, data) => {
             clips: []
         }); //send initial response to load in word data that we have instantly
     try {
+        run_1.userDefaultsCheck(true);
         filesystem_1.createWorkspaceFilesystem(true);
         await findWordsForManualSearch_1.getMetadataForManualSearch(async (id) => {
             console.log("finding clips for id :", id);

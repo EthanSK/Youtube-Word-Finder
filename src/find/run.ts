@@ -1,13 +1,18 @@
 import { ipcMain } from "electron"
 import { sendToConsoleOutput } from "../logger"
 import { ipcSend } from "../ipc"
-import { setUserDefaultsOnStart, userDefaultsOnStart } from "../userDefaults"
+import {
+  setUserDefaultsOnStart,
+  userDefaultsOnStart,
+  userDefaultsKey
+} from "../userDefaults"
 import { createWorkspaceFilesystem, cleanupDirs } from "../filesystem"
 import processVideoMetadata from "./processVideoMetadata"
 import findWords from "./findWords"
 import getVideoMetadata from "./getVideoMetadata"
 import { VideoMetadata } from "./processVideoMetadata"
 import { downloadWords } from "./downloadWords"
+import { load } from "../store"
 
 ipcMain.on("start-pressed", (event, data) => {
   isRunning = true
@@ -27,25 +32,32 @@ async function setup() {
   createWorkspaceFilesystem()
 }
 
-function userDefaultsCheck() {
-  if (
-    userDefaultsOnStart.videoSource === "Text file" &&
-    !userDefaultsOnStart.videoTextFile
-  ) {
+export function userDefaultsCheck(useUpdatedDefaults = false) {
+  console.log("userdefaults check")
+  const userDefaults: UserDefaultsState = useUpdatedDefaults
+    ? load(userDefaultsKey)
+    : userDefaultsOnStart
+  if (userDefaults.videoSource === "Text file" && !userDefaults.videoTextFile) {
     throw new Error("No text file containing video URLs could be found")
   }
-  if (!userDefaultsOnStart.outputLocation) {
+  if (userDefaults.videoSource === "Channel" && !userDefaults.channelId) {
+    throw new Error("No channel ID was given")
+  }
+  if (userDefaults.videoSource === "Playlist" && !userDefaults.playlistId) {
+    throw new Error("No playlist ID was given")
+  }
+  if (!userDefaults.outputLocation) {
     throw new Error("No output location was given")
   }
-  if (!userDefaultsOnStart.maxNumberOfVideos) {
+  if (!userDefaults.maxNumberOfVideos) {
     throw new Error("Maximum number of videos not set")
   }
-  if (!userDefaultsOnStart.numberOfWordReps) {
+  if (!userDefaults.numberOfWordReps) {
     throw new Error("Number of word repetitions not set")
   }
   if (
-    !userDefaultsOnStart.words ||
-    userDefaultsOnStart.words.filter(word => {
+    !userDefaults.words ||
+    userDefaults.words.filter(word => {
       return word.mainWord !== ""
     }).length === 0
   ) {
@@ -88,7 +100,7 @@ export default async function stoppableRun() {
       resumeValue = await n.value
     }
   } catch (error) {
-    ipcSend("stopped-running", { erroar: null })
+    ipcSend("stopped-running", { error: null })
     sendToConsoleOutput(
       "There was an error running the bot: " + error.message,
       "error"

@@ -5,7 +5,7 @@ import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext"
 
 const VideosTextFileButton = () => {
   const { dispatch: userDefaultsDispatch } = useContext(UserDefaultsContext)
-  let options = constants.fileChooserDefaultOptions
+  let options = { ...constants.fileChooserDefaultOptions }
   options.message = "Choose a text file containing the video URLs"
 
   return (

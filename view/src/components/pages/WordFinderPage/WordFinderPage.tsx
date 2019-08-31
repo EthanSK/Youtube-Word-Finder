@@ -185,6 +185,7 @@ const WordFinderPage = () => {
   function handleDownloadClicked() {
     const downloadingClip = getCurrentDownloadingClip()
     if (downloadingClip && !downloadingClip.didFinishDownload) return
+    if (clips.length === 0) return
     const clipPkg: ClipToDownloadIPCPkg = {
       clip: clips[curClipIndex],
       index: curClipIndex

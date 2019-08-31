@@ -10,6 +10,7 @@ const userDefaults_1 = require("../userDefaults");
 const filesystem_1 = require("../filesystem");
 const findWords_1 = __importDefault(require("./findWords"));
 const downloadWords_1 = require("./downloadWords");
+const store_1 = require("../store");
 electron_1.ipcMain.on("start-pressed", (event, data) => {
     isRunning = true;
     stoppableRun();
@@ -24,28 +25,38 @@ async function setup() {
     userDefaultsCheck();
     filesystem_1.createWorkspaceFilesystem();
 }
-function userDefaultsCheck() {
-    if (userDefaults_1.userDefaultsOnStart.videoSource === "Text file" &&
-        !userDefaults_1.userDefaultsOnStart.videoTextFile) {
+function userDefaultsCheck(useUpdatedDefaults = false) {
+    console.log("userdefaults check");
+    const userDefaults = useUpdatedDefaults
+        ? store_1.load(userDefaults_1.userDefaultsKey)
+        : userDefaults_1.userDefaultsOnStart;
+    if (userDefaults.videoSource === "Text file" && !userDefaults.videoTextFile) {
         throw new Error("No text file containing video URLs could be found");
     }
-    if (!userDefaults_1.userDefaultsOnStart.outputLocation) {
+    if (userDefaults.videoSource === "Channel" && !userDefaults.channelId) {
+        throw new Error("No channel ID was given");
+    }
+    if (userDefaults.videoSource === "Playlist" && !userDefaults.playlistId) {
+        throw new Error("No playlist ID was given");
+    }
+    if (!userDefaults.outputLocation) {
         throw new Error("No output location was given");
     }
-    if (!userDefaults_1.userDefaultsOnStart.maxNumberOfVideos) {
+    if (!userDefaults.maxNumberOfVideos) {
         throw new Error("Maximum number of videos not set");
     }
-    if (!userDefaults_1.userDefaultsOnStart.numberOfWordReps) {
+    if (!userDefaults.numberOfWordReps) {
         throw new Error("Number of word repetitions not set");
     }
-    if (!userDefaults_1.userDefaultsOnStart.words ||
-        userDefaults_1.userDefaultsOnStart.words.filter(word => {
+    if (!userDefaults.words ||
+        userDefaults.words.filter(word => {
             return word.mainWord !== "";
         }).length === 0) {
         throw new Error("No words could be found. You must provide words in a text file or in the word options");
     }
     //the rest either don't matter or are set by default. even words text file is not needed, as long as we provided words manually
 }
+exports.userDefaultsCheck = userDefaultsCheck;
 function* run() {
     logger_1.sendToConsoleOutput(`Started running at ${new Date()}`, "startstop");
     yield setup(); //yield so we catch erros
@@ -74,7 +85,7 @@ async function stoppableRun() {
         }
     }
     catch (error) {
-        ipc_1.ipcSend("stopped-running", { erroar: null });
+        ipc_1.ipcSend("stopped-running", { error: null });
         logger_1.sendToConsoleOutput("There was an error running the bot: " + error.message, "error");
     }
 }

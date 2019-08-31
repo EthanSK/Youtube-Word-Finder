@@ -20,12 +20,17 @@ function getDirName(dir, useUpdatedDefaults = false) {
         case "mainDir":
             if (useUpdatedDefaults) {
                 let outputFolderName = userDefaults_1.loadUserDefault("outputFolderName");
-                if (!outputFolderName)
+                if (!outputFolderName) {
                     outputFolderName = userDefaults_1.createOutputName(store_1.load(userDefaults_1.userDefaultsKey));
+                }
                 return path_1.default.join(userDefaults_1.loadUserDefault("outputLocation"), outputFolderName);
             }
             else {
-                return path_1.default.join(userDefaults_1.userDefaultsOnStart.outputLocation, userDefaults_1.userDefaultsOnStart.outputFolderName);
+                let outputFolderName = userDefaults_1.userDefaultsOnStart.outputFolderName;
+                if (!outputFolderName) {
+                    outputFolderName = userDefaults_1.createOutputName(store_1.load(userDefaults_1.userDefaultsKey));
+                }
+                return path_1.default.join(userDefaults_1.userDefaultsOnStart.outputLocation, outputFolderName);
             }
         case "tempDir":
             return path_1.default.join(getDirName("mainDir", useUpdatedDefaults), constants_1.default.folderNames.temp);

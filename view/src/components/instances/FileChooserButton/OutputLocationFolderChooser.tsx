@@ -5,7 +5,7 @@ import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext"
 
 const OutputLocationFolderButton = () => {
   const { dispatch: userDefaultsDispatch } = useContext(UserDefaultsContext)
-  let options = constants.folderChooserDefaultOptions
+  let options = { ...constants.folderChooserDefaultOptions }
   options.message = "Choose a folder to store output files"
 
   return (

@@ -112,35 +112,40 @@ async function getSimilarWords(
   isLoadingAltWords = true
   await Promise.all(
     newWords.map(async word => {
-      if (!hasAltWordFromSuggestion(word) && word.mainWord) {
-        //we don't wanna call the api if we called it before
-        console.log("calling api", word.mainWord)
-        const result = await axios(
-          `https://api.datamuse.com/words?sl=${word.mainWord}`
-        )
-        if (!word.alternativeWords) {
-          word.alternativeWords = {} //need it to exist before checking if the api word has been gotten before below
-        }
-        const data = result.data as APISimilarWord[]
-        data.forEach(apiWord => {
-          const filteredWord = shouldApplyWordFilter(subtitleLanguageCode)
-            ? filterWord(apiWord.word)
-            : apiWord.word
-          if (
-            !word.alternativeWords![filteredWord] &&
-            filteredWord !== word.mainWord
-          ) {
-            word.alternativeWords![filteredWord] = {
-              word: filteredWord,
-              score: apiWord.score,
-              isBeingUsed: false,
-              doesMatchCurrentWord: true,
-              isFromSuggestion: true
-            }
+      try {
+        //because the request sometimes doesn't work and we don't wanna block everything else
+        if (!hasAltWordFromSuggestion(word) && word.mainWord) {
+          //we don't wanna call the api if we called it before
+          console.log("calling api", word.mainWord)
+          const result = await axios(
+            `https://api.datamuse.com/words?sl=${word.mainWord}`
+          )
+          if (!word.alternativeWords) {
+            word.alternativeWords = {} //need it to exist before checking if the api word has been gotten before below
           }
-        })
-      } else {
-        // console.log("already has alt word from suggestion ", word.mainWord)
+          const data = result.data as APISimilarWord[]
+          data.forEach(apiWord => {
+            const filteredWord = shouldApplyWordFilter(subtitleLanguageCode)
+              ? filterWord(apiWord.word)
+              : apiWord.word
+            if (
+              !word.alternativeWords![filteredWord] &&
+              filteredWord !== word.mainWord
+            ) {
+              word.alternativeWords![filteredWord] = {
+                word: filteredWord,
+                score: apiWord.score,
+                isBeingUsed: false,
+                doesMatchCurrentWord: true,
+                isFromSuggestion: true
+              }
+            }
+          })
+        } else {
+          // console.log("already has alt word from suggestion ", word.mainWord)
+        }
+      } catch (error) {
+        console.log("error getting word from api: ", error)
       }
     })
   )

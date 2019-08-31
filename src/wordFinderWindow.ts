@@ -17,6 +17,7 @@ import {
 } from "./filesystem"
 import windowStateKeeper from "electron-window-state"
 import { downloadClip } from "./find/downloadWords"
+import { userDefaultsCheck } from "./find/run"
 
 export let wordFinderWindow: BrowserWindow | null
 
@@ -144,6 +145,7 @@ ipc.on("request-word-finder-data", async (event, data) => {
     }) //send initial response to load in word data that we have instantly
 
   try {
+    userDefaultsCheck(true)
     createWorkspaceFilesystem(true)
     await getMetadataForManualSearch(async id => {
       console.log("finding clips for id :", id)
