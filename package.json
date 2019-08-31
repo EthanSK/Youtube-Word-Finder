@@ -1,13 +1,13 @@
 {
   "name": "youtubewordfinder",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Finds clips of youtubers saying certain words",
   "main": "dist/main.js",
   "scripts": {
     "start": "electron .",
     "pack": "electron-builder --dir",
     "dist": "npm run build && electron-builder",
-    "build": "npm run react-build",
+    "build": "tsc && npm run react-build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "react-start": "cd view && npm start",
     "react-build": "cd view && npm run build",
@@ -29,7 +29,8 @@
     "@types/react-router-dom": "^4.3.5",
     "@types/youtube-dl": "^1.12.2",
     "electron": "^6.0.4",
-    "electron-builder": "^21.2.0"
+    "electron-builder": "^21.2.0",
+    "typescript": "^3.6.2"
   },
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.0.19",
