@@ -2,15 +2,15 @@ import React from "react"
 import Button from "../../elements/Button/Button"
 import { ipcSend } from "../../../ipc"
 
-const WordOptionsButton = () => {
+const UpdateYoutubeDlButton = () => {
   return (
     <Button
-      title="Open word options"
-      class="mediumButton"
+      title="Update youtube-dl"
+      class="smallButton"
       onClick={event => {
-        ipcSend("open-word-options", {})
+        ipcSend("update-youtube-dl", {})
       }}
     />
   )
 }
-export default WordOptionsButton
+export default UpdateYoutubeDlButton

@@ -19,6 +19,7 @@ import DownloadOrderDropdown from "../../instances/Dropdown/DownloadOrderDropdow
 import StartButton from "../../instances/Button/StartButton"
 import SubtitleLanguageTextBox from "../../instances/TextBox/SubtitleLanguageTextBox"
 import ETGgamesButton from "../../instances/Button/ETGgamesButton"
+import UpdateYoutubeDlButton from "../../instances/Button/UpdateYoutubeDlButton"
 
 const HomePage = () => {
   return (
@@ -48,6 +49,10 @@ const HomePage = () => {
           {/* <DownloadOrderDropdown key="DownloadOrderDropdownInstance" /> */}
           <OutputLocationTextBox key="OutputLocationTextBoxInstance" />
           <OutputFolderNameTextBox key="OutputFolderNameTextBoxInstance" />
+          <SplitRow>
+            <UpdateYoutubeDlButton></UpdateYoutubeDlButton>
+            <div key="div3" />
+          </SplitRow>
         </div>
         <div className="homePageRightSide">
           <ConsoleOutput placeholder="👋 This app finds and downloads clips from YouTube of specified words being spoken! This is the output box. If you have any problems running the app, check out the app's official webpage, or contact us!" />

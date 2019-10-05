@@ -14,6 +14,7 @@ export type IPCRendererSendChannel =
   | "download-manually-found-word"
   | "go-to-file-path"
   | "reopen-window-url-expired"
+  | "update-youtube-dl"
 
 export function ipcSend(channel: IPCRendererSendChannel, data?: any) {
   // console.log("sending ipc from renderer: ", channel, data)

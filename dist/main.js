@@ -14,11 +14,12 @@ require("./userDefaults");
 require("./find/run");
 const electron_window_state_1 = __importDefault(require("electron-window-state"));
 const utils_1 = require("./utils");
+require("./youtubeDlUpdate");
 dotenv_1.default.config();
 function createWindow() {
     let mainWindowState = electron_window_state_1.default({
         defaultWidth: 850,
-        defaultHeight: 600,
+        defaultHeight: 500,
         file: "mainWindow.json"
     });
     // Create the browser window.
@@ -55,6 +56,7 @@ function createWindow() {
         await utils_1.delay(1000);
         // restoreUserDefaults() //now responds to request from renderer
         // updateYoutubeDl()
+        console.log(electron_1.app.getPath("userData"));
     });
     // Emitted when the window is closed.
     exports.mainWindow.on("closed", () => {

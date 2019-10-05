@@ -10,6 +10,7 @@ import "./find/run"
 import windowStateKeeper from "electron-window-state"
 import { updateYoutubeDl } from "./youtubeDlUpdate"
 import { delay } from "./utils"
+import "./youtubeDlUpdate"
 
 dotenv.config()
 
@@ -18,7 +19,7 @@ export let mainWindow: BrowserWindow | null
 function createWindow() {
   let mainWindowState = windowStateKeeper({
     defaultWidth: 850,
-    defaultHeight: 600,
+    defaultHeight: 500,
     file: "mainWindow.json"
   })
 
@@ -58,6 +59,7 @@ function createWindow() {
     await delay(1000)
     // restoreUserDefaults() //now responds to request from renderer
     // updateYoutubeDl()
+    console.log(app.getPath("userData"))
   })
 
   // Emitted when the window is closed.
