@@ -13,6 +13,7 @@ require("./wordFinderWindow");
 require("./userDefaults");
 require("./find/run");
 const electron_window_state_1 = __importDefault(require("electron-window-state"));
+const utils_1 = require("./utils");
 dotenv_1.default.config();
 function createWindow() {
     let mainWindowState = electron_window_state_1.default({
@@ -51,8 +52,9 @@ function createWindow() {
         );
     }
     exports.mainWindow.webContents.once("did-finish-load", async () => {
-        // await delay(10)
+        await utils_1.delay(1000);
         // restoreUserDefaults() //now responds to request from renderer
+        // updateYoutubeDl()
     });
     // Emitted when the window is closed.
     exports.mainWindow.on("closed", () => {

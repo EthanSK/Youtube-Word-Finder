@@ -1,6 +1,6 @@
 {
   "name": "youtubewordfinder",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Finds clips of youtubers saying certain words",
   "main": "dist/main.js",
   "scripts": {
@@ -27,19 +27,20 @@
     "@types/dotenv": "^6.1.1",
     "@types/electron-store": "^3.2.0",
     "@types/react-router-dom": "^4.3.5",
-    "@types/youtube-dl": "^1.12.2",
     "electron": "^6.0.4",
     "electron-builder": "^21.2.0",
     "typescript": "^3.6.2"
   },
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.0.19",
+    "@types/youtube-dl": "^1.12.2",
     "axios": "^0.19.0",
     "del": "^5.1.0",
     "dotenv": "^8.1.0",
     "electron-log": "^3.0.7",
     "electron-store": "^4.0.0",
     "electron-window-state": "^5.0.3",
+    "get-node-modules-dir": "^1.0.1",
     "moment": "^2.24.0",
     "node-webvtt": "^1.6.1",
     "react-player": "^1.12.0",

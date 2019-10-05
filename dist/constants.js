@@ -26,6 +26,9 @@ const constants = {
     },
     settings: {
         numVidsInBatch: 300
+    },
+    ffmpeg: {
+        headers: "User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20150101 Firefox/47.0 (Chrome)\r\nAccept-Encoding: gzip, deflate\r\nAccept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7\r\nAccept-Language: en-us,en;q=0.5\r\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n"
     }
 };
 exports.default = constants;

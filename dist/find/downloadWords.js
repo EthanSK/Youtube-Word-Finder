@@ -62,12 +62,18 @@ async function downloadClip(clip, isForManualSearch = false) {
         }
         let proc = child_process_1.spawn(ffmpegPath, [
             "-y",
-            "-i",
-            clip.url,
             "-ss",
             startTime.toString(),
-            "-to",
-            endTime.toString(),
+            "-t",
+            (endTime - startTime).toString(),
+            "-headers",
+            constants_1.default.ffmpeg.headers,
+            "-i",
+            clip.url,
+            "-c",
+            "copy",
+            "-f",
+            "mp4",
             fullPath
         ]);
         //stdout

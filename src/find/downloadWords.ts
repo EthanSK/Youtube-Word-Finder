@@ -81,12 +81,18 @@ export async function downloadClip(
 
     let proc = spawn(ffmpegPath, [
       "-y", //overwrite
-      "-i",
-      clip.url,
       "-ss",
       startTime.toString(),
-      "-to",
-      endTime.toString(),
+      "-t",
+      (endTime - startTime).toString(),
+      "-headers",
+      constants.ffmpeg.headers,
+      "-i",
+      clip.url,
+      "-c",
+      "copy",
+      "-f",
+      "mp4",
       fullPath
     ])
 

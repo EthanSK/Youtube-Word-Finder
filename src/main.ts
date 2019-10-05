@@ -8,6 +8,8 @@ import "./wordFinderWindow"
 import "./userDefaults"
 import "./find/run"
 import windowStateKeeper from "electron-window-state"
+import { updateYoutubeDl } from "./youtubeDlUpdate"
+import { delay } from "./utils"
 
 dotenv.config()
 
@@ -53,8 +55,9 @@ function createWindow() {
   }
 
   mainWindow.webContents.once("did-finish-load", async () => {
-    // await delay(10)
+    await delay(1000)
     // restoreUserDefaults() //now responds to request from renderer
+    // updateYoutubeDl()
   })
 
   // Emitted when the window is closed.
