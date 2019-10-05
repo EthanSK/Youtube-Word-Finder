@@ -9,8 +9,13 @@ const fs_1 = __importDefault(require("fs"));
 const electron_1 = require("electron");
 let getBinary = require("youtube-dl/lib/get-binary");
 let downloader = require("youtube-dl/lib/downloader");
-electron_1.ipcMain.on("update-youtube-dl", (event, data) => {
-    updateYoutubeDl();
+electron_1.ipcMain.on("update-youtube-dl", async (event, data) => {
+    try {
+        await updateYoutubeDl();
+    }
+    catch (error) {
+        logger_1.sendToConsoleOutput(`Error updating youtube-dl: ${error.message}`, "error");
+    }
 });
 async function updateYoutubeDl() {
     logger_1.sendToConsoleOutput("Updating youtube-dl", "loading");

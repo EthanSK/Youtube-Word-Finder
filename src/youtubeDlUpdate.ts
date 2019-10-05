@@ -8,8 +8,12 @@ import { ipcMain } from "electron"
 let getBinary = require("youtube-dl/lib/get-binary")
 let downloader = require("youtube-dl/lib/downloader")
 
-ipcMain.on("update-youtube-dl", (event, data: string) => {
-  updateYoutubeDl()
+ipcMain.on("update-youtube-dl", async (event, data: string) => {
+  try {
+    await updateYoutubeDl()
+  } catch (error) {
+    sendToConsoleOutput(`Error updating youtube-dl: ${error.message}`, "error")
+  }
 })
 
 export async function updateYoutubeDl() {

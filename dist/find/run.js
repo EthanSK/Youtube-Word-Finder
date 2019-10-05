@@ -86,7 +86,7 @@ async function stoppableRun() {
     }
     catch (error) {
         ipc_1.ipcSend("stopped-running", { error: null });
-        logger_1.sendToConsoleOutput("There was an error running the bot: " + error.message, "error");
+        logger_1.sendToConsoleOutput("Error running the bot: " + error.message, "error");
     }
 }
 exports.default = stoppableRun;

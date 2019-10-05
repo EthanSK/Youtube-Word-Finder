@@ -60,22 +60,26 @@ async function downloadClip(clip, isForManualSearch = false) {
             resolve(fullPath);
             return;
         }
-        let proc = child_process_1.spawn(ffmpegPath, [
+        const shouldReEncode = isForManualSearch
+            ? userDefaults_1.loadUserDefault("reEncodeVideos")
+            : userDefaults_1.userDefaultsOnStart.reEncodeVideos;
+        let args = [
             "-y",
             "-ss",
             startTime.toString(),
-            "-t",
-            (endTime - startTime).toString(),
+            "-to",
+            endTime.toString(),
             "-headers",
             constants_1.default.ffmpeg.headers,
             "-i",
-            clip.url,
-            "-c",
-            "copy",
-            "-f",
-            "mp4",
-            fullPath
-        ]);
+            clip.url
+        ];
+        if (shouldReEncode === false) {
+            args.push("-c", //this causes freeze at end
+            "copy", "-f", "mp4");
+        }
+        args.push(fullPath);
+        let proc = child_process_1.spawn(ffmpegPath, args);
         //stdout
         proc.stdout.setEncoding("utf8");
         proc.stdout.on("data", function (data) { });

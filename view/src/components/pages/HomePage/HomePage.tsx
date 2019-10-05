@@ -20,6 +20,7 @@ import StartButton from "../../instances/Button/StartButton"
 import SubtitleLanguageTextBox from "../../instances/TextBox/SubtitleLanguageTextBox"
 import ETGgamesButton from "../../instances/Button/ETGgamesButton"
 import UpdateYoutubeDlButton from "../../instances/Button/UpdateYoutubeDlButton"
+import ReEncodeVideosButton from "../../instances/Button/ReEncodeVideosButton"
 
 const HomePage = () => {
   return (
@@ -51,6 +52,7 @@ const HomePage = () => {
           <OutputFolderNameTextBox key="OutputFolderNameTextBoxInstance" />
           <SplitRow>
             <UpdateYoutubeDlButton></UpdateYoutubeDlButton>
+            <ReEncodeVideosButton></ReEncodeVideosButton>
             <div key="div3" />
           </SplitRow>
         </div>

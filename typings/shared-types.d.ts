@@ -73,4 +73,5 @@ interface UserDefaultsState {
   subtitleLanguageCode?: string
   words?: Word[]
   downloadOrder?: DownloadOrder
+  reEncodeVideos?: boolean
 }

@@ -6,7 +6,9 @@ import { userDefaultsOnStart, loadUserDefault } from "../userDefaults"
 import constants from "../constants"
 import { sendToConsoleOutput } from "../logger"
 import fs from "fs"
+import { ipcMain } from "electron"
 const ffmpegPath = ffmpegPathNoAsar.replace("app.asar", "app.asar.unpacked")
+
 export function* downloadWords(clips: ClipToDownload[]) {
   sendToConsoleOutput("Downloading clips", "loading")
   createDirIfNeeded(getDirName("wordsDir"))
@@ -78,23 +80,33 @@ export async function downloadClip(
       resolve(fullPath)
       return
     }
+    const shouldReEncode = isForManualSearch
+      ? loadUserDefault("reEncodeVideos")
+      : userDefaultsOnStart.reEncodeVideos
 
-    let proc = spawn(ffmpegPath, [
+    let args = [
       "-y", //overwrite
       "-ss",
       startTime.toString(),
-      "-t",
-      (endTime - startTime).toString(),
+      "-to",
+      endTime.toString(), //for some reason, have ss at -t after the -i makes it dl WAY slower. it's actually in the docs.
       "-headers",
       constants.ffmpeg.headers,
       "-i",
-      clip.url,
-      "-c",
-      "copy",
-      "-f",
-      "mp4",
-      fullPath
-    ])
+      clip.url
+    ]
+
+    if (shouldReEncode === false) {
+      args.push(
+        "-c", //this causes freeze at end
+        "copy",
+        "-f",
+        "mp4"
+      )
+    }
+    args.push(fullPath)
+
+    let proc = spawn(ffmpegPath, args)
 
     //stdout
     proc.stdout.setEncoding("utf8")
