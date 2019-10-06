@@ -119,19 +119,29 @@ export async function downloadClip(
       if (data.includes("HTTP error 403 Forbidden")) {
         console.log("raw video url expired")
         wasErrorFound = true
-        reject(
-          new URIError(
-            "Raw video URL expired. Need to get updated metadata for video. If this problem persists, delete the temp folder in your chosen output location."
-          )
+        // reject(
+        //   new URIError(
+        //     "Raw video URL expired. Need to get updated metadata for video. If this problem persists, delete the temp folder in your chosen output location."
+        //   )
+        // )
+        sendToConsoleOutput(
+          "Error downloading video: raw video URL expired. Need to get updated metadata for video. If this problem persists, delete the temp folder in your chosen output location.",
+          "error"
         )
+
         return
       }
 
       if (data.includes("error") || data.includes("Error")) {
-        reject(
-          new Error(
-            data //honestly idk what else to do.
-          )
+        // reject(
+        //   new Error(
+        //     data //honestly idk what else to do.
+        //   )
+        // )
+        //don't stop tryna continue, keep going!!
+        sendToConsoleOutput(
+          `Error downloading video ${clip.id}: ${data}. Execution will continue.`,
+          "error"
         )
       }
     })

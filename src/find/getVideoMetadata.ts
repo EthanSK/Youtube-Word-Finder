@@ -79,6 +79,7 @@ async function downloadInfoAndSubs(
       userDefaults.subtitleLanguageCode! //will always be set by default to something
     ]
     if (userDefaults.videoSource !== "Text file") {
+      //channel counts as playlist
       flags.push(
         "--playlist-start",
         playlistIndex!.toString(),
@@ -92,7 +93,11 @@ async function downloadInfoAndSubs(
     )
 
     youtubedl.exec(url, flags, {}, function(err, output) {
-      if (err) return reject(err)
+      if (err) {
+        // return reject(err)
+        //nahh don't reject, keep going
+        sendToConsoleOutput("Error getting video metadata: " + err, "error")
+      }
       // console.log("outputtt: ", JSON.parse(output[0]).id)
       // fs.writeFileSync(path.join(getDirName("metadataDir"), "lol.json"), output) //no way to get subs straight to memory :/
       if (!output.join("\n")) {
