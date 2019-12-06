@@ -74,7 +74,7 @@ async function downloadInfoAndSubs(url, useUpdatedDefaults, playlistIndex) {
             }
             // console.log("outputtt: ", JSON.parse(output[0]).id)
             // fs.writeFileSync(path.join(getDirName("metadataDir"), "lol.json"), output) //no way to get subs straight to memory :/
-            if (!output.join("\n")) {
+            if (!output) {
                 //no more vids in playlist
                 resolve();
             }
