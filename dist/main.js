@@ -15,7 +15,9 @@ require("./find/run");
 const electron_window_state_1 = __importDefault(require("electron-window-state"));
 const utils_1 = require("./utils");
 require("./youtubeDlUpdate");
+const youtubedl = require("youtube-dl");
 dotenv_1.default.config();
+youtubedl.setYtdlBinary(youtubedl.getYtdlBinary().replace("app.asar", "app.asar.unpacked"));
 function createWindow() {
     let mainWindowState = electron_window_state_1.default({
         defaultWidth: 850,

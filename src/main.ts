@@ -12,7 +12,13 @@ import { updateYoutubeDl } from "./youtubeDlUpdate"
 import { delay } from "./utils"
 import "./youtubeDlUpdate"
 
+const youtubedl = require("youtube-dl")
+
 dotenv.config()
+
+youtubedl.setYtdlBinary(
+  youtubedl.getYtdlBinary().replace("app.asar", "app.asar.unpacked")
+)
 
 export let mainWindow: BrowserWindow | null
 
