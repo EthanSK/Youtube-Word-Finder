@@ -17,7 +17,12 @@ const youtubedl = require("youtube-dl")
 dotenv.config()
 
 youtubedl.setYtdlBinary(
-  youtubedl.getYtdlBinary().replace("app.asar", "app.asar.unpacked")
+  (function() {
+    const curBin = youtubedl.getYtdlBinary()
+    return curBin.includes("unpacked")
+      ? curBin
+      : curBin.replace("app.asar", "app.asar.unpacked")
+  })()
 )
 
 export let mainWindow: BrowserWindow | null

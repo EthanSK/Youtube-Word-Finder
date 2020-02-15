@@ -17,7 +17,12 @@ const utils_1 = require("./utils");
 require("./youtubeDlUpdate");
 const youtubedl = require("youtube-dl");
 dotenv_1.default.config();
-youtubedl.setYtdlBinary(youtubedl.getYtdlBinary().replace("app.asar", "app.asar.unpacked"));
+youtubedl.setYtdlBinary((function () {
+    const curBin = youtubedl.getYtdlBinary();
+    return curBin.includes("unpacked")
+        ? curBin
+        : curBin.replace("app.asar", "app.asar.unpacked");
+})());
 function createWindow() {
     let mainWindowState = electron_window_state_1.default({
         defaultWidth: 850,
