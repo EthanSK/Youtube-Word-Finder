@@ -5,7 +5,6 @@ import fs, { fstatSync } from "fs"
 import { get } from "https"
 import { ipcMain } from "electron"
 
-let getBinary = require("youtube-dl/lib/get-binary")
 let downloader = require("youtube-dl/lib/downloader")
 
 ipcMain.on("update-youtube-dl", async (event, data: string) => {
@@ -18,10 +17,10 @@ ipcMain.on("update-youtube-dl", async (event, data: string) => {
 
 export async function updateYoutubeDl() {
   sendToConsoleOutput("Updating youtube-dl", "loading")
-  console.log(getBinary())
-  const binDir = path
-    .dirname(getBinary())
-    .replace("app.asar", "app.asar.unpacked")
+  //@ts-ignore
+  console.log(youtubedl.getYtdlBinary())
+  //@ts-ignore
+  const binDir = path.dirname(youtubedl.getYtdlBinary())
   const binary = path.join(binDir, "youtube-dl")
   if (fs.existsSync(binary)) {
     fs.unlinkSync(binary)

@@ -1,6 +1,6 @@
 {
   "name": "youtubewordfinder",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "Finds clips of youtubers saying certain words",
   "main": "dist/main.js",
   "scripts": {
@@ -45,7 +45,7 @@
     "node-webvtt": "^1.6.1",
     "react-player": "^1.14.2",
     "react-router-dom": "^5.1.2",
-    "youtube-dl": "^2.1.0"
+    "youtube-dl": "^2.3.0"
   },
   "postinstall": "electron-builder install-app-deps",
   "build": {
