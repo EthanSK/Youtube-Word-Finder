@@ -89,12 +89,14 @@ const consoleOutputReducer = (
 function generateUserDefaultsActionPayload(
   consoleOutputOptions: ConsoleOutputComponentsPayload
 ): ConsoleOutputActionPayload | undefined {
-  if (
-    consoleOutputOptions.shouldOutput === false ||
-    !consoleOutputOptions.value
-  )
-    return //only if defined and set to false, else default behaviour is to output
-  let message = `Changed ${consoleOutputOptions.name} to ${consoleOutputOptions.value}`
+  if (consoleOutputOptions.shouldOutput === false) return //only if defined and set to false, else default behaviour is to output
+
+  let message: string
+  if (consoleOutputOptions.value) {
+    message = `Changed ${consoleOutputOptions.name} to ${consoleOutputOptions.value}`
+  } else {
+    message = `Removed ${consoleOutputOptions.name}`
+  }
   if (consoleOutputOptions.appendToMessage) {
     message += `. ${consoleOutputOptions.appendToMessage}`
   }

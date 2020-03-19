@@ -26,7 +26,7 @@ youtubedl.setYtdlBinary((function () {
 function createWindow() {
     let mainWindowState = electron_window_state_1.default({
         defaultWidth: 850,
-        defaultHeight: 500,
+        defaultHeight: 600,
         file: "mainWindow.json"
     });
     // Create the browser window.

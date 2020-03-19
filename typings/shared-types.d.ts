@@ -74,4 +74,5 @@ interface UserDefaultsState {
   words?: Word[]
   downloadOrder?: DownloadOrder
   reEncodeVideos?: boolean
+  cookiesTextFile?: string
 }

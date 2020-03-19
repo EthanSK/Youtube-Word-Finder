@@ -5,6 +5,7 @@
   "main": "dist/main.js",
   "scripts": {
     "start": "electron .",
+    "dev": "NODE_ENV=development electron .",
     "pack": "electron-builder --dir",
     "dist": "npm run build && electron-builder",
     "build": "npm i youtube-dl && tsc && npm run react-build",

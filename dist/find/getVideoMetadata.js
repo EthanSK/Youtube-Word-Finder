@@ -65,6 +65,9 @@ async function downloadInfoAndSubs(url, useUpdatedDefaults, playlistIndex) {
             //channel counts as playlist
             flags.push("--playlist-start", playlistIndex.toString(), "--playlist-end", playlistIndex.toString()); //only get video at this index
         }
+        if (userDefaults.cookiesTextFile) {
+            flags.push("--cookies", userDefaults.cookiesTextFile);
+        }
         flags.push("-o", filesystem_1.createYoutubeDlFilePath("metadataDir", "id", useUpdatedDefaults));
         youtube_dl_1.default.exec(url, flags, {}, function (err, output) {
             if (err) {

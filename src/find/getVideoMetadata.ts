@@ -87,6 +87,9 @@ async function downloadInfoAndSubs(
         playlistIndex!.toString()
       ) //only get video at this index
     }
+    if (userDefaults.cookiesTextFile) {
+      flags.push("--cookies", userDefaults.cookiesTextFile)
+    }
     flags.push(
       "-o",
       createYoutubeDlFilePath("metadataDir", "id", useUpdatedDefaults)

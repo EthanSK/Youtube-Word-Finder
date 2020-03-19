@@ -16,12 +16,14 @@ export type TextBoxId =
   | "maxNumberOfVids"
   | "numberOfWordReps"
   | "subtitleLanguage"
+  | "cookiesTextFile"
 
 const TextBoxContainer = (props: {
   textBoxId: TextBoxId
   labelText: string
   placeholder: string
   fileChooser?: ReactNode
+  allowManualInputFileChooser?: boolean
   initialText?: string
   isHidden?: boolean
   consoleOutputOptions: {
@@ -42,7 +44,7 @@ const TextBoxContainer = (props: {
   const style = props.isHidden ? { display: "none" } : {}
 
   function consoleOutput(event: React.ChangeEvent<HTMLInputElement>) {
-    if (props.fileChooser) return //the finish event comes from the file chooser itself
+    if (props.fileChooser && !props.allowManualInputFileChooser) return //the finish event comes from the file chooser itself
     let payload = props.consoleOutputOptions.payload
     if (!payload) payload = {}
     if (props.consoleOutputOptions.useDefaultIfUndefined) {
@@ -88,7 +90,9 @@ const TextBoxContainer = (props: {
         id={props.textBoxId}
         className="textBox homePageTextBox"
         placeholder={props.placeholder}
-        readOnly={props.fileChooser !== undefined}
+        readOnly={
+          props.fileChooser !== undefined && !props.allowManualInputFileChooser
+        }
         onBlur={event => {
           consoleOutput(event)
           props.onFinishEditing && props.onFinishEditing(event)

@@ -30,7 +30,7 @@ export let mainWindow: BrowserWindow | null
 function createWindow() {
   let mainWindowState = windowStateKeeper({
     defaultWidth: 850,
-    defaultHeight: 500,
+    defaultHeight: 600,
     file: "mainWindow.json"
   })
 

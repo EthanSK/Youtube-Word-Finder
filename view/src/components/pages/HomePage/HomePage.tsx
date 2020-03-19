@@ -21,6 +21,7 @@ import SubtitleLanguageTextBox from "../../instances/TextBox/SubtitleLanguageTex
 import ETGgamesButton from "../../instances/Button/ETGgamesButton"
 import UpdateYoutubeDlButton from "../../instances/Button/UpdateYoutubeDlButton"
 import ReEncodeVideosButton from "../../instances/Button/ReEncodeVideosButton"
+import CookiesTextFileTextBox from "../../instances/TextBox/CookiesTextFileTextBox"
 
 const HomePage = () => {
   return (
@@ -50,6 +51,7 @@ const HomePage = () => {
           {/* <DownloadOrderDropdown key="DownloadOrderDropdownInstance" /> */}
           <OutputLocationTextBox key="OutputLocationTextBoxInstance" />
           <OutputFolderNameTextBox key="OutputFolderNameTextBoxInstance" />
+          <CookiesTextFileTextBox key="CookiesTextFileTextBoxInstance"></CookiesTextFileTextBox>
           <SplitRow>
             <UpdateYoutubeDlButton></UpdateYoutubeDlButton>
             <ReEncodeVideosButton></ReEncodeVideosButton>
