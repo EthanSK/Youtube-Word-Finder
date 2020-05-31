@@ -4,13 +4,10 @@ import { ipcSend } from "../ipc"
 import {
   setUserDefaultsOnStart,
   userDefaultsOnStart,
-  userDefaultsKey
+  userDefaultsKey,
 } from "../userDefaults"
 import { createWorkspaceFilesystem, cleanupDirs } from "../filesystem"
-import processVideoMetadata from "./processVideoMetadata"
 import findWords from "./findWords"
-import getVideoMetadata from "./getVideoMetadata"
-import { VideoMetadata } from "./processVideoMetadata"
 import { downloadWords } from "./downloadWords"
 import { load } from "../store"
 
@@ -57,7 +54,7 @@ export function userDefaultsCheck(useUpdatedDefaults = false) {
   }
   if (
     !userDefaults.words ||
-    userDefaults.words.filter(word => {
+    userDefaults.words.filter((word) => {
       return word.mainWord !== ""
     }).length === 0
   ) {

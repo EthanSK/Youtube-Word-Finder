@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.updateYoutubeDl = void 0;
 const youtube_dl_1 = __importDefault(require("youtube-dl"));
 const logger_1 = require("./logger");
 const path_1 = __importDefault(require("path"));

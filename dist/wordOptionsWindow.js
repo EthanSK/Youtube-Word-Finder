@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.wordOptionsWindow = void 0;
 const electron_1 = require("electron");
 const constants_1 = __importDefault(require("./constants"));
 const main_1 = require("./main");
@@ -13,7 +14,7 @@ function createWindow() {
     let mainWindowState = electron_window_state_1.default({
         defaultWidth: 700,
         defaultHeight: 700,
-        file: "wordOptionsWindow.json"
+        file: "wordOptionsWindow.json",
     });
     // Create the browser window.
     exports.wordOptionsWindow = new electron_1.BrowserWindow({
@@ -26,10 +27,10 @@ function createWindow() {
         minWidth: 200,
         minHeight: 200,
         webPreferences: {
-            nodeIntegration: true
+            nodeIntegration: true,
         },
         title: constants_1.default.wordOptions.name,
-        parent: main_1.mainWindow
+        parent: main_1.mainWindow,
     });
     mainWindowState.manage(exports.wordOptionsWindow);
     logger_1.sendToConsoleOutput("Started changing word options", "settings");

@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.shouldApplyWordFilter = exports.filterWord = exports.handleNewWordsTextFile = void 0;
 const fs_1 = __importDefault(require("fs"));
 const userDefaults_1 = require("./userDefaults");
 //called in store userdefaults ipc listener

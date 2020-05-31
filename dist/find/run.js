@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.userDefaultsCheck = void 0;
 const electron_1 = require("electron");
 const logger_1 = require("../logger");
 const ipc_1 = require("../ipc");
@@ -49,7 +50,7 @@ function userDefaultsCheck(useUpdatedDefaults = false) {
         throw new Error("Number of word repetitions not set");
     }
     if (!userDefaults.words ||
-        userDefaults.words.filter(word => {
+        userDefaults.words.filter((word) => {
             return word.mainWord !== "";
         }).length === 0) {
         throw new Error("No words could be found. You must provide words in a text file or in the word options");

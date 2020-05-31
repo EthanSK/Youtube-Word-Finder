@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.createOutputName = exports.setUserDefaultsOnStart = exports.userDefaultsOnStart = exports.loadUserDefault = exports.saveUserDefault = exports.userDefaultsKey = void 0;
 const electron_1 = require("electron");
 const words_1 = require("./words");
 const store_1 = require("./store");

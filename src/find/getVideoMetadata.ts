@@ -19,33 +19,39 @@ export default async function getVideoMetadata(
     ? load(userDefaultsKey)
     : userDefaultsOnStart
   let id: string | undefined
-  switch (userDefaults.videoSource) {
-    case "Channel":
-      id = await downloadInfoAndSubs(
-        constants.youtube.channelURLPrefix + userDefaults.channelId,
-        useUpdatedDefaults,
-        videoIndex + 1
-      )
-      break
-    case "Playlist":
-      id = await downloadInfoAndSubs(
-        constants.youtube.playlistURLPrefix + userDefaults.playlistId,
-        useUpdatedDefaults,
-        videoIndex + 1
-      )
-      break
-    case "Text file":
-      const url = fs
-        .readFileSync(userDefaults.videoTextFile!, "utf8")
-        .split(/\r\n|\r|\n/)
-        .filter(url => url) //non falsy urls only
-        .map(url => {
-          return url
-        })[videoIndex]
+  try {
+    switch (userDefaults.videoSource) {
+      case "Channel":
+        id = await downloadInfoAndSubs(
+          constants.youtube.channelURLPrefix + userDefaults.channelId,
+          useUpdatedDefaults,
+          videoIndex + 1
+        )
+        break
+      case "Playlist":
+        id = await downloadInfoAndSubs(
+          constants.youtube.playlistURLPrefix + userDefaults.playlistId,
+          useUpdatedDefaults,
+          videoIndex + 1
+        )
+        break
+      case "Text file":
+        const url = fs
+          .readFileSync(userDefaults.videoTextFile!, "utf8")
+          .split(/\r\n|\r|\n/)
+          .filter((url) => url) //non falsy urls only
+          .map((url) => {
+            return url
+          })[videoIndex]
 
-      if (url) id = await downloadInfoAndSubs(url, useUpdatedDefaults)
-      break
+        if (url) id = await downloadInfoAndSubs(url, useUpdatedDefaults)
+        break
+    }
+  } catch (error) {
+    sendToConsoleOutput("Error getting video metadata: " + error, "error")
+    id = "GET_VIDEO_METADATA_ERROR" //this is horrid, but the only way using generators i tihnk
   }
+
   // sendToConsoleOutput("Got video metadata and subtitles", "info") //unecessary
   return id
 }
@@ -76,7 +82,7 @@ async function downloadInfoAndSubs(
       // "--write-sub ", //only using auto because it has individual word timings
       "--write-auto-sub",
       "--sub-lang", //dont enable this without setting a sub lang after it
-      userDefaults.subtitleLanguageCode! //will always be set by default to something
+      userDefaults.subtitleLanguageCode!, //will always be set by default to something
     ]
     if (userDefaults.videoSource !== "Text file") {
       //channel counts as playlist
@@ -95,11 +101,9 @@ async function downloadInfoAndSubs(
       createYoutubeDlFilePath("metadataDir", "id", useUpdatedDefaults)
     )
 
-    youtubedl.exec(url, flags, {}, function(err, output) {
+    youtubedl.exec(url, flags, {}, function (err, output) {
       if (err) {
-        // return reject(err)
-        //nahh don't reject, keep going
-        sendToConsoleOutput("Error getting video metadata: " + err, "error")
+        return reject(err)
       }
       // console.log("outputtt: ", JSON.parse(output[0]).id)
       // fs.writeFileSync(path.join(getDirName("metadataDir"), "lol.json"), output) //no way to get subs straight to memory :/

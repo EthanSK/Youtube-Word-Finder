@@ -15,9 +15,17 @@ export default function* findWords() {
   wordFoundCounts = [] //i think not having this may have been causing the glitch earlier
   for (let i = 0; i < userDefaultsOnStart.maxNumberOfVideos!; i++) {
     const id = yield getVideoMetadata(i)
+    if (id === "GET_VIDEO_METADATA_ERROR") {
+      continue //there was an error getting 1 vid's metadata. don't stopp everything. just keep trying
+    }
     if (!id) {
-      sendToConsoleOutput("No more videos", "info")
-      break
+      sendToConsoleOutput(
+        `There was no video at index ${
+          i + 1
+        }. Therefore, there are no more videos to get.`,
+        "info"
+      )
+      break //if id is null but there was no error thrown (so catch above not trigged) then stop.
     } //no more vids in playlist
     const videoMetadata = processVideoMetadata(id)
     if (!videoMetadata) continue

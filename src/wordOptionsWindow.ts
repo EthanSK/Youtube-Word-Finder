@@ -11,7 +11,7 @@ function createWindow() {
   let mainWindowState = windowStateKeeper({
     defaultWidth: 700,
     defaultHeight: 700,
-    file: "wordOptionsWindow.json"
+    file: "wordOptionsWindow.json",
   })
   // Create the browser window.
   wordOptionsWindow = new BrowserWindow({
@@ -24,10 +24,10 @@ function createWindow() {
     minWidth: 200,
     minHeight: 200,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
     },
     title: constants.wordOptions.name,
-    parent: mainWindow!
+    parent: mainWindow!,
   })
   mainWindowState.manage(wordOptionsWindow)
 
