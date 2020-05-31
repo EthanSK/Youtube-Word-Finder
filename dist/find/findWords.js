@@ -16,7 +16,7 @@ function* findWords() {
     for (let i = 0; i < userDefaults_1.userDefaultsOnStart.maxNumberOfVideos; i++) {
         const id = yield getVideoMetadata_1.default(i);
         if (!id) {
-            logger_1.sendToConsoleOutput("No more videos in playlist or channel", "info");
+            logger_1.sendToConsoleOutput("No more videos", "info");
             break;
         } //no more vids in playlist
         const videoMetadata = processVideoMetadata_1.default(id);
@@ -73,7 +73,7 @@ function searchWordText(videoMetadata, text, isAlternative, wordIndex, isForManu
             originalUnfilteredWord,
             isAlternative,
             wordIndex,
-            mainWord
+            mainWord,
         };
         if (videoMetadata.subtitles.isIndividualWords) {
             if (text ===
@@ -132,7 +132,7 @@ function calculatePercentageFound(words) {
     if (words === "main") {
         const targetCount = userDefaults_1.userDefaultsOnStart.words.length * userDefaults_1.userDefaultsOnStart.numberOfWordReps;
         let foundCount = 0;
-        wordFoundCounts.forEach(el => {
+        wordFoundCounts.forEach((el) => {
             foundCount += el.wordCount;
         });
         console.log("found count: ", foundCount, "target count: ", targetCount);
@@ -140,14 +140,14 @@ function calculatePercentageFound(words) {
     }
     else {
         let targetCount = 0;
-        userDefaults_1.userDefaultsOnStart.words.forEach(el => {
+        userDefaults_1.userDefaultsOnStart.words.forEach((el) => {
             if (el.alternativeWords)
                 targetCount +=
                     Object.keys(el.alternativeWords).length *
                         userDefaults_1.userDefaultsOnStart.numberOfWordReps;
         });
         let foundCount = 0;
-        wordFoundCounts.forEach(el => {
+        wordFoundCounts.forEach((el) => {
             foundCount += Object.keys(el.alternativeWordCount).length;
         });
         if (targetCount !== 0)

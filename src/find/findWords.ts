@@ -16,7 +16,7 @@ export default function* findWords() {
   for (let i = 0; i < userDefaultsOnStart.maxNumberOfVideos!; i++) {
     const id = yield getVideoMetadata(i)
     if (!id) {
-      sendToConsoleOutput("No more videos in playlist or channel", "info")
+      sendToConsoleOutput("No more videos", "info")
       break
     } //no more vids in playlist
     const videoMetadata = processVideoMetadata(id)
@@ -110,7 +110,7 @@ export function searchWordText(
       originalUnfilteredWord,
       isAlternative,
       wordIndex,
-      mainWord
+      mainWord,
     }
     if (videoMetadata.subtitles.isIndividualWords) {
       if (
@@ -177,21 +177,21 @@ function calculatePercentageFound(
     const targetCount =
       userDefaultsOnStart.words!.length * userDefaultsOnStart.numberOfWordReps!
     let foundCount = 0
-    wordFoundCounts.forEach(el => {
+    wordFoundCounts.forEach((el) => {
       foundCount += el.wordCount
     })
     console.log("found count: ", foundCount, "target count: ", targetCount)
     return (foundCount / targetCount) * 100
   } else {
     let targetCount = 0
-    userDefaultsOnStart.words!.forEach(el => {
+    userDefaultsOnStart.words!.forEach((el) => {
       if (el.alternativeWords)
         targetCount +=
           Object.keys(el.alternativeWords).length *
           userDefaultsOnStart.numberOfWordReps!
     })
     let foundCount = 0
-    wordFoundCounts.forEach(el => {
+    wordFoundCounts.forEach((el) => {
       foundCount += Object.keys(el.alternativeWordCount).length
     })
     if (targetCount !== 0) return (foundCount / targetCount) * 100

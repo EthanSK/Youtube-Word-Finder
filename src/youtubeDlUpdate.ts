@@ -7,6 +7,8 @@ import { ipcMain } from "electron"
 
 let downloader = require("youtube-dl/lib/downloader")
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0" //without this, we get CERT_HAS_EXPIRED error after a while. this is fine since it's an electron app, not an actual web server.
+
 ipcMain.on("update-youtube-dl", async (event, data: string) => {
   try {
     await updateYoutubeDl()

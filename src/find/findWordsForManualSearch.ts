@@ -12,10 +12,10 @@ async function getCurrentlyDownloadedMetadataIds(): Promise<string[]> {
     fs.readdir(outputFolder, (err, files) => {
       if (err) reject(err)
       const ids = files
-        .filter(el => {
+        .filter((el) => {
           return el.includes(".info.json")
         })
-        .map(el => el.split(".")[0])
+        .map((el) => el.split(".")[0])
       resolve(ids)
     })
   })
@@ -42,7 +42,7 @@ export async function getMetadataForManualSearch(
   ) {
     const id = await getVideoMetadata(i, true)
     if (!id) {
-      sendToConsoleOutput("No more videos in playlist or channel", "info")
+      sendToConsoleOutput("No more videosø", "info")
       break
     } //no more vids in playlist. this is so we don't waste a lot of time searching for hundreds of videos that aren't there.
     idRetrieved(id)

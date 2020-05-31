@@ -17,10 +17,10 @@ async function getCurrentlyDownloadedMetadataIds() {
             if (err)
                 reject(err);
             const ids = files
-                .filter(el => {
+                .filter((el) => {
                 return el.includes(".info.json");
             })
-                .map(el => el.split(".")[0]);
+                .map((el) => el.split(".")[0]);
             resolve(ids);
         });
     });
@@ -38,7 +38,7 @@ async function getMetadataForManualSearch(idRetrieved, shouldGetUpdated = false)
     for (let i = currentlyDownloaded.length; i < userDefaults_1.loadUserDefault("maxNumberOfVideos"); i++) {
         const id = await getVideoMetadata_1.default(i, true);
         if (!id) {
-            logger_1.sendToConsoleOutput("No more videos in playlist or channel", "info");
+            logger_1.sendToConsoleOutput("No more videosø", "info");
             break;
         } //no more vids in playlist. this is so we don't waste a lot of time searching for hundreds of videos that aren't there.
         idRetrieved(id);
