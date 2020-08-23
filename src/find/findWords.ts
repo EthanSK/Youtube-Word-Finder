@@ -14,37 +14,44 @@ export default function* findWords() {
   let result: ClipToDownload[] = []
   wordFoundCounts = [] //i think not having this may have been causing the glitch earlier
   for (let i = 0; i < userDefaultsOnStart.maxNumberOfVideos!; i++) {
-    const id = yield getVideoMetadata(i)
-    if (id === "GET_VIDEO_METADATA_ERROR") {
-      continue //there was an error getting 1 vid's metadata. don't stopp everything. just keep trying
-    }
-    if (!id) {
-      sendToConsoleOutput(
-        `There was no video at index ${
+    try {
+      const id = yield getVideoMetadata(i)
+      if (id === "GET_VIDEO_METADATA_ERROR") {
+        continue //there was an error getting 1 vid's metadata. don't stopp everything. just keep trying
+      }
+      if (!id) {
+        sendToConsoleOutput(
+          `There was no video at index ${
           i + 1
-        }. Therefore, there are no more videos to get.`,
-        "info"
-      )
-      break //if id is null but there was no error thrown (so catch above not trigged) then stop.
-    } //no more vids in playlist
-    const videoMetadata = processVideoMetadata(id)
-    if (!videoMetadata) continue
-    const clipsToDownload = searchWordsInSubs(videoMetadata)
-    sendToConsoleOutput(
-      `Found ${Math.round(
-        calculatePercentageFound("main")!
-      )}% of the main words (with repetitions) so far`,
-      "info"
-    )
-    const altWordPercentFound = calculatePercentageFound("alternative")
-    if (altWordPercentFound)
+          }. Therefore, there are no more videos to get.`,
+          "info"
+        )
+        break //if id is null but there was no error thrown (so catch above not trigged) then stop.
+      } //no more vids in playlist
+      const videoMetadata = processVideoMetadata(id)
+      if (!videoMetadata) continue
+      const clipsToDownload = searchWordsInSubs(videoMetadata)
       sendToConsoleOutput(
         `Found ${Math.round(
-          altWordPercentFound
-        )}% of the alternative words (with repetitions) so far`,
+          calculatePercentageFound("main")!
+        )}% of the main words (with repetitions) so far`,
         "info"
       )
-    result.push(...clipsToDownload)
+      const altWordPercentFound = calculatePercentageFound("alternative")
+      if (altWordPercentFound)
+        sendToConsoleOutput(
+          `Found ${Math.round(
+            altWordPercentFound
+          )}% of the alternative words (with repetitions) so far`,
+          "info"
+        )
+      result.push(...clipsToDownload)
+
+    } catch (error) {
+      sendToConsoleOutput(
+        `Error finding words for video at index ${i}: ${error}. Continuing execution to next video.`, 'error'
+      )
+    }
 
     // console.log("clipsToDownload", clipsToDownload.length)
     // console.log("word counts", wordFoundCounts.map(el => el.wordCount))

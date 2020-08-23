@@ -82,7 +82,7 @@ function transformSubtitles(
     subsFile = fs.readFileSync(file).toString()
   } catch (error) {
     sendToConsoleOutput(
-      `Could not find subtitle file. This might be because the video with ID ${id} does not have subtitles. This is a non fatal error, and execution will continue.`,
+      `Could not find subtitle file. This might be because the video with ID ${id} does not have subtitles. This is a non fatal error, and execution will continue. Error message: ${error}`,
       "error"
     )
     return
@@ -95,10 +95,18 @@ function transformSubtitles(
   }
   for (let i = 0; i < subs.cues.length; i++) {
     const cue = subs.cues[i]
-    const words = hasIndividualWordTimings
-      ? handleIndividualWordsCue(cue)
-      : handlePhraseCue(cue)
-    if (words) result.phrases.push(...words)
+    try {
+      const words = hasIndividualWordTimings
+        ? handleIndividualWordsCue(cue)
+        : handlePhraseCue(cue)
+      if (words) result.phrases.push(...words)
+    } catch (error) {
+      sendToConsoleOutput(
+        `There was an error trying to transform the subtitles of video with ID ${id}. This is a non fatal error, and execution will continue.`,
+        "error"
+      )
+    }
+
   }
 
   return result
