@@ -92,7 +92,7 @@ async function downloadInfoAndSubs(
       //   "--playlist-end",
       //   playlistIndex!.toString()
       // ) //only get video at this index
-      flags.push("--playlist-items", playlistIndex!.toString()) //new and improved way
+      flags.push("--playlist-items", playlistIndex!.toString()) //new and improved way (untested)
     }
     if (userDefaults.cookiesTextFile) {
       flags.push("--cookies", userDefaults.cookiesTextFile)
@@ -106,7 +106,7 @@ async function downloadInfoAndSubs(
       if (err) {
         return reject(err)
       }
-      console.log("outputt: ", output)
+      // console.log("outputt: ", output)
       // console.log("outputtt: ", JSON.parse(output[0]).id)
       // fs.writeFileSync(path.join(getDirName("metadataDir"), "lol.json"), output) //no way to get subs straight to memory :/
       if (!output || (output.length === 1 && output[0] === "")) {
