@@ -3,6 +3,7 @@ executables
 node_modules
 playground
 *.mp4
+dist
 
 *.map
 #STANDARD THINGS TO IGNORE - COPYPASTA:
