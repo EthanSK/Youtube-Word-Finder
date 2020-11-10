@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ipcSend = void 0;
 const electron_1 = require("electron");
 const main_1 = require("./main");
 //this sends to all renderer processes, as it is not a reply to an event

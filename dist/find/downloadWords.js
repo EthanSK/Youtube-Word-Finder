@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.downloadClip = exports.downloadWords = void 0;
 const child_process_1 = require("child_process");
 const ffmpeg_1 = require("@ffmpeg-installer/ffmpeg");
 const filesystem_1 = require("../filesystem");

@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.findClipsForManualSearch = exports.getMetadataForManualSearch = void 0;
 const filesystem_1 = require("../filesystem");
 const fs_1 = __importDefault(require("fs"));
 const getVideoMetadata_1 = __importDefault(require("./getVideoMetadata"));
@@ -17,10 +18,10 @@ async function getCurrentlyDownloadedMetadataIds() {
             if (err)
                 reject(err);
             const ids = files
-                .filter(el => {
+                .filter((el) => {
                 return el.includes(".info.json");
             })
-                .map(el => el.split(".")[0]);
+                .map((el) => el.split(".")[0]);
             resolve(ids);
         });
     });
@@ -37,8 +38,11 @@ async function getMetadataForManualSearch(idRetrieved, shouldGetUpdated = false)
     //then get the remaining subs needed
     for (let i = currentlyDownloaded.length; i < userDefaults_1.loadUserDefault("maxNumberOfVideos"); i++) {
         const id = await getVideoMetadata_1.default(i, true);
+        if (id === "GET_VIDEO_METADATA_ERROR") {
+            continue; //there was an error getting 1 vid's metadata. don't stopp everything. just keep trying
+        }
         if (!id) {
-            logger_1.sendToConsoleOutput("No more videos in playlist or channel", "info");
+            logger_1.sendToConsoleOutput(`There was no video at index ${i + 1}. Therefore, there are no more videos to get.`, "info");
             break;
         } //no more vids in playlist. this is so we don't waste a lot of time searching for hundreds of videos that aren't there.
         idRetrieved(id);

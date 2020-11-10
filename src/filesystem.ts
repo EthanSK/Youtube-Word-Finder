@@ -1,9 +1,9 @@
-import fs from "fs"
+import fs from "fs-extra"
 import {
   userDefaultsOnStart,
   loadUserDefault,
   createOutputName,
-  userDefaultsKey
+  userDefaultsKey,
 } from "./userDefaults"
 import path from "path"
 import constants from "./constants"
@@ -12,9 +12,7 @@ import { load } from "./store"
 import { saveUserDefault } from "./userDefaults"
 
 export function createDirIfNeeded(path: string) {
-  if (!fs.existsSync(path)) {
-    fs.mkdirSync(path)
-  }
+  fs.ensureDirSync(path)
 }
 
 export type WorkspaceDir =
@@ -74,7 +72,7 @@ export function getFilesInDir(dir: string): Promise<string[]> {
   return new Promise((resolve, reject) => {
     fs.readdir(dir, (err, files) => {
       if (err) return reject(err)
-      resolve(files.map(file => path.join(dir, file))) //return absolute file
+      resolve(files.map((file) => path.join(dir, file))) //return absolute file
     })
   })
 }

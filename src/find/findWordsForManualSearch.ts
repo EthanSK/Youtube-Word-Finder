@@ -12,10 +12,10 @@ async function getCurrentlyDownloadedMetadataIds(): Promise<string[]> {
     fs.readdir(outputFolder, (err, files) => {
       if (err) reject(err)
       const ids = files
-        .filter(el => {
+        .filter((el) => {
           return el.includes(".info.json")
         })
-        .map(el => el.split(".")[0])
+        .map((el) => el.split(".")[0])
       resolve(ids)
     })
   })
@@ -41,8 +41,16 @@ export async function getMetadataForManualSearch(
     i++
   ) {
     const id = await getVideoMetadata(i, true)
+    if (id === "GET_VIDEO_METADATA_ERROR") {
+      continue //there was an error getting 1 vid's metadata. don't stopp everything. just keep trying
+    }
     if (!id) {
-      sendToConsoleOutput("No more videos in playlist or channel", "info")
+      sendToConsoleOutput(
+        `There was no video at index ${
+          i + 1
+        }. Therefore, there are no more videos to get.`,
+        "info"
+      )
       break
     } //no more vids in playlist. this is so we don't waste a lot of time searching for hundreds of videos that aren't there.
     idRetrieved(id)

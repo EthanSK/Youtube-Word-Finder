@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.searchWordText = void 0;
 const userDefaults_1 = require("../userDefaults");
 const processVideoMetadata_1 = __importDefault(require("./processVideoMetadata"));
 const words_1 = require("../words");
@@ -14,20 +15,28 @@ function* findWords() {
     let result = [];
     wordFoundCounts = []; //i think not having this may have been causing the glitch earlier
     for (let i = 0; i < userDefaults_1.userDefaultsOnStart.maxNumberOfVideos; i++) {
-        const id = yield getVideoMetadata_1.default(i);
-        if (!id) {
-            logger_1.sendToConsoleOutput("No more videos in playlist or channel", "info");
-            break;
-        } //no more vids in playlist
-        const videoMetadata = processVideoMetadata_1.default(id);
-        if (!videoMetadata)
-            continue;
-        const clipsToDownload = searchWordsInSubs(videoMetadata);
-        logger_1.sendToConsoleOutput(`Found ${Math.round(calculatePercentageFound("main"))}% of the main words (with repetitions) so far`, "info");
-        const altWordPercentFound = calculatePercentageFound("alternative");
-        if (altWordPercentFound)
-            logger_1.sendToConsoleOutput(`Found ${Math.round(altWordPercentFound)}% of the alternative words (with repetitions) so far`, "info");
-        result.push(...clipsToDownload);
+        try {
+            const id = yield getVideoMetadata_1.default(i);
+            if (id === "GET_VIDEO_METADATA_ERROR") {
+                continue; //there was an error getting 1 vid's metadata. don't stopp everything. just keep trying
+            }
+            if (!id) {
+                logger_1.sendToConsoleOutput(`There was no video at index ${i + 1}. Therefore, there are no more videos to get.`, "info");
+                break; //if id is null but there was no error thrown (so catch above not trigged) then stop.
+            } //no more vids in playlist
+            const videoMetadata = processVideoMetadata_1.default(id);
+            if (!videoMetadata)
+                continue;
+            const clipsToDownload = searchWordsInSubs(videoMetadata);
+            logger_1.sendToConsoleOutput(`Found ${Math.round(calculatePercentageFound("main"))}% of the main words (with repetitions) so far`, "info");
+            const altWordPercentFound = calculatePercentageFound("alternative");
+            if (altWordPercentFound)
+                logger_1.sendToConsoleOutput(`Found ${Math.round(altWordPercentFound)}% of the alternative words (with repetitions) so far`, "info");
+            result.push(...clipsToDownload);
+        }
+        catch (error) {
+            logger_1.sendToConsoleOutput(`Error finding words for video at index ${i}: ${error}. Continuing execution to next video.`, 'error');
+        }
         // console.log("clipsToDownload", clipsToDownload.length)
         // console.log("word counts", wordFoundCounts.map(el => el.wordCount))
     }
@@ -73,7 +82,7 @@ function searchWordText(videoMetadata, text, isAlternative, wordIndex, isForManu
             originalUnfilteredWord,
             isAlternative,
             wordIndex,
-            mainWord
+            mainWord,
         };
         if (videoMetadata.subtitles.isIndividualWords) {
             if (text ===
@@ -132,7 +141,7 @@ function calculatePercentageFound(words) {
     if (words === "main") {
         const targetCount = userDefaults_1.userDefaultsOnStart.words.length * userDefaults_1.userDefaultsOnStart.numberOfWordReps;
         let foundCount = 0;
-        wordFoundCounts.forEach(el => {
+        wordFoundCounts.forEach((el) => {
             foundCount += el.wordCount;
         });
         console.log("found count: ", foundCount, "target count: ", targetCount);
@@ -140,14 +149,14 @@ function calculatePercentageFound(words) {
     }
     else {
         let targetCount = 0;
-        userDefaults_1.userDefaultsOnStart.words.forEach(el => {
+        userDefaults_1.userDefaultsOnStart.words.forEach((el) => {
             if (el.alternativeWords)
                 targetCount +=
                     Object.keys(el.alternativeWords).length *
                         userDefaults_1.userDefaultsOnStart.numberOfWordReps;
         });
         let foundCount = 0;
-        wordFoundCounts.forEach(el => {
+        wordFoundCounts.forEach((el) => {
             foundCount += Object.keys(el.alternativeWordCount).length;
         });
         if (targetCount !== 0)

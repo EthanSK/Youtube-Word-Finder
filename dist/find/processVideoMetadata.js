@@ -51,7 +51,7 @@ function transformSubtitles(file, id) {
         subsFile = fs_1.default.readFileSync(file).toString();
     }
     catch (error) {
-        logger_1.sendToConsoleOutput(`Could not find subtitle file. This might be because the video with ID ${id} does not have subtitles. This is a non fatal error, and execution will continue.`, "error");
+        logger_1.sendToConsoleOutput(`Could not find subtitle file. This might be because the video with ID ${id} does not have subtitles. This is a non fatal error, and execution will continue. Error message: ${error}`, "error");
         return;
     }
     const subs = node_webvtt_1.default.parse(subsFile, { meta: true });
@@ -62,11 +62,16 @@ function transformSubtitles(file, id) {
     };
     for (let i = 0; i < subs.cues.length; i++) {
         const cue = subs.cues[i];
-        const words = hasIndividualWordTimings
-            ? handleIndividualWordsCue(cue)
-            : handlePhraseCue(cue);
-        if (words)
-            result.phrases.push(...words);
+        try {
+            const words = hasIndividualWordTimings
+                ? handleIndividualWordsCue(cue)
+                : handlePhraseCue(cue);
+            if (words)
+                result.phrases.push(...words);
+        }
+        catch (error) {
+            logger_1.sendToConsoleOutput(`There was an error trying to transform the subtitles of video with ID ${id}. This is a non fatal error, and execution will continue.`, "error");
+        }
     }
     return result;
 }

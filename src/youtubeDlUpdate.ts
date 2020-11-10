@@ -8,6 +8,8 @@ import downloader from "youtube-dl/lib/downloader"
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0" //coz we get Error: certificate has expired https://stackoverflow.com/a/20497028/6820042
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0" //without this, we get CERT_HAS_EXPIRED error after a while. this is fine since it's an electron app, not an actual web server.
+
 ipcMain.on("update-youtube-dl", async (event, data: string) => {
   try {
     await updateYoutubeDl()

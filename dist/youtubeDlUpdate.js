@@ -10,6 +10,7 @@ const fs_1 = __importDefault(require("fs"));
 const electron_1 = require("electron");
 const downloader_1 = __importDefault(require("youtube-dl/lib/downloader"));
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"; //coz we get Error: certificate has expired https://stackoverflow.com/a/20497028/6820042
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"; //without this, we get CERT_HAS_EXPIRED error after a while. this is fine since it's an electron app, not an actual web server.
 electron_1.ipcMain.on("update-youtube-dl", async (event, data) => {
     try {
         await updateYoutubeDl();

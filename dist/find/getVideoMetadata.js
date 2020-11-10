@@ -16,24 +16,30 @@ async function getVideoMetadata(videoIndex, useUpdatedDefaults = false) {
         ? store_1.load(userDefaults_1.userDefaultsKey)
         : userDefaults_1.userDefaultsOnStart;
     let id;
-    switch (userDefaults.videoSource) {
-        case "Channel":
-            id = await downloadInfoAndSubs(constants_1.default.youtube.channelURLPrefix + userDefaults.channelId, useUpdatedDefaults, videoIndex + 1);
-            break;
-        case "Playlist":
-            id = await downloadInfoAndSubs(constants_1.default.youtube.playlistURLPrefix + userDefaults.playlistId, useUpdatedDefaults, videoIndex + 1);
-            break;
-        case "Text file":
-            const url = fs_1.default
-                .readFileSync(userDefaults.videoTextFile, "utf8")
-                .split(/\r\n|\r|\n/)
-                .filter((url) => url) //non falsy urls only
-                .map((url) => {
-                return url;
-            })[videoIndex];
-            if (url)
-                id = await downloadInfoAndSubs(url, useUpdatedDefaults);
-            break;
+    try {
+        switch (userDefaults.videoSource) {
+            case "Channel":
+                id = await downloadInfoAndSubs(constants_1.default.youtube.channelURLPrefix + userDefaults.channelId, useUpdatedDefaults, videoIndex + 1);
+                break;
+            case "Playlist":
+                id = await downloadInfoAndSubs(constants_1.default.youtube.playlistURLPrefix + userDefaults.playlistId, useUpdatedDefaults, videoIndex + 1);
+                break;
+            case "Text file":
+                const url = fs_1.default
+                    .readFileSync(userDefaults.videoTextFile, "utf8")
+                    .split(/\r\n|\r|\n/)
+                    .filter((url) => url) //non falsy urls only
+                    .map((url) => {
+                    return url;
+                })[videoIndex];
+                if (url)
+                    id = await downloadInfoAndSubs(url, useUpdatedDefaults);
+                break;
+        }
+    }
+    catch (error) {
+        logger_1.sendToConsoleOutput("Error getting video metadata: " + error, "error");
+        id = "GET_VIDEO_METADATA_ERROR"; //this is horrid, but the only way using generators i tihnk
     }
     // sendToConsoleOutput("Got video metadata and subtitles", "info") //unecessary
     return id;
@@ -78,9 +84,7 @@ async function downloadInfoAndSubs(url, useUpdatedDefaults, playlistIndex) {
         console.log("url: ", url, "flags: ", flags);
         youtube_dl_1.default.exec(url, flags, {}, function (err, output) {
             if (err) {
-                // return reject(err)
-                //nahh don't reject, keep going
-                logger_1.sendToConsoleOutput("Error getting video metadata: " + err, "error");
+                return reject(err);
             }
             console.log("outputt: ", output);
             // console.log("outputtt: ", JSON.parse(output[0]).id)
