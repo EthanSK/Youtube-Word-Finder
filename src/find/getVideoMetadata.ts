@@ -38,8 +38,8 @@ export default async function getVideoMetadata(
       const url = fs
         .readFileSync(userDefaults.videoTextFile!, "utf8")
         .split(/\r\n|\r|\n/)
-        .filter(url => url) //non falsy urls only
-        .map(url => {
+        .filter((url) => url) //non falsy urls only
+        .map((url) => {
           return url
         })[videoIndex]
 
@@ -76,16 +76,17 @@ async function downloadInfoAndSubs(
       // "--write-sub ", //only using auto because it has individual word timings
       "--write-auto-sub",
       "--sub-lang", //dont enable this without setting a sub lang after it
-      userDefaults.subtitleLanguageCode! //will always be set by default to something
+      userDefaults.subtitleLanguageCode!, //will always be set by default to something
     ]
     if (userDefaults.videoSource !== "Text file") {
       //channel counts as playlist
-      flags.push(
-        "--playlist-start",
-        playlistIndex!.toString(),
-        "--playlist-end",
-        playlistIndex!.toString()
-      ) //only get video at this index
+      // flags.push(
+      //   "--playlist-start",
+      //   playlistIndex!.toString(),
+      //   "--playlist-end",
+      //   playlistIndex!.toString()
+      // ) //only get video at this index
+      flags.push("--playlist-items", playlistIndex!.toString()) //new and improved way
     }
     if (userDefaults.cookiesTextFile) {
       flags.push("--cookies", userDefaults.cookiesTextFile)
@@ -94,16 +95,17 @@ async function downloadInfoAndSubs(
       "-o",
       createYoutubeDlFilePath("metadataDir", "id", useUpdatedDefaults)
     )
-
-    youtubedl.exec(url, flags, {}, function(err, output) {
+    console.log("url: ", url, "flags: ", flags)
+    youtubedl.exec(url, flags, {}, function (err, output) {
       if (err) {
         // return reject(err)
         //nahh don't reject, keep going
         sendToConsoleOutput("Error getting video metadata: " + err, "error")
       }
+      console.log("outputt: ", output)
       // console.log("outputtt: ", JSON.parse(output[0]).id)
       // fs.writeFileSync(path.join(getDirName("metadataDir"), "lol.json"), output) //no way to get subs straight to memory :/
-      if (!output) {
+      if (!output || (output.length === 1 && output[0] === "")) {
         //no more vids in playlist
         resolve()
       } else {

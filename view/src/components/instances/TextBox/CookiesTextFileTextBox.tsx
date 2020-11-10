@@ -20,8 +20,8 @@ const CookiesTextFileTextBox = (props: { key: string }) => {
         useDefaultIfUndefined: true,
         payload: {
           instructionToFollow:
-            "This is only if you are getting this error: HTTP Error 429: Too Many Requests or 402: Payment Required\n\nInstructions on getting the cookies file can be found here: https://github.com/ytdl-org/youtube-dl/blob/master/README.md#how-do-i-pass-cookies-to-youtube-dl"
-        }
+            "This is only if you are getting this error: HTTP Error 429: Too Many Requests or 402: Payment Required\n\nInstructions on getting the cookies file can be found here: https://github.com/ytdl-org/youtube-dl/blob/master/README.md#how-do-i-pass-cookies-to-youtube-dl or here: https://github.com/l1ving/youtube-dl#how-do-i-pass-cookies-to-youtube-dl",
+        },
       }}
       //no onfinishediting here because it can't be edited, it is done in the file choose
     />

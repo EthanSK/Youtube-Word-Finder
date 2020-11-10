@@ -1,0 +1,19 @@
+{
+    "restoreTerminals.terminals": [
+        {
+            "splitTerminals": [
+                {
+                    "name": "backend",
+                    "commands": ["npm run dev"]
+                },
+                {
+                    "name": "view",
+                    "commands": ["npm run react-start"]
+                },
+                {
+                    "name": "terminal"                    
+                }
+            ]
+        }
+    ]
+}

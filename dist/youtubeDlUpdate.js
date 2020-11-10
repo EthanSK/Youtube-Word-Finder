@@ -8,7 +8,8 @@ const logger_1 = require("./logger");
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 const electron_1 = require("electron");
-let downloader = require("youtube-dl/lib/downloader");
+const downloader_1 = __importDefault(require("youtube-dl/lib/downloader"));
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"; //coz we get Error: certificate has expired https://stackoverflow.com/a/20497028/6820042
 electron_1.ipcMain.on("update-youtube-dl", async (event, data) => {
     try {
         await updateYoutubeDl();
@@ -28,12 +29,12 @@ async function updateYoutubeDl() {
         fs_1.default.unlinkSync(binary);
     }
     await new Promise((resolve, reject) => {
-        downloader(binDir, function error(err, done) {
+        downloader_1.default(binDir, (err, message) => {
             if (err) {
                 console.log("error: ", err);
                 return reject(err);
             }
-            console.log("done updating", done);
+            console.log("done updating", message);
             logger_1.sendToConsoleOutput(`youtube-dl updated at ${binDir}`, "success");
             resolve();
         });
