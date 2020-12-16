@@ -67,18 +67,25 @@ export function userDefaultsCheck(useUpdatedDefaults = false) {
   //the rest either don't matter or are set by default. even words text file is not needed, as long as we provided words manually
 }
 
-function* run() {
-  sendToConsoleOutput(`Started running at ${new Date()}`, "startstop")
-  yield setup() //yield so we catch erros
+function setYtdlBinary() {
   if (userDefaultsOnStart.customYtdlBinary) {
     //@ts-ignore
     youtubedl.setYtdlBinary(userDefaultsOnStart.customYtdlBinary)
     console.log(
       "Using custom youtube-dl binary",
-      //@ts-ignore
-      youtubedl.getYtdlBinary()
+      userDefaultsOnStart.customYtdlBinary
     )
   }
+  //@ts-ignore
+  const binary = youtubedl.getYtdlBinary()
+  sendToConsoleOutput(`Using this youtube-dl binary: ${binary}`, "info")
+}
+
+function* run() {
+  sendToConsoleOutput(`Started running at ${new Date()}`, "startstop")
+  yield setup() //yield so we catch erros
+  setYtdlBinary()
+
   const clips: ClipToDownload[] = yield* findWords()
   console.log("clips", clips.length)
   yield* downloadWords(clips)

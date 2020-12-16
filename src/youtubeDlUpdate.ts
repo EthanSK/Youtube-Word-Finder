@@ -41,7 +41,9 @@ export async function updateYoutubeDl() {
         `youtube-dl updated at ${binDir}. Any custom youtube-dl binary set will be overwritten by this updated binary.`,
         "success"
       )
-      saveUserDefault({ customYtdlBinary: binDir }) //next time we open youtube word finder it will be updated
+      //@ts-ignore
+      const newBin = youtubedl.getYtdlBinary()
+      saveUserDefault({ customYtdlBinary: newBin }) //remove it
       resolve()
     })
   })
