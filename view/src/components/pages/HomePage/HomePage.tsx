@@ -22,6 +22,7 @@ import ETGgamesButton from "../../instances/Button/ETGgamesButton"
 import UpdateYoutubeDlButton from "../../instances/Button/UpdateYoutubeDlButton"
 import ReEncodeVideosButton from "../../instances/Button/ReEncodeVideosButton"
 import CookiesTextFileTextBox from "../../instances/TextBox/CookiesTextFileTextBox"
+import CustomYtdlBinaryTextBox from "../../instances/TextBox/CustomYtdlBinaryTextBox"
 
 const HomePage = () => {
   return (
@@ -52,9 +53,10 @@ const HomePage = () => {
           <OutputLocationTextBox key="OutputLocationTextBoxInstance" />
           <OutputFolderNameTextBox key="OutputFolderNameTextBoxInstance" />
           <CookiesTextFileTextBox key="CookiesTextFileTextBoxInstance"></CookiesTextFileTextBox>
+          <CustomYtdlBinaryTextBox key="CustomYtdlBinaryTextBoxInstance"></CustomYtdlBinaryTextBox>
           <SplitRow>
-            <UpdateYoutubeDlButton></UpdateYoutubeDlButton>
-            <ReEncodeVideosButton></ReEncodeVideosButton>
+            <UpdateYoutubeDlButton key="UpdateYoutubeDlButton1"></UpdateYoutubeDlButton>
+            <ReEncodeVideosButton key="ReEncodeVideosButton1"></ReEncodeVideosButton>
             <div key="div3" />
           </SplitRow>
         </div>

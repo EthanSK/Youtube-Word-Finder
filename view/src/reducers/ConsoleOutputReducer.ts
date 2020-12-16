@@ -50,7 +50,7 @@ const consoleOutputReducer = (
     case "addNewMessage": //this isn't really used anywhere.
       const newPayload: ConsoleOutputPayload = {
         ...(action.payload as ConsoleOutputActionPayload),
-        timestamp: Date.now()
+        timestamp: Date.now(),
       }
 
       ipcSend("log-console-output", newPayload)
@@ -63,7 +63,7 @@ const consoleOutputReducer = (
       if (generatedPayload) {
         const newPayload: ConsoleOutputPayload = {
           ...generatedPayload!,
-          timestamp: Date.now()
+          timestamp: Date.now(),
         }
         ipcSend("log-console-output", newPayload)
         // return [...state, newPayload]
@@ -74,7 +74,7 @@ const consoleOutputReducer = (
         const secondPayload: ConsoleOutputPayload = {
           message: payload.instructionToFollow,
           messageType: "instruction",
-          timestamp: Date.now()
+          timestamp: Date.now(),
         }
         ipcSend("log-console-output", secondPayload)
 

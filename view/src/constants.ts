@@ -7,16 +7,16 @@ const fileChooserDefaultOptions: OpenDialogOptions = {
   filters: [
     {
       name: "Text Files",
-      extensions: ["txt"]
-    }
+      extensions: ["txt"],
+    },
   ],
-  properties: ["openFile", "createDirectory"]
+  properties: ["openFile", "createDirectory"],
 }
 
 const folderChooserDefaultOptions: OpenDialogOptions = {
   title: "Choose a folder!",
   buttonLabel: "Choose",
-  properties: ["openDirectory", "createDirectory"]
+  properties: ["openDirectory", "createDirectory"],
 }
 
 const constants = {
@@ -24,7 +24,7 @@ const constants = {
   fileChooserDefaultOptions,
   folderChooserDefaultOptions,
   maxNumAltWordsToDisplay: 30,
-  youtubeVideoURLPrefix: "https://www.youtube.com/watch?v=" //adding the options to stop more videos showing doesn't work
+  youtubeVideoURLPrefix: "https://www.youtube.com/watch?v=", //adding the options to stop more videos showing doesn't work
 }
 
 export default constants

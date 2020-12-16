@@ -80,7 +80,7 @@ async function downloadInfoAndSubs(
       "--print-json",
       "--ignore-errors", //i don't think this throws a normal error - it crashes the program, so ignore errors. It also throws errors if the sub doesn't exist but only auto sub, so this is needed
       // "--write-sub ", //only using auto because it has individual word timings
-      "--write-auto-sub",
+      "--write-auto-sub", //prefer auto because it has individual word timings.
       "--sub-lang", //dont enable this without setting a sub lang after it
       userDefaults.subtitleLanguageCode!, //will always be set by default to something
     ]

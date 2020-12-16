@@ -4,7 +4,7 @@ import "./index.css"
 import { BrowserRouter } from "react-router-dom"
 import ViewManager from "./ViewManager"
 import UserDefaultsContextProvider, {
-  UserDefaultsContext
+  UserDefaultsContext,
 } from "./contexts/UserDefaultsContext"
 import { ipcSend } from "./ipc"
 const { ipcRenderer } = window.require("electron")
@@ -17,7 +17,7 @@ const UserDefaults = () => {
     // console.log("send reque to restore defaults")
     ipcSend("restore-user-defaults") //sending it here so it only requests when ready
     const channel = "restored-user-defaults"
-    var handleUserDefaultRestore = function(
+    var handleUserDefaultRestore = function (
       event: Electron.IpcRendererEvent,
       data: UserDefaultsState
     ) {

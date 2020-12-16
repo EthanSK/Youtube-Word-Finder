@@ -5,10 +5,12 @@ import fs, { fstatSync } from "fs"
 import { get } from "https"
 import { ipcMain } from "electron"
 import downloader from "youtube-dl/lib/downloader"
+import { saveUserDefault, userDefaultsKey } from "./userDefaults"
+import { load } from "./store"
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0" //coz we get Error: certificate has expired https://stackoverflow.com/a/20497028/6820042
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0" //without this, we get CERT_HAS_EXPIRED error after a while. this is fine since it's an electron app, not an actual web server.
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0" //without this, we get CERT_HAS_EXPIRED error after a while. this is fine since it's an electron app, not an actual web server. why do I have this twice lol oh well.
 
 ipcMain.on("update-youtube-dl", async (event, data: string) => {
   try {
@@ -35,7 +37,11 @@ export async function updateYoutubeDl() {
         return reject(err)
       }
       console.log("done updating", message)
-      sendToConsoleOutput(`youtube-dl updated at ${binDir}`, "success")
+      sendToConsoleOutput(
+        `youtube-dl updated at ${binDir}. Any custom youtube-dl binary set will be overwritten by this updated binary.`,
+        "success"
+      )
+      saveUserDefault({ customYtdlBinary: binDir }) //next time we open youtube word finder it will be updated
       resolve()
     })
   })

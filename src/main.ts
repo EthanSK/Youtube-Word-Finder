@@ -17,7 +17,7 @@ const youtubedl = require("youtube-dl")
 dotenv.config()
 
 youtubedl.setYtdlBinary(
-  (function() {
+  (function () {
     const curBin = youtubedl.getYtdlBinary()
     return curBin.includes("unpacked")
       ? curBin
@@ -31,7 +31,7 @@ function createWindow() {
   let mainWindowState = windowStateKeeper({
     defaultWidth: 850,
     defaultHeight: 600,
-    file: "mainWindow.json"
+    file: "mainWindow.json",
   })
 
   // Create the browser window.
@@ -45,10 +45,10 @@ function createWindow() {
     minWidth: 300,
     minHeight: 400,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
     },
     // titleBarStyle: "hiddenInset",
-    title: constants.app.name
+    title: constants.app.name,
   })
   mainWindowState.manage(mainWindow)
 

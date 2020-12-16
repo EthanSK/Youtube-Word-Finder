@@ -1,13 +1,14 @@
 import React from "react"
 import Button from "../../elements/Button/Button"
 import { ipcSend } from "../../../ipc"
+import { ipcRenderer } from "electron"
 
 const UpdateYoutubeDlButton = () => {
   return (
     <Button
       title="Update youtube-dl"
       class="smallButton"
-      onClick={event => {
+      onClick={(event) => {
         ipcSend("update-youtube-dl", {})
       }}
     />

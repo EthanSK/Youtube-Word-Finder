@@ -10,6 +10,7 @@ import { createWorkspaceFilesystem, cleanupDirs } from "../filesystem"
 import findWords from "./findWords"
 import { downloadWords } from "./downloadWords"
 import { load } from "../store"
+import youtubedl from "youtube-dl"
 
 ipcMain.on("start-pressed", (event, data) => {
   isRunning = true
@@ -69,6 +70,15 @@ export function userDefaultsCheck(useUpdatedDefaults = false) {
 function* run() {
   sendToConsoleOutput(`Started running at ${new Date()}`, "startstop")
   yield setup() //yield so we catch erros
+  if (userDefaultsOnStart.customYtdlBinary) {
+    //@ts-ignore
+    youtubedl.setYtdlBinary(userDefaultsOnStart.customYtdlBinary)
+    console.log(
+      "Using custom youtube-dl binary",
+      //@ts-ignore
+      youtubedl.getYtdlBinary()
+    )
+  }
   const clips: ClipToDownload[] = yield* findWords()
   console.log("clips", clips.length)
   yield* downloadWords(clips)

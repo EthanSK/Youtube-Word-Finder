@@ -75,4 +75,5 @@ interface UserDefaultsState {
   downloadOrder?: DownloadOrder
   reEncodeVideos?: boolean
   cookiesTextFile?: string
+  customYtdlBinary?: string
 }

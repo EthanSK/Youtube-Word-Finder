@@ -2,6 +2,7 @@ import React, { ReactNode, useContext, useEffect, useRef } from "react"
 import "./TextBox.css"
 import { ConsoleOutputComponentsPayload } from "../../../reducers/ConsoleOutputReducer"
 import { ConsoleOutputContext } from "../../../contexts/ConsoleOutputContext"
+import { useState } from "react"
 
 //add new strings to union as needed
 export type TextBoxId =
@@ -17,6 +18,7 @@ export type TextBoxId =
   | "numberOfWordReps"
   | "subtitleLanguage"
   | "cookiesTextFile"
+  | "customYtdlBinary"
 
 const TextBoxContainer = (props: {
   textBoxId: TextBoxId
@@ -40,6 +42,7 @@ const TextBoxContainer = (props: {
   key: string //not used here, just to make sure we add a key when adding this element
 }) => {
   const { dispatch: consoleOutputDispatch } = useContext(ConsoleOutputContext)
+  // const [textValue, setTextValue] = useState<string>(props.initialText || "")
 
   const style = props.isHidden ? { display: "none" } : {}
 
@@ -93,18 +96,20 @@ const TextBoxContainer = (props: {
         readOnly={
           props.fileChooser !== undefined && !props.allowManualInputFileChooser
         }
-        onBlur={event => {
+        onBlur={(event) => {
           consoleOutput(event)
           props.onFinishEditing && props.onFinishEditing(event)
         }}
-        onKeyPress={event => {
+        onKeyPress={(event) => {
           if (event.key === "Enter") {
             event.currentTarget.blur()
           }
         }}
         defaultValue={props.initialText} //doesn't accept input if using just value
+        // value={textValue} //this fux it up
+        // onChange={(e) => setTextValue(e.target.value)}
       />
-      {(function() {
+      {(function () {
         if (props.fileChooser) {
           return props.fileChooser
         }
