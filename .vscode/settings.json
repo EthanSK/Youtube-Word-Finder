@@ -1,4 +1,5 @@
 {
+    "restoreTerminals.runOnStartup": false,
     "restoreTerminals.terminals": [
         {
             "splitTerminals": [
