@@ -55,7 +55,7 @@
   "postinstall": "electron-builder install-app-deps",
   "build": {
     "appId": "com.ethansk.youtubewordfinder",
-    "productName": "Youtube Word Finder",
+    "productName": "YouTube Word Finder",
     "copyright": "Copyright © 2020 ${author}",
     "directories": {
       "buildResources": "resources",
