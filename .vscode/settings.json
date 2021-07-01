@@ -1,20 +1,21 @@
 {
-    "restoreTerminals.terminals": [
+  "restoreTerminals.runOnStartup": false,
+  "restoreTerminals.terminals": [
+    {
+      "splitTerminals": [
         {
-            "splitTerminals": [
-                {
-                    "name": "backend",
-                    "commands": ["npm run dev"]
-                },
-                {
-                    "name": "view",
-                    "commands": ["npm run react-start"]
-                },
-                {
-                    "name": "terminal"                    
-                }
-            ]
+          "name": "backend",
+          "commands": ["npm run dev"]
+        },
+        {
+          "name": "view",
+          "commands": ["npm run react-start"]
+        },
+        {
+          "name": "terminal"
         }
-    ],
-    "typescript.tsdk": "node_modules/typescript/lib"
+      ]
+    }
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
