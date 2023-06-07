@@ -7,13 +7,13 @@ import { getRandomInt } from "./utils"
 import { setUserDefaultsOnStart } from "./userDefaults"
 import {
   getMetadataForManualSearch,
-  findClipsForManualSearch
+  findClipsForManualSearch,
 } from "./find/findWordsForManualSearch"
 import {
   createWorkspaceFilesystem,
   getDirName,
   createDirIfNeeded,
-  cleanupDirs
+  cleanupDirs,
 } from "./filesystem"
 import windowStateKeeper from "electron-window-state"
 import { downloadClip } from "./find/downloadWords"
@@ -27,7 +27,7 @@ function createWindow() {
   let mainWindowState = windowStateKeeper({
     defaultWidth: 750,
     defaultHeight: 600,
-    file: "wordFinderWindow.json"
+    file: "wordFinderWindow.json",
   })
   // Create the browser window.
   wordFinderWindow = new BrowserWindow({
@@ -40,10 +40,10 @@ function createWindow() {
     minWidth: 200,
     minHeight: 200,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
     },
     title: constants.wordFinder.name,
-    parent: mainWindow!
+    parent: mainWindow!,
   })
   mainWindowState.manage(wordFinderWindow)
 
@@ -112,11 +112,11 @@ ipc.on(
       // console.log("manual clip path: ", path)
       const response: ResponseClipToDownloadIPCPkg = {
         downloadPath: path,
-        index: data.index
+        index: data.index,
       }
       if (!event.sender.isDestroyed())
         event.sender.send("downloaded-manually-found-word", response)
-    } catch (error) {
+    } catch (error: any) {
       sendToConsoleOutput(
         "There was an error downloading the manually found clip: " +
           error.message,
@@ -126,7 +126,7 @@ ipc.on(
         downloadPath: path,
         index: data.index,
         isError: true,
-        isVideoURLExpiredError: error.name === "URIError"
+        isVideoURLExpiredError: error.name === "URIError",
       }
       if (!event.sender.isDestroyed())
         event.sender.send("downloaded-manually-found-word", response)
@@ -141,13 +141,13 @@ ipc.on("request-word-finder-data", async (event, data) => {
   if (!event.sender.isDestroyed())
     event.sender.send("response-word-finder-data-batch", {
       ...wordData,
-      clips: []
+      clips: [],
     }) //send initial response to load in word data that we have instantly
 
   try {
     userDefaultsCheck(true)
     createWorkspaceFilesystem(true)
-    await getMetadataForManualSearch(async id => {
+    await getMetadataForManualSearch(async (id) => {
       console.log("finding clips for id :", id)
       const clips = await findClipsForManualSearch(
         wordData.word,
@@ -158,13 +158,13 @@ ipc.on("request-word-finder-data", async (event, data) => {
       let response: WordFinderResponseWindowData = {
         ...wordData,
         clips: clips,
-        didScanNewVideo: true
+        didScanNewVideo: true,
       }
       if (!event.sender.isDestroyed())
         event.sender.send("response-word-finder-data-batch", response)
     })
     // throw new Error("test error")
-  } catch (error) {
+  } catch (error: any) {
     //dont send the stop running event to the manual search window, coz there could be an auto search in progress
     sendToConsoleOutput(
       `There was an error manually searching for word ${wordData.word.mainWord}: ` +
@@ -175,7 +175,7 @@ ipc.on("request-word-finder-data", async (event, data) => {
       event.sender.send("response-word-finder-data-batch", {
         ...wordData,
         clips: [],
-        isError: true
+        isError: true,
       })
   }
   if (!event.sender.isDestroyed())

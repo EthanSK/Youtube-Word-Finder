@@ -15,14 +15,14 @@ export default function* findWords() {
   wordFoundCounts = [] //i think not having this may have been causing the glitch earlier
   for (let i = 0; i < userDefaultsOnStart.maxNumberOfVideos!; i++) {
     try {
-      const id = yield getVideoMetadata(i)
+      const id: string = yield getVideoMetadata(i)
       if (id === "GET_VIDEO_METADATA_ERROR") {
         continue //there was an error getting 1 vid's metadata. don't stopp everything. just keep trying
       }
       if (!id) {
         sendToConsoleOutput(
           `There was no video at index ${
-          i + 1
+            i + 1
           }. Therefore, there are no more videos to get.`,
           "info"
         )
@@ -46,10 +46,10 @@ export default function* findWords() {
           "info"
         )
       result.push(...clipsToDownload)
-
     } catch (error) {
       sendToConsoleOutput(
-        `Error finding words for video at index ${i}: ${error}. Continuing execution to next video.`, 'error'
+        `Error finding words for video at index ${i}: ${error}. Continuing execution to next video.`,
+        "error"
       )
     }
 

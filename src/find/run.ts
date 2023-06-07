@@ -107,13 +107,13 @@ export default async function stoppableRun() {
         )
         return
       }
-      const n = iter.next(resumeValue)
+      const n = iter.next(resumeValue as string)
       if (n.done) {
         return n.value
       }
       resumeValue = await n.value
     }
-  } catch (error) {
+  } catch (error: any) {
     ipcSend("stopped-running", { error: null })
     sendToConsoleOutput("Error running the bot: " + error.message, "error")
   }

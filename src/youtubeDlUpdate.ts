@@ -15,7 +15,7 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0" //without this, we get CERT_HAS_E
 ipcMain.on("update-youtube-dl", async (event, data: string) => {
   try {
     await updateYoutubeDl()
-  } catch (error) {
+  } catch (error: any) {
     sendToConsoleOutput(`Error updating youtube-dl: ${error.message}`, "error")
   }
 })
@@ -44,7 +44,7 @@ export async function updateYoutubeDl() {
       //@ts-ignore
       const newBin = youtubedl.getYtdlBinary()
       saveUserDefault({ customYtdlBinary: newBin }) //remove it
-      resolve()
+      resolve(undefined)
     })
   })
 }

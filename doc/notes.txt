@@ -8,7 +8,7 @@ for some fucked reason, I need to keep @ffmpeg-installer folder top level idk an
 # To start dev env
 
 - In one shell, do npm run react-start
-- Once that's loaded, in another shell, do npm start
+- Once that's loaded, in another shell, do npm run dev
 
 # For setting up with typescript, electron, and react:
 
