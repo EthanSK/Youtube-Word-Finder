@@ -46,6 +46,7 @@ function createWindow() {
     minHeight: 400,
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false,
     },
     // titleBarStyle: "hiddenInset",
     title: constants.app.name,

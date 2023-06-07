@@ -41,6 +41,7 @@ function createWindow() {
     minHeight: 200,
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false,
     },
     title: constants.wordFinder.name,
     parent: mainWindow!,
