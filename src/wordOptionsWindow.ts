@@ -30,6 +30,7 @@ function createWindow() {
     title: constants.wordOptions.name,
     parent: mainWindow!,
   })
+
   mainWindowState.manage(wordOptionsWindow)
 
   sendToConsoleOutput("Started changing word options", "settings")

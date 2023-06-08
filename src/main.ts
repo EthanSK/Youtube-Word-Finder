@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain as ipc } from "electron"
+import { app, BrowserWindow, ipcMain, dialog } from "electron"
 import constants from "./constants"
 import path from "path"
 import dotenv from "dotenv"
@@ -92,7 +92,7 @@ app.on("ready", createWindow)
 // Quit when all windows are closed.
 app.on("window-all-closed", () => {
   // On macOS it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
+  // to stay active until the user quits explicitly with Cmd +  Q
   if (process.platform !== "darwin") {
     app.quit()
   }
@@ -104,4 +104,17 @@ app.on("activate", () => {
   if (mainWindow === null) {
     createWindow()
   }
+})
+
+ipcMain.on("open-file-dialog", (event, data) => {
+  dialog
+    .showOpenDialog(data)
+    .then((result) => {
+      if (!result.canceled && result.filePaths.length > 0) {
+        event.sender.send("selected-file", result.filePaths)
+      }
+    })
+    .catch((err) => {
+      console.log(err)
+    })
 })

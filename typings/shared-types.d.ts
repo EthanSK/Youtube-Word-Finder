@@ -8,7 +8,10 @@ interface Word {
 
 interface ClipToDownload {
   id: string
-  url: string
+  bestVideoUrl?: string //we don't use the stems now coz i can't get it to work while being efficient and only downloading a portion of the video from the input (so it doesn't download the whole thing and bes slow)
+  bestAudioUrl?: string
+  bestCombinedUrl?: string
+
   start: number
   end: number
   wordSearchedText: string

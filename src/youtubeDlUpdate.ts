@@ -23,7 +23,7 @@ ipcMain.on("update-youtube-dl", async (event, data: string) => {
 export async function updateYoutubeDl() {
   sendToConsoleOutput("Updating youtube-dl", "loading")
   //@ts-ignore
-  console.log(youtubedl.getYtdlBinary())
+  console.log("binary: ", youtubedl.getYtdlBinary())
   //@ts-ignore
   const binDir = path.dirname(youtubedl.getYtdlBinary())
   const binary = path.join(binDir, "youtube-dl")

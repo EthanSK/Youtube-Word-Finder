@@ -21,7 +21,23 @@ export interface TransformedSubtitles {
 export interface VideoMetadata {
   id: string
   subtitles: TransformedSubtitles
-  url: string
+  bestVideoUrl?: string
+  bestAudioUrl?: string
+  bestCombinedUrl?: string
+}
+
+export interface YoutubeVideoFormat {
+  format_id: string
+  format_note: string
+  asr: number
+  filesize: number
+  tbr: number
+  width: number
+  height: number
+  fps: number
+  vcodec: string
+  acodec: string
+  url?: string //appaz sometimse it might not exist, better be safe than sorry, just skip if not present
 }
 
 const infoFileExt = "info.json"
@@ -55,7 +71,9 @@ export default function processVideoMetadata(
   return {
     subtitles: subs,
     id: jsonInfo.id,
-    url: jsonInfo.formats[jsonInfo.formats.length - 1].url //last format always seems to be for the best with video and audio
+    bestVideoUrl: selectBestVideoFormat(jsonInfo.formats)?.url,
+    bestAudioUrl: selectBestAudioFormat(jsonInfo.formats)?.url,
+    bestCombinedUrl: selectBestCombinedFormat(jsonInfo.formats)?.url,
   }
 }
 
@@ -91,7 +109,7 @@ function transformSubtitles(
   const hasIndividualWordTimings = doesTextIncludeTimingTag(subsFile) //<c> tag is how individual timings are done. check for the closing /c tag to make sure it's not fluke.
   let result: TransformedSubtitles = {
     isIndividualWords: hasIndividualWordTimings,
-    phrases: []
+    phrases: [],
   }
   for (let i = 0; i < subs.cues.length; i++) {
     const cue = subs.cues[i]
@@ -106,7 +124,6 @@ function transformSubtitles(
         "error"
       )
     }
-
   }
 
   return result
@@ -117,7 +134,7 @@ function handlePhraseCue(cue: SubtitleCue): Phrase[] | undefined {
     const result = {
       start: cue.start,
       end: cue.end,
-      text: cue.text
+      text: cue.text,
     }
     return [result]
   } else {
@@ -147,8 +164,8 @@ function handleIndividualWordsCue(cue: SubtitleCue): Phrase[] | undefined {
 
     const wordPkgs = text
       .split("</c>")
-      .filter(el => el) //if not falsy
-      .map(segment => {
+      .filter((el) => el) //if not falsy
+      .map((segment) => {
         const startTime = segment
           .split("<c>")[0]
           .replace("<", "")
@@ -157,7 +174,7 @@ function handleIndividualWordsCue(cue: SubtitleCue): Phrase[] | undefined {
         const text = segment.split("<c>")[1].trim()
         return {
           startTime,
-          text
+          text,
         }
       })
 
@@ -165,21 +182,21 @@ function handleIndividualWordsCue(cue: SubtitleCue): Phrase[] | undefined {
     result.push({
       start: cue.start,
       end: convertTimingFormat(wordPkgs[0].startTime),
-      text: firstWord
+      text: firstWord,
     })
     //then create other words before last word
     for (let i = 0; i < wordPkgs.length - 1; i++) {
       result.push({
         start: convertTimingFormat(wordPkgs[i].startTime),
         end: convertTimingFormat(wordPkgs[i + 1].startTime),
-        text: wordPkgs[i].text
+        text: wordPkgs[i].text,
       })
     }
     //creat last word specially
     result.push({
       start: convertTimingFormat(wordPkgs[wordPkgs.length - 1].startTime),
       end: cue.end,
-      text: wordPkgs[wordPkgs.length - 1].text
+      text: wordPkgs[wordPkgs.length - 1].text,
     })
     return result
   }
@@ -194,3 +211,67 @@ function handleIndividualWordsCue(cue: SubtitleCue): Phrase[] | undefined {
 I<00:01:23.090><c> am</c><00:01:24.090><c> most</c><00:01:24.300><c> of</c><00:01:24.510><c> all</c><00:01:24.600><c> happy</c><00:01:24.960><c> and</c><00:01:25.260><c> grateful</c><00:01:25.740><c> to</c>
 
 */
+
+//the following selection functions are from chatgpt, when i asked to to reproduce has ytdlp does it internally
+
+function selectBestVideoFormat(
+  formats: YoutubeVideoFormat[]
+): YoutubeVideoFormat | null {
+  // Filter out formats without video.
+  const videoFormats = formats.filter(
+    (format) => format.vcodec !== "none" && format.acodec === "none"
+  )
+
+  // Sort formats by resolution (width x height), then by bitrate.
+  const sortedFormats = videoFormats.sort((a, b) => {
+    const resA = (a.width || 0) * (a.height || 0)
+    const resB = (b.width || 0) * (b.height || 0)
+
+    if (resA !== resB) {
+      return resB - resA // Highest resolution first
+    }
+
+    return (b.tbr || 0) - (a.tbr || 0) // Highest bitrate first
+  })
+
+  return sortedFormats[0] || null
+}
+
+function selectBestAudioFormat(
+  formats: YoutubeVideoFormat[]
+): YoutubeVideoFormat | null {
+  // Filter out formats without audio.
+  const audioFormats = formats.filter(
+    (format) => format.acodec !== "none" && format.vcodec === "none"
+  )
+
+  // Sort formats by bitrate.
+  const sortedFormats = audioFormats.sort(
+    (a, b) => (b.tbr || 0) - (a.tbr || 0) // Highest bitrate first
+  )
+
+  return sortedFormats[0] || null
+}
+
+function selectBestCombinedFormat(
+  formats: YoutubeVideoFormat[]
+): YoutubeVideoFormat | null {
+  // Filter out formats without either video or audio.
+  const combinedFormats = formats.filter(
+    (format) => format.vcodec !== "none" && format.acodec !== "none"
+  )
+
+  // Sort formats by resolution (width x height), then by bitrate.
+  const sortedFormats = combinedFormats.sort((a, b) => {
+    const resA = (a.width || 0) * (a.height || 0)
+    const resB = (b.width || 0) * (b.height || 0)
+
+    if (resA !== resB) {
+      return resB - resA // Highest resolution first
+    }
+
+    return (b.tbr || 0) - (a.tbr || 0) // Highest bitrate first
+  })
+  console.log("best combined format : ", sortedFormats[0].format_id)
+  return sortedFormats[0] || null
+}

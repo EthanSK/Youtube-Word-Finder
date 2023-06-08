@@ -46,6 +46,7 @@ function createWindow() {
     title: constants.wordFinder.name,
     parent: mainWindow!,
   })
+
   mainWindowState.manage(wordFinderWindow)
 
   sendToConsoleOutput("Started finding word manually", "info")

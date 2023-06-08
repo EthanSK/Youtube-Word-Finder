@@ -3,8 +3,7 @@ import "./FileChooserButton.css"
 
 import { ConsoleOutputComponentsPayload } from "../../../reducers/ConsoleOutputReducer"
 import { ConsoleOutputContext } from "../../../contexts/ConsoleOutputContext"
-
-const { remote } = window.require("electron")
+const { ipcRenderer } = window.require("electron")
 
 const FileChooserButton = (props: {
   fileChooserType: "file" | "folder"
@@ -19,9 +18,16 @@ const FileChooserButton = (props: {
 
   //doing all this here because every single file and folder chooser will be the same
   async function handleClick() {
-    const files = await remote.dialog.showOpenDialog(props.options)
-    consoleOutput(files.filePaths)
-    props.onFilesOrFolderChosen(files.filePaths)
+    ipcRenderer.send("open-file-dialog", { options: props.options })
+    // const files = await remote.dialog.showOpenDialog(props.options)
+    // consoleOutput(files.filePaths)
+    // props.onFilesOrFolderChosen(files.filePaths)
+
+    ipcRenderer.once("selected-file", (event, filePaths) => {
+      console.log(`You selected: ${filePaths}`)
+      consoleOutput(filePaths)
+      props.onFilesOrFolderChosen(filePaths)
+    })
   }
 
   function consoleOutput(filePaths?: string[]) {
@@ -38,7 +44,7 @@ const FileChooserButton = (props: {
 
   return (
     <button className="emojiButton fileChooserButton" onClick={handleClick}>
-      {(function() {
+      {(function () {
         if (props.fileChooserType === "file") return "📄"
         if (props.fileChooserType === "folder") return "📂"
       })()}

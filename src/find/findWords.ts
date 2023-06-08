@@ -115,9 +115,11 @@ export function searchWordText(
     ? loadUserDefault("subtitleLanguageCode")
     : userDefaultsOnStart.subtitleLanguageCode! //doing this in the for loop is SO FUCKING DUMB DO U KNOW HOW LONG IT TAKES
   for (const phrase of videoMetadata.subtitles.phrases) {
-    const clip = {
+    const clip: ClipToDownload = {
       id: videoMetadata.id,
-      url: videoMetadata.url,
+      bestVideoUrl: videoMetadata.bestVideoUrl,
+      bestAudioUrl: videoMetadata.bestAudioUrl,
+      bestCombinedUrl: videoMetadata.bestCombinedUrl,
       start: phrase.start,
       end: phrase.end,
       phraseMatched: phrase.text,

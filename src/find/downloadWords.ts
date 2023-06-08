@@ -20,7 +20,14 @@ export function* downloadWords(clips: ClipToDownload[]) {
 
   //i acc think its better to download main word with alternative, because when editing, you'll want everything that exists for that word, and therefore you can edit while the bot is downloading!
   for (const clip of sortedClips) {
-    yield downloadClip(clip)
+    try {
+      yield downloadClip(clip)
+    } catch (error: any) {
+      sendToConsoleOutput(
+        `Error downloading clip with id ${clip.id} ${error.message}. Continuing execution to next video.`,
+        "error"
+      )
+    }
   }
 
   sendToConsoleOutput("Finished downloading clips", "info")
@@ -80,6 +87,13 @@ export async function downloadClip(
       resolve(fullPath)
       return
     }
+
+    console.log("clip: ", clip)
+
+    if (!clip.bestCombinedUrl) {
+      reject("No best combined url for clip")
+      return
+    }
     const shouldReEncode = isForManualSearch
       ? loadUserDefault("reEncodeVideos")
       : userDefaultsOnStart.reEncodeVideos
@@ -93,7 +107,7 @@ export async function downloadClip(
       "-headers",
       constants.ffmpeg.headers,
       "-i",
-      clip.url
+      clip.bestCombinedUrl,
     ]
 
     if (shouldReEncode === false) {
@@ -110,11 +124,11 @@ export async function downloadClip(
 
     //stdout
     proc.stdout.setEncoding("utf8")
-    proc.stdout.on("data", function(data) {})
+    proc.stdout.on("data", function (data) {})
 
     //stderr
     proc.stderr.setEncoding("utf8")
-    proc.stderr.on("data", function(data: string) {
+    proc.stderr.on("data", function (data: string) {
       // console.log("stderr data: ", data)
       if (data.includes("HTTP error 403 Forbidden")) {
         console.log("raw video url expired")
@@ -146,7 +160,7 @@ export async function downloadClip(
       }
     })
 
-    proc.stderr.on("error", function(err) {
+    proc.stderr.on("error", function (err) {
       console.log("there was an error ffmpeg dl: ", err)
     })
 
