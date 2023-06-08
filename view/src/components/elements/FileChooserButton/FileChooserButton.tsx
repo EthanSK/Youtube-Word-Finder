@@ -3,6 +3,7 @@ import "./FileChooserButton.css"
 
 import { ConsoleOutputComponentsPayload } from "../../../reducers/ConsoleOutputReducer"
 import { ConsoleOutputContext } from "../../../contexts/ConsoleOutputContext"
+import { ipcSend } from "../../../ipc"
 const { ipcRenderer } = window.require("electron")
 
 const FileChooserButton = (props: {
@@ -18,7 +19,7 @@ const FileChooserButton = (props: {
 
   //doing all this here because every single file and folder chooser will be the same
   async function handleClick() {
-    ipcRenderer.send("open-file-dialog", { options: props.options })
+    ipcSend("open-file-dialog", { options: props.options })
     // const files = await remote.dialog.showOpenDialog(props.options)
     // consoleOutput(files.filePaths)
     // props.onFilesOrFolderChosen(files.filePaths)

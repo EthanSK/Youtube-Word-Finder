@@ -43,7 +43,7 @@ function createWindow() {
     wordOptionsWindow.loadURL("http://localhost:3000?wordOptions")
   } else {
     // and load  index.html of the app.
-    // mainWindow.loadFile(path.join(__dirname, "../view/build/index.html")) //DON'T DIRECTLY LOAD FILE. DO LOAD URL
+    // mainWindow.loadFile(path.join(__dirn ame, "../view/build/index.html")) //DON'T DIRECTLY LOAD FILE. DO LOAD URL
     wordOptionsWindow.loadURL(
       `file://${path.join(__dirname, "../view/build/index.html?wordOptions")}` //must use loadurl if using the query string ? to have multiple pages
     )

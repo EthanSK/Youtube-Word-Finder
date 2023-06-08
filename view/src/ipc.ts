@@ -16,6 +16,7 @@ export type IPCRendererSendChannel =
   | "reopen-window-url-expired"
   | "update-youtube-dl"
   | "re-encode-videos"
+  | "open-file-dialog"
 
 export function ipcSend(channel: IPCRendererSendChannel, data?: any) {
   // console.log("sending ipc from renderer: ", channel, data)

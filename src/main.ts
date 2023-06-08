@@ -107,8 +107,9 @@ app.on("activate", () => {
 })
 
 ipcMain.on("open-file-dialog", (event, data) => {
+  console.log("open file data: ", data)
   dialog
-    .showOpenDialog(data)
+    .showOpenDialog(data.options)
     .then((result) => {
       if (!result.canceled && result.filePaths.length > 0) {
         event.sender.send("selected-file", result.filePaths)
