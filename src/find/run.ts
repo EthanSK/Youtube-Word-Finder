@@ -38,11 +38,11 @@ export function userDefaultsCheck(useUpdatedDefaults = false) {
   if (userDefaults.videoSource === "Text file" && !userDefaults.videoTextFile) {
     throw new Error("No text file containing video URLs could be found")
   }
-  if (userDefaults.videoSource === "Channel" && !userDefaults.channelId) {
-    throw new Error("No channel ID was given")
+  if (userDefaults.videoSource === "Channel" && !userDefaults.channelUrl) {
+    throw new Error("No channel URL was given")
   }
-  if (userDefaults.videoSource === "Playlist" && !userDefaults.playlistId) {
-    throw new Error("No playlist ID was given")
+  if (userDefaults.videoSource === "Playlist" && !userDefaults.playlistUrl) {
+    throw new Error("No playlist URL was given")
   }
   if (!userDefaults.outputLocation) {
     throw new Error("No output location was given")
@@ -96,7 +96,7 @@ function* run() {
 
 export default async function stoppableRun() {
   const iter = run()
-  let resumeValue
+  let resumeValue: any
   try {
     for (;;) {
       if (!isRunning) {
@@ -107,7 +107,7 @@ export default async function stoppableRun() {
         )
         return
       }
-      const n = iter.next(resumeValue as string)
+      const n = iter.next(resumeValue)
       if (n.done) {
         return n.value
       }

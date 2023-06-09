@@ -1,6 +1,6 @@
 import { getDirName } from "../filesystem"
 import fs from "fs"
-import getVideoMetadata from "./getVideoMetadata"
+import getVideoMetadata, { getVideoUrls } from "./getVideoMetadata"
 import { loadUserDefault } from "../userDefaults"
 import { sendToConsoleOutput } from "../logger"
 import processVideoMetadata from "./processVideoMetadata"
@@ -34,13 +34,15 @@ export async function getMetadataForManualSearch(
     }
   }
 
+  let videoUrls: string[] = await getVideoUrls()
+
   //then get the remaining subs needed
   for (
     let i = currentlyDownloaded.length;
     i < loadUserDefault("maxNumberOfVideos");
     i++
   ) {
-    const id = await getVideoMetadata(i, true)
+    const id = await getVideoMetadata(videoUrls[i], true)
     if (id === "GET_VIDEO_METADATA_ERROR") {
       continue //there was an error getting 1 vid's metadata. don't stopp everything. just keep trying
     }

@@ -7,22 +7,20 @@ export type VideoSource = "Channel" | "Playlist" | "Text file" //enums suck comp
 const VideoSourceDropdown = (props: {
   key: string //not used here, just to make sure we add a key when adding this element
 }) => {
-  const {
-    state: userDefaultsState,
-    dispatch: userDefaultsDispatch
-  } = useContext(UserDefaultsContext)
+  const { state: userDefaultsState, dispatch: userDefaultsDispatch } =
+    useContext(UserDefaultsContext)
 
   return (
     <DropdownContainer
       key="VideoSourceDropdown"
       consoleOutputOptions={{ useDefaultIfUndefined: true }}
-      onChange={function(event) {
+      onChange={function (event) {
         const value: VideoSource = event.target.value as VideoSource
         userDefaultsDispatch({
           type: "set",
           payload: {
-            videoSource: value
-          }
+            videoSource: value,
+          },
         })
       }}
       selectId="videoSource"
@@ -31,20 +29,20 @@ const VideoSourceDropdown = (props: {
         {
           value: "Channel",
           isSelected: userDefaultsState.videoSource === "Channel",
-          instructionConsoleOutput: "Ensure you provided a channel ID"
+          instructionConsoleOutput: "Ensure you provided a channel URL",
         },
         {
           value: "Playlist",
           isSelected: userDefaultsState.videoSource === "Playlist",
           instructionConsoleOutput:
-            "Ensure you provided a playlist ID that is public"
+            "Ensure you provided a playlist URL that is public",
         },
         {
           value: "Text file",
           isSelected: userDefaultsState.videoSource === "Text file",
           instructionConsoleOutput:
-            "Ensure you provided a text file with each video URL on a new line"
-        }
+            "Ensure you provided a text file with each video URL on a new line",
+        },
       ]}
     />
   )

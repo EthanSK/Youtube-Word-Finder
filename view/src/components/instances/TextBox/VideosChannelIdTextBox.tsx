@@ -3,28 +3,26 @@ import TextBoxContainer from "../../elements/TextBox/TextBox"
 import { UserDefaultsContext } from "../../../contexts/UserDefaultsContext"
 
 const VideosChannelIdTextBox = (props: { key: string }) => {
-  const {
-    state: userDefaultsState,
-    dispatch: userDefaultsDispatch
-  } = useContext(UserDefaultsContext)
+  const { state: userDefaultsState, dispatch: userDefaultsDispatch } =
+    useContext(UserDefaultsContext)
 
   return (
     <TextBoxContainer
       key="VideosChannelIdTextBox"
       textBoxId="videosChannelId"
-      labelText="Videos channel ID"
-      placeholder="Channel ID e.g. UCivXNaaNhyuQQO-0V9L6nFA"
-      onFinishEditing={function(event) {
+      labelText="Videos channel URL"
+      placeholder="Channel URL e.g. https://www.youtube.com/@REEEthan"
+      onFinishEditing={function (event) {
         const newText = event.target.value
         userDefaultsDispatch({
           type: "set",
           payload: {
-            channelId: newText
-          }
+            channelUrl: newText,
+          },
         })
       }}
       consoleOutputOptions={{ useDefaultIfUndefined: true }}
-      initialText={userDefaultsState.channelId}
+      initialText={userDefaultsState.channelUrl}
       isHidden={userDefaultsState.videoSource !== "Channel"}
     />
   )

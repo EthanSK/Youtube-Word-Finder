@@ -1,6 +1,6 @@
 {
   "name": "youtubewordfinder",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Finds clips of youtubers saying certain words",
   "main": "dist/main.js",
   "scripts": {

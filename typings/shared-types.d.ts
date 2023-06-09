@@ -64,8 +64,8 @@ type DownloadOrder =
 interface UserDefaultsState {
   hasUserDefaultsLoaded?: boolean
   videoSource?: VideoSource
-  channelId?: string
-  playlistId?: string
+  channelUrl?: string
+  playlistUrl?: string
   videoTextFile?: string
   outputLocation?: string
   wordsToFindTextFile?: string

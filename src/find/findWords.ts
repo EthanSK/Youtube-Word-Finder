@@ -1,8 +1,13 @@
 import { userDefaultsOnStart, loadUserDefault } from "../userDefaults"
 import processVideoMetadata, { VideoMetadata } from "./processVideoMetadata"
 import { filterWord, shouldApplyWordFilter } from "../words"
-import getVideoMetadata from "./getVideoMetadata"
+import getVideoMetadata, {
+  getVideoIdsFromUrl,
+  getVideoUrls,
+  getVideoUrlsFromTextFile,
+} from "./getVideoMetadata"
 import { sendToConsoleOutput } from "../logger"
+import constants from "../constants"
 
 let wordFoundCounts: {
   wordCount: number
@@ -13,9 +18,16 @@ let wordFoundCounts: {
 export default function* findWords() {
   let result: ClipToDownload[] = []
   wordFoundCounts = [] //i think not having this may have been causing the glitch earlier
-  for (let i = 0; i < userDefaultsOnStart.maxNumberOfVideos!; i++) {
+
+  let videoUrls: string[] = yield getVideoUrls()
+
+  for (
+    let i = 0;
+    i < Math.min(userDefaultsOnStart.maxNumberOfVideos!, videoUrls.length);
+    i++
+  ) {
     try {
-      const id: string = yield getVideoMetadata(i)
+      const id: string = yield getVideoMetadata(videoUrls[i])
       if (id === "GET_VIDEO_METADATA_ERROR") {
         continue //there was an error getting 1 vid's metadata. don't stopp everything. just keep trying
       }
@@ -26,7 +38,7 @@ export default function* findWords() {
           }. Therefore, there are no more videos to get.`,
           "info"
         )
-        break //if id is null but there was no error thrown (so catch above not trigged) then stop.
+        continue //if id is null but there was no error thrown (so catch above not trigged) then stop.
       } //no more vids in playlist
       const videoMetadata = processVideoMetadata(id)
       if (!videoMetadata) continue

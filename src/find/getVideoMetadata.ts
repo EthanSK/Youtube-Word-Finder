@@ -8,11 +8,11 @@ import path from "path"
 import { load } from "../store"
 
 export default async function getVideoMetadata(
-  videoIndex: number,
+  videoUrl: string,
   useUpdatedDefaults: boolean = false
 ): Promise<string | undefined> {
   sendToConsoleOutput(
-    `Getting metadata and subtitles for video ${videoIndex + 1}`,
+    `Getting metadata and subtitles for video ${videoUrl}`,
     "loading"
   )
   const userDefaults: UserDefaultsState = useUpdatedDefaults
@@ -20,33 +20,7 @@ export default async function getVideoMetadata(
     : userDefaultsOnStart
   let id: string | undefined
   try {
-    switch (userDefaults.videoSource) {
-      case "Channel":
-        id = await downloadInfoAndSubs(
-          constants.youtube.channelURLPrefix + userDefaults.channelId,
-          useUpdatedDefaults,
-          videoIndex + 1
-        )
-        break
-      case "Playlist":
-        id = await downloadInfoAndSubs(
-          constants.youtube.playlistURLPrefix + userDefaults.playlistId,
-          useUpdatedDefaults,
-          videoIndex + 1
-        )
-        break
-      case "Text file":
-        const url = fs
-          .readFileSync(userDefaults.videoTextFile!, "utf8")
-          .split(/\r\n|\r|\n/)
-          .filter((url) => url) //non falsy urls only
-          .map((url) => {
-            return url
-          })[videoIndex]
-
-        if (url) id = await downloadInfoAndSubs(url, useUpdatedDefaults)
-        break
-    }
+    id = await downloadInfoAndSubs(videoUrl, useUpdatedDefaults)
   } catch (error) {
     sendToConsoleOutput("Error getting video metadata: " + error, "error")
     id = "GET_VIDEO_METADATA_ERROR" //this is horrid, but the only way using generators i tihnk
@@ -56,22 +30,46 @@ export default async function getVideoMetadata(
   return id
 }
 
+export function getVideoUrlsFromTextFile(
+  useUpdatedDefaults: boolean = false
+): string[] {
+  const userDefaults: UserDefaultsState = useUpdatedDefaults
+    ? load(userDefaultsKey)
+    : userDefaultsOnStart
+  return fs
+    .readFileSync(userDefaults.videoTextFile!, "utf8")
+    .split(/\r\n|\r|\n/)
+    .filter((url) => url) //non falsy urls only
+    .map((url) => {
+      return url
+    })
+}
+
+//url can either be channel url or playlist url
+export async function getVideoIdsFromUrl(url: string): Promise<string[]> {
+  return new Promise((resolve, reject) => {
+    let flags = ["--get-id", "--flat-playlist"]
+
+    youtubedl.exec(url, flags, {}, function (err, output) {
+      if (err) {
+        return reject(err)
+      }
+      resolve(output)
+    })
+  })
+}
+
 //this should only get one video at a time. if using text file, don't need playlistIndex, else we do, othrewise it will adowlnoad the whole channel
 async function downloadInfoAndSubs(
-  url: string,
-  useUpdatedDefaults: boolean,
-
-  playlistIndex?: number
+  videoUrl: string,
+  useUpdatedDefaults: boolean
 ): Promise<string | undefined> {
   const userDefaults = useUpdatedDefaults
     ? load(userDefaultsKey)
     : userDefaultsOnStart
 
-  if (!url) throw new Error("Video input URL cannot be found")
-  if (userDefaults.videoSource !== "Text file" && !playlistIndex)
-    throw new Error("Playlist index is not set for channel or playlist url")
-  if (userDefaults.videoSource === "Text file" && !url.includes("watch?v="))
-    throw new Error("Detected an invalid URL in the videos text file")
+  if (!videoUrl || !videoUrl.includes("watch?v="))
+    throw new Error("Detected an invalid URL " + videoUrl)
 
   return new Promise((resolve, reject) => {
     let flags = [
@@ -84,16 +82,7 @@ async function downloadInfoAndSubs(
       "--sub-lang", //dont enable this without setting a sub lang after it
       userDefaults.subtitleLanguageCode!, //will always be set by default to something
     ]
-    if (userDefaults.videoSource !== "Text file") {
-      //channel counts as playlist
-      // flags.push(
-      //   "--playlist-start",
-      //   playlistIndex!.toString(),
-      //   "--playlist-end",
-      //   playlistIndex!.toString()
-      // ) //only get video at this index
-      flags.push("--playlist-items", playlistIndex!.toString()) //new and improved way (untested)
-    }
+
     if (userDefaults.cookiesTextFile) {
       flags.push("--cookies", userDefaults.cookiesTextFile)
     }
@@ -101,12 +90,17 @@ async function downloadInfoAndSubs(
       "-o",
       createYoutubeDlFilePath("metadataDir", "id", useUpdatedDefaults)
     )
-    console.log("url: ", url, "flags: ", flags)
-    youtubedl.exec(url, flags, {}, function (err, output) {
+    console.log(
+      "videoUrl: ",
+      videoUrl,
+      "flags: ",
+      flags.reduce((a, b) => a + " " + b)
+    )
+    youtubedl.exec(videoUrl, flags, {}, function (err, output) {
       if (err) {
         return reject(err)
       }
-      // console.log("outputt: ", output)
+      // console.log("outputt: ", output, JSON.parse(output.join("\n")).id)
       // console.log("outputtt: ", JSON.parse(output[0]).id)
       // fs.writeFileSync(path.join(getDirName("metadataDir"), "lol.json"), output) //no way to get subs straight to memory :/
       if (!output || (output.length === 1 && output[0] === "")) {
@@ -117,4 +111,38 @@ async function downloadInfoAndSubs(
       }
     })
   })
+}
+
+export async function getVideoUrls(): Promise<string[]> {
+  let videoUrls: string[] = []
+  if (userDefaultsOnStart.videoSource === "Playlist") {
+    if (!userDefaultsOnStart.playlistUrl) {
+      throw new Error("No playlist URL was provided")
+    }
+    videoUrls = await getVideoIdsFromUrl(userDefaultsOnStart.playlistUrl).then(
+      (videoIds) => {
+        return videoIds.map(
+          (videoId) => constants.youtube.videoURLPrefix + videoId
+        )
+      }
+    )
+  } else if (userDefaultsOnStart.videoSource === "Channel") {
+    if (!userDefaultsOnStart.channelUrl) {
+      throw new Error("No channel URL was provided")
+    }
+    videoUrls = await getVideoIdsFromUrl(userDefaultsOnStart.channelUrl).then(
+      (videoIds) => {
+        return videoIds.map(
+          (videoId) => constants.youtube.videoURLPrefix + videoId
+        )
+      }
+    )
+  } else if (userDefaultsOnStart.videoSource === "Text file") {
+    if (!userDefaultsOnStart.videoTextFile) {
+      throw new Error("No video text file was provided")
+    }
+    videoUrls = getVideoUrlsFromTextFile(false)
+  }
+
+  return videoUrls
 }
