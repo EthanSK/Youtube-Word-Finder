@@ -6,7 +6,7 @@ import { ipcRenderer } from "electron"
 const UpdateYoutubeDlButton = () => {
   return (
     <Button
-      title="Update youtube-dl"
+      title="Update youtube-dl (yt-dlp)"
       class="smallButton"
       onClick={(event) => {
         ipcSend("update-youtube-dl", {})

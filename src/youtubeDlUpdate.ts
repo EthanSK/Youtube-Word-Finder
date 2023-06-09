@@ -38,7 +38,7 @@ export async function updateYoutubeDl() {
       }
       console.log("done updating", message)
       sendToConsoleOutput(
-        `youtube-dl updated at ${binDir}. Any custom youtube-dl binary set will be overwritten by this updated binary.`,
+        `youtube-dl (yt-dlp) updated at ${binDir}. Any custom youtube-dl binary set will be overwritten by this updated binary.`,
         "success"
       )
       //@ts-ignore

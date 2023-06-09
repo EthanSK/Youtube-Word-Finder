@@ -23,7 +23,7 @@ const CustomYtdlBinary = () => {
       options={options}
       consoleOutputOptions={{
         useDefaultIfUndefined: true,
-        payload: { name: "Custom youtube-dl binary" },
+        payload: { name: "Custom youtube-dl (yt-dlp) binary" },
       }}
       onFilesOrFolderChosen={async (filePaths) => {
         if (filePaths && filePaths[0]) {

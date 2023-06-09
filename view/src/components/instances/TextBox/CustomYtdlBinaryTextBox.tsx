@@ -13,16 +13,16 @@ const CustomYtdlBinaryTextBox = (props: { key: string }) => {
     <TextBoxContainer
       key={"CustomYtdlBinaryTextBox"}
       textBoxId="customYtdlBinary"
-      labelText="Custom youtube-dl binary"
+      labelText="Custom youtube-dl (yt-dlp) binary"
       fileChooser={<CustomYtdlBinary />}
       allowManualInputFileChooser={true}
-      placeholder="Optional: Path to custom youtube-dl Binary"
+      placeholder="Optional: Path to custom youtube-dl (yt-dlp) Binary"
       initialText={userDefaultsState.customYtdlBinary}
       consoleOutputOptions={{
         useDefaultIfUndefined: true,
         payload: {
           instructionToFollow:
-            "If you are experiencing bugs with the official youtube-dl binary, and have found a fork of youtube-dl that has a fix to that bug, then provide the path to the custom binary built from that fork here and use it until youtube-dl fix the official binary.",
+            "If you are experiencing bugs with the official yt-dlp binary, and have found a fork that has a fix to that bug, then provide the path to the custom binary built from that fork here and use it until official binary is fixed.",
         },
       }}
       onFinishEditing={(e) => {

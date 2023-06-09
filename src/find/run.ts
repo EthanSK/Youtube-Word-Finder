@@ -72,13 +72,16 @@ function setYtdlBinary() {
     //@ts-ignore
     youtubedl.setYtdlBinary(userDefaultsOnStart.customYtdlBinary)
     console.log(
-      "Using custom youtube-dl binary",
+      "Using custom youtube-dl (yt-dlp) binary",
       userDefaultsOnStart.customYtdlBinary
     )
   }
   //@ts-ignore
   const binary = youtubedl.getYtdlBinary()
-  sendToConsoleOutput(`Using this youtube-dl binary: ${binary}`, "info")
+  sendToConsoleOutput(
+    `Using this youtube-dl (yt-dlp) binary: ${binary}`,
+    "info"
+  )
 }
 
 function* run() {

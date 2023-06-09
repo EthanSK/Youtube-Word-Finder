@@ -26,6 +26,7 @@
   padding: 10px;
   transition: 0.2s;
   border-style: solid; /*this was causing that weird diagonal split in colour*/
+  white-space: nowrap;
 }
 
 .mediumButton {
@@ -42,6 +43,7 @@
   padding: 10px;
   transition: 0.2s;
   border-style: solid;
+  white-space: nowrap;
 }
 
 .smallButton {
@@ -59,6 +61,7 @@
   padding-right: 7px;
   transition: 0.2s;
   border-style: solid;
+  white-space: nowrap;
 }
 
 .emojiButton {
