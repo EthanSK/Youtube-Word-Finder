@@ -21,3 +21,6 @@ an npm module with @ in name is called a scoped package
 
 to share types, add the exact file of the shared types file in tsconfig   "files": ["customTypes/shared-types.d.ts"]
 
+
+
+on windows, do npm install from a terminal that as running as administrator, or ffmpeg won't install....ffs i fucking hate stupid windows.
