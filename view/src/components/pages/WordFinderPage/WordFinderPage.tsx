@@ -21,9 +21,9 @@ const WordFinderPage = () => {
   const [windowData, setWindowData] = useState<WordFinderRequestWindowData>({
     word: {
       mainWord: "Loading...",
-      originalUnfilteredWord: "Loading..."
+      originalUnfilteredWord: "Loading...",
     },
-    arrIndex: 0
+    arrIndex: 0,
   })
   const { state: userDefaultsState } = useContext(UserDefaultsContext)
   const [clips, setClips] = useState<ClipToDownload[]>([])
@@ -41,13 +41,13 @@ const WordFinderPage = () => {
   let playerRef = useRef<ReactPlayer>(null)
 
   function getCurrentDownloadingClip(): DownloadingClip | undefined {
-    return downloadingClips.filter(el => el.clipIndex === curClipIndex)[0]
+    return downloadingClips.filter((el) => el.clipIndex === curClipIndex)[0]
   }
 
   function setCurrentDownloadingClip(newValue: DownloadingClip) {
-    setDownloadingClips(downloadingClips => {
+    setDownloadingClips((downloadingClips) => {
       const curClips = downloadingClips
-      let curClip = curClips.filter(el => el.clipIndex === curClipIndex)[0]
+      let curClip = curClips.filter((el) => el.clipIndex === curClipIndex)[0]
       //if already exits, modify props
       // console.log("new value", newValue)
       if (curClip) {
@@ -89,18 +89,18 @@ const WordFinderPage = () => {
     // console.log("send reque to restore defaults")
     ipcSend("request-word-finder-data", { shouldGetUpdated: false }) //sending it here so it only requests when ready
     const channel = "response-word-finder-data-batch"
-    var handleUserDefaultRestore = function(
+    var handleUserDefaultRestore = function (
       event: Electron.IpcRendererEvent,
       data: WordFinderResponseWindowData
     ) {
       setWindowData({ word: data.word, arrIndex: data.arrIndex })
 
-      setClips(clips => [...clips, ...data.clips]) //must be callback or it wont work
+      setClips((clips) => [...clips, ...data.clips]) //must be callback or it wont work
       if (data.isError) {
         setIsError(true)
       }
       if (data.didScanNewVideo) {
-        setScannedVidsCount(scannedVidsCount => scannedVidsCount + 1)
+        setScannedVidsCount((scannedVidsCount) => scannedVidsCount + 1)
       }
     }
 
@@ -123,7 +123,8 @@ const WordFinderPage = () => {
   function handlePlayerOnStart() {
     playerRef.current &&
       playerRef.current.seekTo(
-        timesWithPadding({ originalStart: clips[curClipIndex].start }).start!
+        timesWithPadding({ originalStart: clips[curClipIndex].start }).start!,
+        "seconds"
       )
     //   setIsPlaying(true)
   }
@@ -133,9 +134,9 @@ const WordFinderPage = () => {
     if (!clips[curClipIndex]) return
 
     const endTime = timesWithPadding({
-      originalEnd: clips[curClipIndex].end
+      originalEnd: clips[curClipIndex].end,
     }).end
-    const adjustedEndTime = endTime && endTime - 0.35 //because ffmpeg seems to cut short/youtube player cuts long
+    const adjustedEndTime = endTime //&& endTime - 0.35 //because ffmpeg seems to cut short/youtube player cuts long //ah fuck it its not worth it...makes like no difference
 
     if (
       playerRef.current &&
@@ -151,7 +152,7 @@ const WordFinderPage = () => {
         setDidStopAtClipEnd(true) //so we can keep playing after clip endsn
       }
     }
-  }, 50)
+  }, 1)
 
   function getURL() {
     if (clips[curClipIndex]) {
@@ -168,18 +169,19 @@ const WordFinderPage = () => {
     playerRef.current &&
       clips[curClipIndex] &&
       playerRef.current.seekTo(
-        timesWithPadding({ originalStart: clips[curClipIndex].start }).start!
+        timesWithPadding({ originalStart: clips[curClipIndex].start }).start!,
+        "seconds"
       )
     setDidStopAtClipEnd(false)
     setIsPlaying(true)
   }
 
   function handleNextClicked() {
-    setCurClipIndex(curClipIndex => mod(curClipIndex + 1, clips.length))
+    setCurClipIndex((curClipIndex) => mod(curClipIndex + 1, clips.length))
     //reload handled in useeffect
   }
   function handlePreviousClicked() {
-    setCurClipIndex(curClipIndex => mod(curClipIndex - 1, clips.length))
+    setCurClipIndex((curClipIndex) => mod(curClipIndex - 1, clips.length))
   }
 
   function handleDownloadClicked() {
@@ -188,7 +190,7 @@ const WordFinderPage = () => {
     if (clips.length === 0) return
     const clipPkg: ClipToDownloadIPCPkg = {
       clip: clips[curClipIndex],
-      index: curClipIndex
+      index: curClipIndex,
     }
     if (downloadingClip && downloadingClip.didFinishDownload) {
       ipcSend("go-to-file-path", downloadingClip.downloadPath) //open in finder
@@ -198,12 +200,12 @@ const WordFinderPage = () => {
     setCurrentDownloadingClip({
       clip: clips[curClipIndex],
       clipIndex: curClipIndex,
-      didFinishDownload: false
+      didFinishDownload: false,
     })
     const indexOfThisClip = curClipIndex //so if we change the index, the copy won't change
 
     const channel = "downloaded-manually-found-word"
-    var handleDownloadedWord = function(
+    var handleDownloadedWord = function (
       event: Electron.IpcRendererEvent,
       data: ResponseClipToDownloadIPCPkg
     ) {
@@ -232,7 +234,7 @@ const WordFinderPage = () => {
         clip: clips[data.index],
         clipIndex: data.index,
         didFinishDownload: true,
-        downloadPath: path
+        downloadPath: path,
       }
       // console.log("download clip: ", clip, "path", path)
 
@@ -244,11 +246,11 @@ const WordFinderPage = () => {
   }
 
   const playerStyle = {
-    margin: "auto"
+    margin: "auto",
   }
 
   const errorMessageStyle = {
-    color: "red"
+    color: "red",
   }
 
   function setText() {
@@ -274,8 +276,9 @@ const WordFinderPage = () => {
   function setText2() {
     let text = ""
     if (clips[curClipIndex]) {
-      text = `${clips.length -
-        1} other clips found. Scanned ${scannedVidsCount} videos. `
+      text = `${
+        clips.length - 1
+      } other clips found. Scanned ${scannedVidsCount} videos. `
     } else if (isFinishedScanning) {
       text = `Try increasing max number of vids & add more alternative words. `
     } else {
@@ -331,7 +334,7 @@ const WordFinderPage = () => {
         />
         <Button
           class="mediumButton"
-          title={(function() {
+          title={(function () {
             const downloadingClip = getCurrentDownloadingClip()
             if (downloadingClip) {
               return downloadingClip.didFinishDownload
@@ -348,7 +351,7 @@ const WordFinderPage = () => {
       <p>{setText()}</p>
       <p>{setText2()}</p>
       <p className="miniText">
-        {(function() {
+        {(function () {
           const downloadingClip = getCurrentDownloadingClip()
           // console.log("thingy: ", downloadingClip)
           if (downloadingClip) {
@@ -361,7 +364,7 @@ const WordFinderPage = () => {
         })()}
       </p>
       <p className="errorMessage" style={errorMessageStyle}>
-        {(function() {
+        {(function () {
           if (isVideoURLExpiredError) {
             return "Raw video URL expired. Redownloading updated metadata for all videos."
           } else if (isError) {

@@ -94,6 +94,7 @@ export async function downloadClip(
       reject("No best combined url for clip")
       return
     }
+
     const shouldReEncode = isForManualSearch
       ? loadUserDefault("reEncodeVideos")
       : userDefaultsOnStart.reEncodeVideos
@@ -135,7 +136,7 @@ export async function downloadClip(
         wasErrorFound = true
         // reject(
         //   new URIError(
-        //     "Raw video URL expired. Need to get updated metadata for video. If this problem persists, delete the temp folder in your chosen output location."
+        //     "Raw video URL expired. Need to get updated metadata for  video.  If this problem persists, delete the temp folder in your chosen output location."
         //   )
         // )
         sendToConsoleOutput(
