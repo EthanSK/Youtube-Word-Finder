@@ -44,7 +44,7 @@ function createWindow() {
       contextIsolation: false,
     },
     title: constants.wordFinder.name,
-    parent: mainWindow!,
+    // parent: mainWindow!, //this causes crash...
   })
 
   mainWindowState.manage(wordFinderWindow)

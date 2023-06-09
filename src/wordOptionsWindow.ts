@@ -13,10 +13,11 @@ function createWindow() {
     defaultHeight: 700,
     file: "wordOptionsWindow.json",
   })
+
   // Create the browser window.
   wordOptionsWindow = new BrowserWindow({
     backgroundColor: "#282828",
-    //remember to add icon here for linux coz appaz u need it. wow it didn't work in postilkesbot test
+    //remember to add icon here  for linux coz appaz u need it. wow it didn't work in postilkesbot test
     width: mainWindowState.width,
     height: mainWindowState.height,
     x: mainWindowState.x,
@@ -28,7 +29,7 @@ function createWindow() {
       contextIsolation: false,
     },
     title: constants.wordOptions.name,
-    parent: mainWindow!,
+    // parent: mainWindow!, //causes a crash. not worth it.
   })
 
   mainWindowState.manage(wordOptionsWindow)
@@ -39,7 +40,7 @@ function createWindow() {
   //   win.webContents.openDevTools()
   if (process.env.NODE_ENV === "development") {
     // wordOptionsWindow.setPosition(600, 600)
-    // and load the index.html of the app.
+    // and load the index.html of  the app.
     wordOptionsWindow.loadURL("http://localhost:3000?wordOptions")
   } else {
     // and load  index.html of the app.
@@ -55,6 +56,7 @@ function createWindow() {
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     sendToConsoleOutput("Finished changing word options", "settings")
+
     wordOptionsWindow = null
   })
 }
