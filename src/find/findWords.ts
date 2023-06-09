@@ -27,6 +27,10 @@ export default function* findWords() {
     i++
   ) {
     try {
+      sendToConsoleOutput(
+        `Getting metadata and subtitles for video ${i} - ${videoUrls[i]}`,
+        "loading"
+      )
       const id: string = yield getVideoMetadata(videoUrls[i])
       if (id === "GET_VIDEO_METADATA_ERROR") {
         continue //there was an error getting 1 vid's metadata. don't stopp everything. just keep trying

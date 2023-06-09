@@ -11,10 +11,6 @@ export default async function getVideoMetadata(
   videoUrl: string,
   useUpdatedDefaults: boolean = false
 ): Promise<string | undefined> {
-  sendToConsoleOutput(
-    `Getting metadata and subtitles for video ${videoUrl}`,
-    "loading"
-  )
   const userDefaults: UserDefaultsState = useUpdatedDefaults
     ? load(userDefaultsKey)
     : userDefaultsOnStart

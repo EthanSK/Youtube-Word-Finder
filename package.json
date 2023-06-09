@@ -63,7 +63,11 @@
     },
     "mac": {
       "category": "public.app-category.productivity",
-      "hardenedRuntime": true
+      "hardenedRuntime": true,
+      "target": {
+        "target": "default",
+        "arch": "universal"
+      }
     },
     "win": {},
     "linux": {
