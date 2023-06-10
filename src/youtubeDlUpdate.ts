@@ -26,7 +26,8 @@ export async function updateYoutubeDl() {
   console.log("binary: ", youtubedl.getYtdlBinary())
   //@ts-ignore
   const binDir = path.dirname(youtubedl.getYtdlBinary())
-  const binary = path.join(binDir, "youtube-dl")
+  //@ts-ignore
+  const binary = youtubedl.getYtdlBinary()
   if (fs.existsSync(binary)) {
     fs.unlinkSync(binary)
   }
