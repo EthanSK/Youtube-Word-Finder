@@ -11,8 +11,6 @@ import { load } from "./store"
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0" //coz we get Error: certificate has expired https://stackoverflow.com/a/20497028/6820042
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0" //without this, we get CERT_HAS_EXPIRED error after a while. this is fine since it's an electron app, not an actual web server. why do I have this twice lol oh well.
-const isWin =
-  process.platform === "win32" || process.env.NODE_PLATFORM === "windows"
 
 ipcMain.on("update-youtube-dl", async (event, data: string) => {
   try {
@@ -29,7 +27,7 @@ export async function updateYoutubeDl() {
   //@ts-ignore
   const binDir = path.dirname(youtubedl.getYtdlBinary())
   //@ts-ignore
-  const binary = youtubedl.getYtdlBinary() + (isWin ? ".exe" : "")
+  const binary = youtubedl.getYtdlBinary()
   if (fs.existsSync(binary)) {
     fs.unlinkSync(binary)
   }
