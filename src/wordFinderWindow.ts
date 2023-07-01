@@ -147,6 +147,7 @@ ipc.on("request-word-finder-data", async (event, data) => {
     }) //send initial response to load in word data that we have instantly
 
   try {
+    // setUserDefaultsOnStart() //doesn't really apply to manual word search
     userDefaultsCheck(true)
     createWorkspaceFilesystem(true)
     await getMetadataForManualSearch(async (id) => {
@@ -165,7 +166,7 @@ ipc.on("request-word-finder-data", async (event, data) => {
       if (!event.sender.isDestroyed())
         event.sender.send("response-word-finder-data-batch", response)
     })
-    // throw new Error("test error")
+    // throw new Error("test error ")
   } catch (error: any) {
     //dont send the stop running event to the manual search window, coz there could be an auto search in progress
     sendToConsoleOutput(

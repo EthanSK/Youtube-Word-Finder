@@ -1,19 +1,20 @@
 {
   "name": "youtubewordfinder",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Finds clips of youtubers saying certain words",
   "main": "dist/main.js",
   "scripts": {
     "start": "electron .",
     "dev": "export NODE_ENV=development && tsc-watch --onSuccess \"electron .\"",
     "pack": "electron-builder --dir",
-    "dist": "npm run build && electron-builder",
-    "build": "npm i youtube-dl && npm run install-ffmpeg-mac-special && tsc && npm run react-build",
+    "dist": "npm i youtube-dl && npm run install-ffmpeg-mac-special && npm run build && electron-builder && npm run uninstall-ffmpeg-mac-special",
+    "build": "tsc && npm run react-build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "react-start": "cd view && npm start",
     "react-build": "cd view && npm run build",
     "install": "cd view && npm install",
-    "install-ffmpeg-mac-special": "if [ \"$(uname)\" = \"Darwin\" ]; then npm i @ffmpeg-installer/darwin-x64 @ffmpeg-installer/darwin-arm64 --force; fi"
+    "install-ffmpeg-mac-special": "if [ \"$(uname)\" = \"Darwin\" ]; then npm i @ffmpeg-installer/darwin-x64 @ffmpeg-installer/darwin-arm64 --force; fi",
+    "uninstall-ffmpeg-mac-special": "if [ \"$(uname)\" = \"Darwin\" ]; then npm uninstall @ffmpeg-installer/darwin-x64 @ffmpeg-installer/darwin-arm64; fi"
   },
   "repository": {
     "type": "git",

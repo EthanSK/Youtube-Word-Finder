@@ -11,6 +11,7 @@ import windowStateKeeper from "electron-window-state"
 import { updateYoutubeDl } from "./youtubeDlUpdate"
 import { delay } from "./utils"
 import "./youtubeDlUpdate"
+import { setUserDefaultsOnStart } from "./userDefaults"
 
 const youtubedl = require("youtube-dl")
 
@@ -24,6 +25,8 @@ youtubedl.setYtdlBinary(
       : curBin.replace("app.asar", "app.asar.unpacked")
   })()
 )
+
+setUserDefaultsOnStart() //otherwise if we go straight to manual word finder window and try and find a word it will give errorr
 
 export let mainWindow: BrowserWindow | null
 

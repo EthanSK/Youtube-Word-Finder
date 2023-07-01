@@ -19,6 +19,7 @@ import DownloadOrderDropdown from "../../instances/Dropdown/DownloadOrderDropdow
 import StartButton from "../../instances/Button/StartButton"
 import SubtitleLanguageTextBox from "../../instances/TextBox/SubtitleLanguageTextBox"
 import ETGgamesButton from "../../instances/Button/ETGgamesButton"
+import YoutubeWordFinderWebsiteButton from "../../instances/Button/YoutubeWordFinderWebsiteButton"
 import UpdateYoutubeDlButton from "../../instances/Button/UpdateYoutubeDlButton"
 import ReEncodeVideosButton from "../../instances/Button/ReEncodeVideosButton"
 import CookiesTextFileTextBox from "../../instances/TextBox/CookiesTextFileTextBox"
@@ -28,7 +29,8 @@ const HomePage = () => {
   return (
     <ConsoleOutputContextProvider>
       <Header title="YouTube Word Finder" />
-      <ETGgamesButton></ETGgamesButton>
+      {/* <ETGgamesButton></ETGgamesButton> */}
+      <YoutubeWordFinderWebsiteButton></YoutubeWordFinderWebsiteButton>
       <div className="homePageContainer">
         <div className="homePageLeftSide">
           <VideoSourceDropdown key="VideoSourceDropdownInstance" />
