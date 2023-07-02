@@ -7,14 +7,14 @@
     "start": "electron .",
     "dev": "export NODE_ENV=development && tsc-watch --onSuccess \"electron .\"",
     "pack": "electron-builder --dir",
-    "dist": "npm i youtube-dl && npm run install-ffmpeg-mac-special && npm run build && electron-builder && npm run uninstall-ffmpeg-mac-special",
+    "dist": "npm i youtube-dl && npm run install-ffmpeg-special && npm run build && electron-builder && npm run uninstall-ffmpeg-special",
     "build": "tsc && npm run react-build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "react-start": "cd view && npm start",
     "react-build": "cd view && npm run build",
     "install": "cd view && npm install",
-    "install-ffmpeg-mac-special": "node -e \"const os = require('os'); const platform = os.platform(); if (platform === 'darwin') { require('child_process').exec('npm i @ffmpeg-installer/darwin-x64 @ffmpeg-installer/darwin-arm64 --force'); } else if (platform === 'linux') { require('child_process').exec('echo Running on Linux'); } else if (platform === 'win32') { require('child_process').exec('npm i @ffmpeg-installer/win32-x64'); }\"",
-    "uninstall-ffmpeg-mac-special": "node -e \"const os = require('os'); const platform = os.platform(); if (platform === 'darwin') { require('child_process').exec('npm uninstall @ffmpeg-installer/darwin-x64 @ffmpeg-installer/darwin-arm64'); } else if (platform === 'linux') { require('child_process').exec('echo Running on Linux'); } else if (platform === 'win32') { require('child_process').exec('npm uninstall @ffmpeg-installer/win32-x64'); }\""
+    "install-ffmpeg-special": "node -e \"const os = require('os'); const platform = os.platform(); if (platform === 'darwin') { require('child_process').exec('npm i @ffmpeg-installer/darwin-x64 @ffmpeg-installer/darwin-arm64 --force'); } else if (platform === 'linux') { require('child_process').exec('echo Running on Linux'); } else if (platform === 'win32') { require('child_process').exec('npm i @ffmpeg-installer/win32-x64'); }\"",
+    "uninstall-ffmpeg-special": "node -e \"const os = require('os'); const platform = os.platform(); if (platform === 'darwin') { require('child_process').exec('npm uninstall @ffmpeg-installer/darwin-x64 @ffmpeg-installer/darwin-arm64'); } else if (platform === 'linux') { require('child_process').exec('echo Running on Linux'); } else if (platform === 'win32') { require('child_process').exec('npm uninstall @ffmpeg-installer/win32-x64'); }\""
   },
   "repository": {
     "type": "git",
