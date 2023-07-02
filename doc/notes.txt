@@ -28,5 +28,7 @@ on windows, do npm install from a terminal that as running as administrator, or 
 Also, make sure on node 16 or might get issues
 also manually add set DISABLE_ESLINT_PLUGIN=true to react build npm script to disable shitey eslint error
 
+the javascript main process error with undefined undefined is coz of ffmpeg installer problems
+
 
  ̶U̶P̶D̶A̶T̶E̶:̶ ̶i̶ ̶r̶e̶a̶l̶i̶s̶e̶d̶ ̶w̶e̶ ̶c̶a̶n̶ ̶b̶u̶i̶l̶d̶ ̶f̶o̶r̶ ̶w̶i̶n̶d̶o̶w̶s̶ ̶f̶r̶o̶m̶ ̶m̶a̶c̶.̶ ̶j̶u̶s̶t̶ ̶d̶o̶ ̶n̶p̶m̶ ̶r̶u̶n̶ ̶d̶i̶s̶t̶ ̶-̶-̶ ̶-̶-̶w̶i̶n̶d̶o̶w̶s̶ ̶,̶ ̶a̶n̶d̶ ̶m̶a̶k̶e̶ ̶s̶u̶r̶e̶ ̶t̶o̶ ̶h̶a̶v̶e̶ ̶o̶p̶e̶n̶e̶d̶ ̶t̶e̶r̶m̶i̶n̶a̶l̶ ̶w̶i̶t̶h̶ ̶r̶o̶s̶e̶t̶t̶a̶ This doesn't work. need to be on intel windows to build for it.
