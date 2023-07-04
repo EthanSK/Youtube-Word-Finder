@@ -10,6 +10,6 @@ export function save(key: string, value: any) {
 
 export function load(key: string): any {
   const loadVal = store.get(key)
-  // console.log("load val: ", loadVal)
+  // console.log("load val : ", loadVal)
   return loadVal
 }

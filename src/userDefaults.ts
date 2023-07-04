@@ -61,9 +61,9 @@ export function loadUserDefault(key: keyof UserDefaultsState) {
   return load(`${userDefaultsKey}.${key}`)
 }
 
-export let userDefaultsOnStart: UserDefaultsState //this should be the source of truth to use settings througout the run
+export let userDefaultsOnStart: UserDefaultsState //this should be the source of truth to use settings througout the run.
 export function setUserDefaultsOnStart() {
-  userDefaultsOnStart = load(`${userDefaultsKey}`)
+  userDefaultsOnStart = load(`${userDefaultsKey}`) ?? {}
   if (!userDefaultsOnStart.outputFolderName) {
     createOutputName(userDefaultsOnStart)
   }
@@ -77,6 +77,6 @@ export function createOutputName(userDefaults: UserDefaultsState): string {
     result = userDefaults.playlistUrl
   if (userDefaults.videoSource === "Text file" && userDefaults.videoTextFile)
     result = "textFileAsSource_AUTO_GEN_OUTPUT_NAME"
-  // result += "_" + Date.now().toString() //so it's unique every time //NO the point is we need to call this function every time if no output folder was given. it should always be the same.
+  // result += "_" + Date.now().toString() //so it's unique every time //NO the point is we need to call this function every time if no output folder was given. it should always be the same
   return result
 }
